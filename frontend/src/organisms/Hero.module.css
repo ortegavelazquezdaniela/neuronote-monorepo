@@ -58,7 +58,7 @@
   overflow: hidden;
   border: 1px solid var(--color-line);
   box-shadow: var(--shadow-soft);
-  background: #ece6dc;
+  background: var(--map-ground);
 }
 
 .climateChip {
@@ -70,10 +70,10 @@
   gap: var(--space-2);
   padding: 0.4rem 0.5rem 0.4rem 0.75rem;
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, #fffdf9 94%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
   box-shadow: var(--shadow-soft);
   font-size: var(--fs-xs);
-  color: var(--nn-ink);
+  color: var(--color-text);
 }
 
 .climateChip svg {

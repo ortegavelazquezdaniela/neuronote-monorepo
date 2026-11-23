@@ -4,7 +4,7 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lift);
   padding: var(--space-4);
-  color: var(--nn-ink);
+  color: var(--color-text);
 }
 
 .head {
@@ -20,7 +20,7 @@
   font-family: var(--font-display);
   font-weight: 650;
   font-size: var(--fs-sm);
-  color: var(--nn-deep-blue);
+  color: var(--color-heading);
 }
 
 .list {
@@ -64,18 +64,18 @@
 
 .time {
   font-variant-numeric: tabular-nums;
-  color: var(--nn-ink-soft);
+  color: var(--color-text-soft);
   font-weight: 600;
 }
 
 .meta {
   font-size: var(--fs-xs);
-  color: var(--nn-ink-soft);
+  color: var(--color-text-soft);
   line-height: 1.5;
 }
 
 .meta strong {
-  color: var(--nn-ink);
+  color: var(--color-text);
 }
 
 .sep {

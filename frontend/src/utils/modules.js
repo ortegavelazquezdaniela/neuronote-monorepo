@@ -51,7 +51,7 @@ export const MODULES = [
       'Registra cómo se sintió un lugar o un trayecto y consulta tu historial cuando lo necesites.',
     detail:
       'Tus notas son privadas por defecto. Puedes exportarlas o borrarlas en cualquier momento.',
-    phase: 4,
+    phase: 2,
   },
   {
     id: 'sos',

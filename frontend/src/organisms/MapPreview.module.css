@@ -82,7 +82,7 @@
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--nn-sage) 60%, transparent);
   box-shadow: var(--shadow-soft);
-  background: #ece6dc;
+  background: var(--map-ground);
 }
 
 .demoBadge {

@@ -25,6 +25,24 @@
   transform: scale(0.97);
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.danger {
+  background: transparent;
+  color: var(--color-error);
+  border-color: color-mix(in srgb, var(--color-error) 45%, transparent);
+}
+
+.danger:hover {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
 .icon {
   width: 1.15em;
   height: 1.15em;

@@ -1,0 +1,158 @@
+.group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.options {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 3rem;
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) ease,
+    background-color var(--dur-fast) ease;
+}
+
+.option:hover {
+  border-color: var(--color-text-soft);
+}
+
+.checked,
+.checked:hover {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 7%, var(--color-surface));
+}
+
+/* El radio nativo sigue presente (accesible), con aspecto propio */
+.input {
+  appearance: none;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  border: 2px solid var(--color-text-soft);
+  border-radius: 50%;
+  background: var(--color-surface);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.input::after {
+  content: '';
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transform: scale(0);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.input:checked {
+  border-color: var(--color-primary);
+}
+
+.input:checked::after {
+  transform: scale(1);
+}
+
+.input:focus-visible {
+  border-radius: 50%;
+}
+
+.text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.optLabel {
+  font-weight: 700;
+}
+
+.desc {
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}
+
+.preview {
+  flex: none;
+  display: inline-flex;
+}
+
+/* --- Variante: tarjetas en cuadrícula --- */
+.cards {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cards .option {
+  align-items: flex-start;
+  padding: var(--space-4);
+}
+
+.cards .input {
+  margin-top: 0.15rem;
+}
+
+/* --- Variante: segmentada --- */
+.segmented {
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+}
+
+.segmented .option {
+  justify-content: center;
+  text-align: center;
+}
+
+/* --- Variante: escala 1–5 --- */
+.scale {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.scale .option {
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  text-align: center;
+}
+
+.scale .desc {
+  font-size: var(--fs-xs);
+}
+
+.scaleEnds {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--color-text-soft);
+}
+
+@media (max-width: 420px) {
+  .scale .desc {
+    display: none;
+  }
+}

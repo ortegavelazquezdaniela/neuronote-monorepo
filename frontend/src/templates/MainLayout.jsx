@@ -1,12 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { SkipLink } from '../atoms/SkipLink';
+import { PageLoader } from '../atoms/PageLoader';
 import { SiteHeader } from '../organisms/SiteHeader';
 import { SiteFooter } from '../organisms/SiteFooter';
 import { SosFab } from '../organisms/SosFab';
+import { BrandIntro } from '../organisms/BrandIntro';
+import { SosProvider } from '../providers/SosProvider';
 
 /**
- * Plantilla común: skip link → header → <main> → footer, y el FAB SOS.
+ * Plantilla común: intro → skip link → header → <main> → footer, FAB SOS y modal SOS.
  * Al navegar, el foco pasa al <main> para que los lectores de pantalla
  * anuncien la nueva página (patrón SPA accesible).
  */
@@ -25,14 +28,17 @@ export function MainLayout() {
   }, [pathname]);
 
   return (
-    <>
+    <SosProvider>
+      <BrandIntro />
       <SkipLink />
       <SiteHeader />
       <main id="contenido" ref={mainRef} tabIndex={-1} style={{ outline: 'none' }}>
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
       <SiteFooter />
       <SosFab />
-    </>
+    </SosProvider>
   );
 }

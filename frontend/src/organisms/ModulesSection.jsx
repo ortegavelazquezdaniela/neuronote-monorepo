@@ -41,7 +41,7 @@ export function ModulesSection() {
                     <span className={styles.label}>{m.label}</span>
                   </h3>
                   <p className={styles.summary}>{m.summary}</p>
-                  <p className={styles.detail}>{m.detail}</p>
+                  <p className={styles.detail} data-calm-hide>{m.detail}</p>
                   <div className={styles.links}>
                     <Link to={m.path} className={styles.more}>
                       Abrir {m.label}

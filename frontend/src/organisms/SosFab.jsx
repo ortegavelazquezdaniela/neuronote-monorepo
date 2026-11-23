@@ -1,20 +1,30 @@
-import { Link, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { LifeBuoy } from 'lucide-react';
+import { useSos } from '../hooks/useSos';
 import styles from './SosFab.module.css';
 
 /**
  * Botón flotante SOS — discreto, permanente, en verde petróleo (nunca rojo).
- * Fase 1: enlaza a /auxilio-inmediato.
- * Fase 2: abrirá el CrisisModal (<dialog>) y responderá al atajo Alt + C.
+ * Abre el modal de apoyo; también disponible con Alt + C.
  */
 export function SosFab() {
   const { pathname } = useLocation();
+  const { openSos } = useSos();
   if (pathname === '/auxilio-inmediato') return null;
 
   return (
-    <Link to="/auxilio-inmediato" className={styles.fab}>
+    <button
+      type="button"
+      className={styles.fab}
+      onClick={openSos}
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Alt+C"
+    >
       <LifeBuoy aria-hidden="true" />
       <span>Ayuda SOS</span>
-    </Link>
+      <kbd className={styles.kbd} aria-hidden="true">
+        Alt C
+      </kbd>
+    </button>
   );
 }

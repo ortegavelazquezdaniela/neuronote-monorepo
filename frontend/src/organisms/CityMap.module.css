@@ -5,22 +5,22 @@
 }
 
 .ground {
-  fill: #ece6dc;
+  fill: var(--map-ground);
 }
 
 .block {
-  fill: #f8f4ee;
-  stroke: #e2dbcf;
+  fill: var(--map-block);
+  stroke: var(--map-block-line);
   stroke-width: 1;
 }
 
 .park {
-  fill: #c9d8cf;
+  fill: var(--map-park);
 }
 
 .trail {
   fill: none;
-  stroke: #f8f4ee;
+  stroke: var(--map-block);
   stroke-width: 3;
   stroke-dasharray: 2 6;
   stroke-linecap: round;
@@ -31,7 +31,7 @@
 }
 
 .avenue {
-  fill: #ddd6ca;
+  fill: var(--map-avenue);
 }
 
 .streetLabel {
@@ -39,7 +39,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  fill: #8a8478;
+  fill: var(--map-label);
 }
 
 .climate circle {
@@ -59,7 +59,7 @@
 
 .routeCalmHalo {
   fill: none;
-  stroke: #fff;
+  stroke: var(--map-halo);
   stroke-width: 11;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -91,7 +91,7 @@
 }
 
 .pinB {
-  fill: var(--nn-deep-blue);
+  fill: var(--map-pin);
 }
 
 .pinText,

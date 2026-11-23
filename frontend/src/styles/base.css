@@ -24,7 +24,7 @@ html {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html {
+  :root:not([data-motion='reduced']) {
     scroll-behavior: smooth;
   }
 }
@@ -92,6 +92,14 @@ a:hover {
   color: var(--nn-ink);
 }
 
+/* Tipografías alternativas: los títulos heredan la fuente elegida */
+:root[data-font='opendyslexic'] h1,
+:root[data-font='opendyslexic'] h2,
+:root[data-font='opendyslexic'] h3 {
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
 /* Foco visible y consistente (WCAG 2.2 · 2.4.7 / 2.4.11) */
 :focus-visible {
   outline: 3px solid var(--color-focus);
@@ -142,19 +150,29 @@ html {
   animation-delay: calc(var(--enter-i, 0) * 70ms);
 }
 
+/* Movimiento reducido: lo decide PreferencesProvider con data-motion
+   (preferencia del sistema, elección de la persona o Modo Calma). */
+:root[data-motion='reduced'] [data-enter] {
+  animation-name: nn-fade;
+  animation-duration: 200ms;
+}
+
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Antes de que React aplique data-motion, respeta al sistema */
 @media (prefers-reduced-motion: reduce) {
-  [data-enter] {
+  :root:not([data-motion]) [data-enter] {
     animation-name: nn-fade;
     animation-duration: 200ms;
   }
-
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-  }
 }
 
-:root[data-motion='reduced'] [data-enter] {
-  animation: none;
+/* Modo Calma: interfaz simplificada, menos elementos simultáneos */
+:root[data-theme='calm'] [data-calm-hide] {
+  display: none !important;
 }
