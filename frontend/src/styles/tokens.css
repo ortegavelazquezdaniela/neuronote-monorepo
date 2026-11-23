@@ -54,6 +54,21 @@
   --color-sos-hover: #345c61;
   --color-footer-bg: var(--nn-deep-blue);
   --color-footer-text: #e7eef4;
+  --color-error: #9b2f2c;
+  --color-error-bg: #fcebe7;
+  --color-success: #2f5d55;
+  --color-success-bg: var(--nn-sage-wash);
+  --color-overlay: rgb(19 35 59 / 0.45);
+
+  /* Mapa esquemático */
+  --map-ground: #ece6dc;
+  --map-block: #f8f4ee;
+  --map-block-line: #e2dbcf;
+  --map-park: #c9d8cf;
+  --map-avenue: #ddd6ca;
+  --map-label: #8a8478;
+  --map-halo: #ffffff;
+  --map-pin: var(--nn-deep-blue);
 
   /* --- Tipografía --- */
   --font-display: 'Schibsted Grotesk Variable', 'Segoe UI', system-ui, sans-serif;
@@ -143,6 +158,10 @@
   --color-sos: #0b1f3d;
   --color-footer-bg: #000000;
   --color-footer-text: #ffffff;
+  --color-error: #8a0000;
+  --color-success: #00452f;
+  --map-block-line: #000000;
+  --map-label: #000000;
 }
 
 /* Modo Noche: fondos oscuros, acentos moderados */
@@ -163,6 +182,34 @@
   --color-focus: #ffd9d4;
   --color-focus-halo: #0f1a2a;
   --color-sos: #407076;
+  --color-sos-hover: #4c8289;
   --color-footer-bg: #0b1422;
   --color-footer-text: #d5dde7;
+  --color-error: #ffb4ab;
+  --color-error-bg: #3a1f24;
+  --color-success: #b5d6c9;
+  --color-success-bg: #1b3530;
+  --color-overlay: rgb(5 10 20 / 0.6);
+
+  --map-ground: #172338;
+  --map-block: #22324d;
+  --map-block-line: #2c3e5d;
+  --map-park: #284640;
+  --map-avenue: #2a3954;
+  --map-label: #9fb0c4;
+  --map-halo: #0f1a2a;
+  --map-pin: #407076;
+}
+
+/* ==========================================================================
+   Tipografías alternativas (ninguna es "la mejor" para todas las personas)
+   ========================================================================== */
+:root[data-font='opendyslexic'] {
+  --font-body: 'OpenDyslexic', 'Atkinson Hyperlegible Next', sans-serif;
+  --font-display: 'OpenDyslexic', 'Atkinson Hyperlegible Next', sans-serif;
+}
+
+:root[data-font='system'] {
+  --font-body: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: system-ui, 'Segoe UI', Roboto, sans-serif;
 }

@@ -1,0 +1,16 @@
+.loader {
+  min-height: 50vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-soft);
+}
+
+.bar {
+  display: block;
+  width: 8rem;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(to right, var(--color-info) 40%, var(--color-line) 40%);
+}

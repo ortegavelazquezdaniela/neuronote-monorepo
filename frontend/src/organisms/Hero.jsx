@@ -35,7 +35,7 @@ export function Hero() {
         <div className={styles.visual} data-enter style={{ '--enter-i': 2 }}>
           <div className={styles.mapFrame}>
             <CityMap title="Vista de demostración: ruta directa frente a ruta de calma" />
-            <div className={styles.climateChip}>
+            <div className={styles.climateChip} data-calm-hide>
               <Thermometer aria-hidden="true" />
               <span>
                 <strong>Avenida</strong> más cálida

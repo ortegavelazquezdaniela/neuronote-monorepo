@@ -42,6 +42,17 @@ Atomic Design. Botones en píldora (min 48 px), enlaces con subrayado offset, fi
 
 Una sola entrada del hero al cargar (opacity + 10 px, 520 ms, `cubic-bezier(0.23,1,0.32,1)`, escalonado 70 ms). Hover/press: 120–180 ms. Nada se mueve por scroll; nada en bucle. `prefers-reduced-motion` → solo fundido de 200 ms.
 
+Intro de marca (Fase 2): 1.8 s en total — símbolo y trazo (0–600 ms), nombre (300–750), eslogan (650–1100), desvanecido (1480–1800). Solo una vez por sesión; nunca con movimiento reducido ni en Modo Calma. El modal SOS no anima: en crisis la respuesta debe ser inmediata.
+
 ## Modos
 
-`data-theme` en `<html>`: `default`, `calm`, `contrast`, `night` (tokens listos; selector en Fase 2).
+Atributos en `<html>`, aplicados por `PreferencesProvider`:
+
+- `data-theme`: `default`, `calm` (colores suaves, oculta elementos `[data-calm-hide]`, reduce movimiento), `contrast`, `night` (incluye colores propios del mapa `--map-*`).
+- `data-font`: `atkinson`, `opendyslexic`, `system`.
+- `data-motion`: `reduced` o `full`.
+- `--text-scale`: 1, 1.125, 1.25 o 1.5.
+
+## Formularios
+
+Etiqueta visible siempre, "(obligatorio)/(opcional)" explícito, pista bajo la etiqueta, error bajo el campo con icono y `aria-describedby`, resumen de errores enfocable con enlaces a cada campo. Radios nativos con aspecto propio (`ChoiceGroup`: tarjetas, segmentado o escala 1–5). Acciones destructivas con confirmación en línea, sin ventanas emergentes.

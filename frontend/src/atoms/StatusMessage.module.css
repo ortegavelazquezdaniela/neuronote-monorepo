@@ -1,0 +1,66 @@
+.msg {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4) var(--space-5);
+  border: 1.5px solid;
+  border-radius: var(--radius-md);
+}
+
+.msg:focus-visible {
+  border-radius: var(--radius-md);
+}
+
+.icon {
+  flex: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: 0.15rem;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.title {
+  font-weight: 700;
+}
+
+.text {
+  font-size: var(--fs-sm);
+}
+
+.text ul {
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.info {
+  border-color: color-mix(in srgb, var(--color-info) 60%, transparent);
+  background: color-mix(in srgb, var(--color-info) 10%, var(--color-surface));
+}
+
+.info .icon {
+  color: var(--color-link);
+}
+
+.success {
+  border-color: color-mix(in srgb, var(--color-success) 45%, transparent);
+  background: var(--color-success-bg);
+}
+
+.success .icon {
+  color: var(--color-success);
+}
+
+.error {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+
+.error .icon,
+.error .title {
+  color: var(--color-error);
+}

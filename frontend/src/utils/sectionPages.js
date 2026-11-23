@@ -36,27 +36,12 @@ export const SECTION_PAGES = [
     'Gráficos simples de variación durante el día.',
     'Lenguaje informativo: no es diagnóstico médico.',
   ]),
-  fromModule('notes', [
-    'Formulario sencillo para registrar cómo se sintió un lugar.',
-    'Historial privado con búsqueda, exportación y borrado.',
-  ]),
   {
     path: '/perfil',
     title: 'Perfil',
     intro: 'Tu cuenta, tus preferencias sensoriales y la gestión de tus datos personales.',
     points: ['Registro e inicio de sesión seguros.', 'Descarga y eliminación de tus datos.'],
     phase: 4,
-  },
-  {
-    path: '/accesibilidad',
-    title: 'Preferencias de accesibilidad',
-    intro: 'Ajusta la interfaz a tu forma de percibir: colores, tamaño del texto, tipografía y movimiento.',
-    points: [
-      'Modo Calma, Modo Alto Contraste y Modo Noche.',
-      'Tamaño de texto y tipografías alternativas (Atkinson Hyperlegible, OpenDyslexic).',
-      'Reducir movimiento y guardar tus preferencias solo si lo autorizas.',
-    ],
-    phase: 2,
   },
   {
     path: '/acerca',

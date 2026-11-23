@@ -12,7 +12,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | Fase | Contenido | Estado |
 |---|---|---|
 | 1 | Entorno, design system, página principal responsive | ✅ Completada |
-| 2 | Interactividad: modos de accesibilidad, intro animada, modal SOS (Alt + C), formularios | Pendiente |
+| 2 | Interactividad: modos de accesibilidad, intro animada, modal SOS (Alt + C), formularios | ✅ Completada |
 | 3 | Leaflet + OpenStreetMap, Open-Meteo, REST Countries, WhatsApp deep-link | Pendiente |
 | 4 | Express + JWT, Supabase (RLS), MongoDB Atlas, PHP + MySQL | Pendiente |
 | 5 | Vitest, RTL, MSW, Supertest, Storybook, CI/CD y despliegue | Pendiente |
@@ -23,14 +23,20 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 neuronote-monorepo/
 ├── frontend/          React 19 + Vite (Atomic Design)
 │   └── src/
-│       ├── atoms/       Button, Logo, DataBadge, SkipLink
-│       ├── molecules/   RouteCompare, LayerToggle
+│       ├── atoms/       Button, Logo, DataBadge, SkipLink, TextField, Switch,
+│       │                StatusMessage, PageLoader
+│       ├── molecules/   RouteCompare, LayerToggle, ChoiceGroup, EmptyState
 │       ├── organisms/   SiteHeader, Hero, CityMap, ModulesSection, MapPreview,
-│       │                PurposeSection, SiteFooter, SosFab
+│       │                PurposeSection, SiteFooter, SosFab, CrisisDialog,
+│       │                BrandIntro, SensoryNoteForm, NotesHistory
 │       ├── templates/   MainLayout
-│       ├── pages/       HomePage, CrisisHelpPage, SectionPage, NotFoundPage
-│       ├── hooks/       useDocumentTitle
-│       ├── utils/       modules.js, helplines.js, sectionPages.js
+│       ├── pages/       HomePage, CrisisHelpPage, AccessibilityPage, NotesPage,
+│       │                SectionPage, NotFoundPage, RouteErrorPage
+│       ├── providers/   PreferencesProvider, SosProvider (contexto global)
+│       ├── hooks/       useDocumentTitle, usePreferences, useSos
+│       ├── services/    storage.js, preferencesStore.js, notesStore.js
+│       ├── utils/       modules.js, helplines.js, sectionPages.js,
+│       │                validation.js, noteLabels.js
 │       └── styles/      tokens.css (paleta + modos), base.css
 ├── backend/           API Express (Fase 4)
 ├── audit-engine/      Microservicio PHP 8 + MySQL (Fase 4)
@@ -79,6 +85,19 @@ Verificado en este equipo (22-nov-2026): XAMPP en `C:\xampp` con **PHP 8.2.12** 
 Opcional: para usar `php` directamente en la terminal, añade `C:\xampp\php` a la variable `Path` de tu usuario (Inicio → "Editar las variables de entorno de tu cuenta" → `Path` → Nuevo) y reinicia VS Code.
 
 > Seguridad: XAMPP trae el usuario `root` **sin contraseña**. Sirve solo para desarrollo local. En la Fase 4 crearemos un usuario MySQL dedicado (`neuronote_app`) con permisos solo sobre su base de datos.
+
+## Funciones disponibles (Fase 2)
+
+| Función | Dónde probarla | Archivos |
+|---|---|---|
+| Modos Calma, Alto Contraste y Noche; tamaño de texto; tipografía (Atkinson, OpenDyslexic, sistema); movimiento | `/accesibilidad` | `pages/AccessibilityPage.jsx`, `providers/PreferencesProvider.jsx`, `styles/tokens.css` |
+| Guardar preferencias solo con permiso ("Recordar en este dispositivo") | `/accesibilidad` | `services/preferencesStore.js`, script en `index.html` |
+| Intro de marca (1.8 s, omitible, una vez por sesión, nunca con movimiento reducido) | Abrir el sitio en una pestaña nueva | `organisms/BrandIntro.jsx` |
+| Modal SOS con `Alt + C` o el botón flotante | Cualquier página | `providers/SosProvider.jsx`, `organisms/CrisisDialog.jsx` |
+| Notas sensoriales: formulario validado, historial, búsqueda, exportar y borrar | `/notas` | `pages/NotesPage.jsx`, `organisms/SensoryNoteForm.jsx`, `organisms/NotesHistory.jsx`, `utils/validation.js` |
+| Estados de carga, error y vacío | Navegación entre páginas, historial vacío | `atoms/PageLoader.jsx`, `pages/RouteErrorPage.jsx`, `molecules/EmptyState.jsx` |
+
+Las notas se guardan **solo en el navegador** hasta la Fase 4, cuando se sincronizarán con la API (con consentimiento).
 
 ## Datos y honestidad
 
