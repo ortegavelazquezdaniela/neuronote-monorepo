@@ -41,12 +41,17 @@ function writeCache(key, value, ttl) {
  * @param {string} [opts.cacheKey]
  * @param {number} [opts.ttl=600000] 10 min
  * @param {AbortSignal} [opts.signal]
+ * @param {boolean} [opts.cacheOnly=false] solo devuelve lo que haya en caché (si no, lanza ApiError 'cache')
  */
-export async function fetchJSON(url, { init = {}, timeout = 12_000, retries = 2, cacheKey, ttl = 600_000, signal } = {}) {
+export async function fetchJSON(
+  url,
+  { init = {}, timeout = 12_000, retries = 2, cacheKey, ttl = 600_000, signal, cacheOnly = false } = {},
+) {
   if (cacheKey) {
     const cached = readCache(cacheKey);
     if (cached !== undefined) return cached;
   }
+  if (cacheOnly) throw new ApiError('cache-miss', { kind: 'cache' });
 
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {

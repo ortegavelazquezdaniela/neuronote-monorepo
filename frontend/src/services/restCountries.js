@@ -14,6 +14,16 @@ const FIELDS = 'names.common,names.translations.spa,codes.alpha_2,calling_codes,
 
 export const restCountriesKey = import.meta.env.VITE_RESTCOUNTRIES_KEY?.trim() || '';
 
+// La API entrega los nombres de moneda en inglés; el navegador los traduce por código ISO 4217.
+const currencyNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['es'], { type: 'currency' }) : null;
+const currencyName = (c) => {
+  try {
+    return currencyNames?.of(c.code) ?? c.name;
+  } catch {
+    return c.name;
+  }
+};
+
 function toCountry(o) {
   const currencies = Array.isArray(o.currencies) ? o.currencies : o.currencies ? [o.currencies] : [];
   return {
@@ -22,7 +32,7 @@ function toCountry(o) {
     flag: o.flag?.emoji ?? '',
     callingCodes: o.calling_codes ?? [],
     languages: (o.languages ?? []).map((l) => l.native_name ?? l.name),
-    currencies: currencies.map((c) => `${c.name} (${c.code})`),
+    currencies: currencies.map((c) => `${currencyName(c)} (${c.code})`),
   };
 }
 

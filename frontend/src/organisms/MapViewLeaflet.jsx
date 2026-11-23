@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { usePreferences } from '../hooks/usePreferences';
-import { HAVEN_TYPES } from '../services/overpass';
+import { HAVEN_TYPES } from '../utils/havenTypes';
 import styles from './MapViewLeaflet.module.css';
 
 /**

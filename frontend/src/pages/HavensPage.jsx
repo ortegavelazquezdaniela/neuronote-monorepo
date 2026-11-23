@@ -10,7 +10,7 @@ import { SensoryDashboardLayout } from '../templates/SensoryDashboardLayout';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useHavens } from '../hooks/useDataHooks';
-import { HAVEN_TYPES } from '../services/overpass';
+import { HAVEN_TYPES } from '../utils/havenTypes';
 import { DEFAULT_CENTER } from '../utils/geo';
 
 const TYPE_OPTIONS = [

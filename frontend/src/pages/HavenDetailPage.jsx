@@ -7,7 +7,7 @@ import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { MicroclimatePanel } from '../organisms/MicroclimatePanel';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useHaven } from '../hooks/useDataHooks';
-import { HAVEN_TYPES } from '../services/overpass';
+import { HAVEN_TYPES } from '../utils/havenTypes';
 import { describeError } from '../services/http';
 import styles from './HavenDetailPage.module.css';
 

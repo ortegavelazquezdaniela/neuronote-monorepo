@@ -1,6 +1,6 @@
 import { useAsync } from './useAsync';
 import { getWeather } from '../services/openMeteo';
-import { getHavenCandidates, getHavenById } from '../services/overpass';
+import { getHavenCandidates, getHavenById } from '../services/havens';
 import { getWalkingRoutes } from '../services/routing';
 import { getCountries } from '../services/restCountries';
 

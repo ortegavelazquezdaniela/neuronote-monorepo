@@ -106,7 +106,8 @@ Todas gratuitas. Verificadas el 22-nov-2026; ningún servicio garantiza disponib
 | Servicio | Uso en NEURONOTE | Clave | Notas | Archivo |
 |---|---|---|---|---|
 | [OpenStreetMap](https://www.openstreetmap.org/) + [Leaflet](https://leafletjs.com/) 1.9 | Mapa (`/mapa`, `/rutas`, `/oasis`, portada) | No | Atribución visible, sin descargas masivas, el mapa se carga solo al verse | `organisms/MapViewLeaflet.jsx` |
-| [Overpass API](https://overpass-api.de/) (datos OSM) | Parques, jardines, bibliotecas y museos reales como **oasis candidatos sin verificar** | No | Se satura a menudo: 2 servidores, 15 s, caché 6 h y respaldo de la última respuesta (7 días) | `services/overpass.js` |
+| [Nominatim](https://nominatim.openstreetmap.org/) (buscador oficial de OSM) | **Fuente principal** de parques, jardines, bibliotecas y museos reales como **oasis candidatos sin verificar**, y de cada ficha `/oasis/:id` | No | Política: máx. 1 petición/s (cola de 1.1 s), caché 6 h, sin autocompletado | `services/nominatim.js`, `services/havens.js` |
+| [Overpass API](https://overpass-api.de/) (datos OSM) | **Respaldo** si Nominatim falla | No | Sus servidores públicos se saturan a menudo (406/502/504 el 23-nov-2026): 2 servidores, 12 s. Si todo falla, se usa la última respuesta guardada (≤ 7 días) | `services/overpass.js` |
 | [OSRM de FOSSGIS](https://routing.openstreetmap.de/) | Rutas a pie con alternativas | No | Solo se calcula cuando la persona elige un destino (≤ 12 km) | `services/routing.js` |
 | [Open-Meteo](https://open-meteo.com/) | Temperatura, presión, UV, humedad, viento (6 h atrás + 18 h) | No | Son **pronósticos** de modelo, se etiquetan así; coordenadas redondeadas a ~1 km | `services/openMeteo.js` |
 | [REST Countries v5](https://restcountries.com/) | Lista de países y códigos telefónicos para WhatsApp; idiomas y moneda | **Sí, gratuita** | Plan Free: 1,000 consultas/mes. Sin clave, la app pide el código de país a mano | `services/restCountries.js` |

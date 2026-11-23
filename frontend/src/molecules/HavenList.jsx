@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { Accessibility, ArrowRight, BookOpen, Landmark, Trees, Flower2 } from 'lucide-react';
 import { DataBadge } from '../atoms/DataBadge';
-import { HAVEN_TYPES } from '../services/overpass';
+import { HAVEN_TYPES } from '../utils/havenTypes';
 import { distanceMeters, formatDistance } from '../utils/geo';
 import styles from './HavenList.module.css';
 
