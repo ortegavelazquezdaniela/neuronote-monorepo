@@ -13,7 +13,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 |---|---|---|
 | 1 | Entorno, design system, página principal responsive | ✅ Completada |
 | 2 | Interactividad: modos de accesibilidad, intro animada, modal SOS (Alt + C), formularios | ✅ Completada |
-| 3 | Leaflet + OpenStreetMap, Open-Meteo, REST Countries, WhatsApp deep-link | Pendiente |
+| 3 | Leaflet + OpenStreetMap, Open-Meteo, REST Countries, WhatsApp deep-link | ✅ Completada (REST Countries requiere clave gratuita) |
 | 4 | Express + JWT, Supabase (RLS), MongoDB Atlas, PHP + MySQL | Pendiente |
 | 5 | Vitest, RTL, MSW, Supertest, Storybook, CI/CD y despliegue | Pendiente |
 
@@ -99,9 +99,40 @@ Opcional: para usar `php` directamente en la terminal, añade `C:\xampp\php` a l
 
 Las notas se guardan **solo en el navegador** hasta la Fase 4, cuando se sincronizarán con la API (con consentimiento).
 
+## Integraciones externas (Fase 3)
+
+Todas gratuitas. Verificadas el 22-nov-2026; ningún servicio garantiza disponibilidad ni es "gratis para siempre".
+
+| Servicio | Uso en NEURONOTE | Clave | Notas | Archivo |
+|---|---|---|---|---|
+| [OpenStreetMap](https://www.openstreetmap.org/) + [Leaflet](https://leafletjs.com/) 1.9 | Mapa (`/mapa`, `/rutas`, `/oasis`, portada) | No | Atribución visible, sin descargas masivas, el mapa se carga solo al verse | `organisms/MapViewLeaflet.jsx` |
+| [Nominatim](https://nominatim.openstreetmap.org/) (buscador oficial de OSM) | **Fuente principal** de parques, jardines, bibliotecas y museos reales como **oasis candidatos sin verificar**, y de cada ficha `/oasis/:id` | No | Política: máx. 1 petición/s (cola de 1.1 s), caché 6 h, sin autocompletado | `services/nominatim.js`, `services/havens.js` |
+| [Overpass API](https://overpass-api.de/) (datos OSM) | **Respaldo** si Nominatim falla | No | Sus servidores públicos se saturan a menudo (406/502/504 el 23-nov-2026): 2 servidores, 12 s. Si todo falla, se usa la última respuesta guardada (≤ 7 días) | `services/overpass.js` |
+| [OSRM de FOSSGIS](https://routing.openstreetmap.de/) | Rutas a pie con alternativas | No | Solo se calcula cuando la persona elige un destino (≤ 12 km) | `services/routing.js` |
+| [Open-Meteo](https://open-meteo.com/) | Temperatura, presión, UV, humedad, viento (6 h atrás + 18 h) | No | Son **pronósticos** de modelo, se etiquetan así; coordenadas redondeadas a ~1 km | `services/openMeteo.js` |
+| [REST Countries v5](https://restcountries.com/) | Lista de países y códigos telefónicos para WhatsApp; idiomas y moneda | **Sí, gratuita** | Plan Free: 1,000 consultas/mes. Sin clave, la app pide el código de país a mano | `services/restCountries.js` |
+| WhatsApp `wa.me` | Mensaje preescrito a una persona de confianza | No | NEURONOTE no envía ni guarda la conversación | `utils/whatsapp.js`, `organisms/TrustedContact.jsx` |
+
+### Configurar REST Countries (opcional, gratis)
+
+1. Crea una cuenta en <https://restcountries.com/sign-up> (plan Free).
+2. En **API Keys**, crea una clave y agrega `localhost` a los orígenes permitidos (y tu dominio cuando despliegues).
+3. Copia `frontend/.env.example` como `frontend/.env.local` y pega la clave en `VITE_RESTCOUNTRIES_KEY=`.
+4. Reinicia `npm run dev`. En la Fase 4 esta llamada pasará por el backend para que la clave no llegue al navegador.
+
+### Nuevas páginas
+
+| Ruta | Qué hace | Archivo |
+|---|---|---|
+| `/mapa` | Mapa con oasis candidatos y microclima de la zona | `pages/MapPage.jsx` |
+| `/rutas` | Origen/destino en el mapa, rutas a pie comparadas por tiempo y cercanía a lugares tranquilos | `pages/RoutesPage.jsx` |
+| `/oasis` | Lista filtrable (tipo, silla de ruedas) + mapa | `pages/HavensPage.jsx` |
+| `/oasis/:id` | Ficha del lugar con datos de OSM, clima y "Planear ruta hasta aquí" | `pages/HavenDetailPage.jsx` |
+| `/microclima` | Panel con gráficas por hora (teclado y tabla accesibles) | `pages/MicroclimatePage.jsx` |
+
 ## Datos y honestidad
 
-Cada valor visible indica su procedencia: **Medido** (Open-Meteo), **Estimado**, **Reportado** (comunidad) o **Demostración**. En la Fase 1 todos los valores de rutas y mapa son de demostración y así se etiquetan.
+Cada valor visible indica su procedencia: **Calculado** (p. ej. distancia de una ruta), **Pronóstico** (Open-Meteo), **Estimado**, **Reportado** (comunidad), **Sin verificar** (lugar real aún no evaluado) o **Demostración** (solo el mapa ilustrativo del inicio).
 
 ## Ayuda en crisis
 

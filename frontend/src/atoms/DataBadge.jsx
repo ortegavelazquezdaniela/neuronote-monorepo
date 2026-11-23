@@ -5,7 +5,9 @@ import styles from './DataBadge.module.css';
  * nunca mostrar un valor sin decir si es medido, estimado, reportado o de demostración.
  */
 const KINDS = {
-  real: { label: 'Medido', title: 'Dato medido por una fuente abierta (p. ej. Open-Meteo)' },
+  real: { label: 'Calculado', title: 'Dato calculado con datos abiertos (p. ej. distancia de una ruta sobre OpenStreetMap)' },
+  forecast: { label: 'Pronóstico', title: 'Valor de un modelo meteorológico (Open-Meteo), no de una estación cercana' },
+  unverified: { label: 'Sin verificar', title: 'Lugar público real que NEURONOTE todavía no ha evaluado' },
   estimated: { label: 'Estimado', title: 'Valor calculado a partir de otras variables' },
   reported: { label: 'Reportado', title: 'Información aportada por la comunidad' },
   demo: { label: 'Demostración', title: 'Dato ficticio usado solo para ilustrar la interfaz' },
