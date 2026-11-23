@@ -1,0 +1,32 @@
+# Render Blueprint — API de NEURONOTE (plan Free).
+# Render → New → Blueprint → elige este repositorio. Los valores secretos
+# (sync: false) se escriben en el panel de Render, nunca en este archivo.
+# Nota: el plan Free se "duerme" tras 15 min sin tráfico y tarda ~1 min en despertar.
+services:
+  - type: web
+    name: neuronote-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: CORS_ORIGIN
+        sync: false # p. ej. https://neuronote.vercel.app
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 2h
+      - key: SUPABASE_URL
+        value: https://uerubfhrjspfiemgsufn.supabase.co
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: RESTCOUNTRIES_KEY
+        sync: false

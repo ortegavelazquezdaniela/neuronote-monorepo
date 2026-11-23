@@ -29,13 +29,14 @@ export function ChoiceGroup({
     <fieldset
       id={groupId}
       className={`${styles.group} ${error ? fieldStyles.hasError : ''}`}
+      aria-labelledby={`${groupId}-legend`}
       aria-describedby={[hintId, errorId].filter(Boolean).join(' ') || undefined}
       aria-invalid={error ? true : undefined}
     >
-      <legend className={fieldStyles.legend}>
+      <legend id={`${groupId}-legend`} className={fieldStyles.legend}>
         {legend}
-        {required === true && <span className={fieldStyles.req}> (obligatorio)</span>}
-        {required === false && <span className={fieldStyles.opt}> (opcional)</span>}
+        {required === true && <> <span className={fieldStyles.req}>(obligatorio)</span></>}
+        {required === false && <> <span className={fieldStyles.opt}>(opcional)</span></>}
       </legend>
       {hint && (
         <p id={hintId} className={fieldStyles.hint}>

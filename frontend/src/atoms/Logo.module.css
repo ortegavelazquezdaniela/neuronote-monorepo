@@ -26,5 +26,6 @@
 }
 
 .inverted .light {
-  color: var(--nn-sage);
+  /* salvia aclarada: #97B1A6 sobre azul profundo daba 4.49:1 (mínimo AA: 4.5:1) */
+  color: #b9cdc4;
 }

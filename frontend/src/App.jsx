@@ -6,6 +6,7 @@ import { SectionPage } from './pages/SectionPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { RouteErrorPage } from './pages/RouteErrorPage';
 import { SECTION_PAGES } from './utils/sectionPages';
+import { RequireAuth } from './organisms/RequireAuth';
 
 // Carga diferida: estas páginas (y Leaflet) solo se descargan cuando se visitan.
 const named = (loader, name) => lazy(() => loader().then((m) => ({ default: m[name] })));
@@ -17,6 +18,8 @@ const RoutesPage = named(() => import('./pages/RoutesPage'), 'RoutesPage');
 const HavensPage = named(() => import('./pages/HavensPage'), 'HavensPage');
 const HavenDetailPage = named(() => import('./pages/HavenDetailPage'), 'HavenDetailPage');
 const MicroclimatePage = named(() => import('./pages/MicroclimatePage'), 'MicroclimatePage');
+const AuthPage = named(() => import('./pages/AuthPage'), 'AuthPage');
+const ProfilePage = named(() => import('./pages/ProfilePage'), 'ProfilePage');
 
 const router = createBrowserRouter([
   {
@@ -35,6 +38,16 @@ const router = createBrowserRouter([
           { path: 'oasis', element: <HavensPage /> },
           { path: 'oasis/:id', element: <HavenDetailPage /> },
           { path: 'microclima', element: <MicroclimatePage /> },
+          { path: 'entrar', element: <AuthPage mode="login" /> },
+          { path: 'registro', element: <AuthPage mode="register" /> },
+          {
+            path: 'perfil',
+            element: (
+              <RequireAuth>
+                <ProfilePage />
+              </RequireAuth>
+            ),
+          },
           ...SECTION_PAGES.map(({ path, ...props }) => ({
             path: path.slice(1),
             element: <SectionPage {...props} />,

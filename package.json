@@ -10,6 +10,9 @@
     "build": "npm run build --prefix frontend",
     "lint": "npm run lint --prefix frontend",
     "preview": "npm run preview --prefix frontend",
+    "api": "npm run dev --prefix backend",
+    "test": "npm test --prefix frontend && npm test --prefix backend",
+    "storybook": "npm run storybook --prefix frontend",
     "php:version": "C:/xampp/php/php.exe -v",
     "audit:serve": "C:/xampp/php/php.exe -S localhost:8080 -t audit-engine"
   },

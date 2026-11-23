@@ -1,6 +1,8 @@
-import { Phone, Siren, UserCheck } from 'lucide-react';
-import { EmptyState } from '../molecules/EmptyState';
+import { useEffect } from 'react';
+import { Phone, Siren } from 'lucide-react';
+import { reportCrisisOpen } from '../services/telemetry';
 import { TrustedContact } from '../organisms/TrustedContact';
+import { PsychologistList } from '../organisms/PsychologistList';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { HELPLINES } from '../utils/helplines';
 import styles from './CrisisHelpPage.module.css';
@@ -12,6 +14,7 @@ import styles from './CrisisHelpPage.module.css';
  */
 export function CrisisHelpPage() {
   useDocumentTitle('Ayuda SOS');
+  useEffect(() => reportCrisisOpen('page'), []);
   const { lineaDeLaVida, emergencias } = HELPLINES;
 
   return (
@@ -46,10 +49,7 @@ export function CrisisHelpPage() {
           <TrustedContact />
 
           <h2 className={`${styles.h2} ${styles.spaced}`}>Profesionales verificados</h2>
-          <EmptyState icon={UserCheck} title="Aún no hay profesionales registrados">
-            Solo publicaremos psicólogas y psicólogos con cédula profesional validada, y su
-            disponibilidad real en ese momento. No inventamos contactos ni horarios.
-          </EmptyState>
+          <PsychologistList />
         </div>
 
         <div className={styles.ground}>

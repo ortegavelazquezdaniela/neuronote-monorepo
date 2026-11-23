@@ -7,132 +7,163 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 
 **Presupuesto: $0.00 MXN** — solo herramientas gratuitas y open source.
 
+![CI](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml/badge.svg)
+![Pruebas](https://img.shields.io/badge/pruebas-99%20pasando-2f5d55)
+![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-82%25-407076)
+![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-96%25-407076)
+![Lighthouse](https://img.shields.io/badge/Lighthouse%20inicio-99%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)
+![Licencia MIT](https://img.shields.io/badge/licencia-MIT-c9c5ba)
+
 ## Estado
 
 | Fase | Contenido | Estado |
 |---|---|---|
-| 1 | Entorno, design system, página principal responsive | ✅ Completada |
-| 2 | Interactividad: modos de accesibilidad, intro animada, modal SOS (Alt + C), formularios | ✅ Completada |
-| 3 | Leaflet + OpenStreetMap, Open-Meteo, REST Countries, WhatsApp deep-link | ✅ Completada (REST Countries requiere clave gratuita) |
-| 4 | Express + JWT, Supabase (RLS), MongoDB Atlas, PHP + MySQL | Pendiente |
-| 5 | Vitest, RTL, MSW, Supertest, Storybook, CI/CD y despliegue | Pendiente |
+| 1 | Entorno, design system, página principal responsive | ✅ |
+| 2 | Modos de accesibilidad, intro, modal SOS (Alt + C), formularios, estados | ✅ |
+| 3 | Leaflet + OSM, Nominatim/Overpass, rutas a pie, Open-Meteo, REST Countries, WhatsApp | ✅ |
+| 4 | API Express (JWT + bcrypt), Supabase/PostgreSQL con RLS, MongoDB Atlas, motor PHP + MySQL | ✅ (Supabase y MongoDB necesitan tus claves, ver abajo) |
+| 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, configuración de despliegue | ✅ (el despliegue necesita tus cuentas de Vercel y Render) |
 
-## Estructura
+## Arquitectura
 
 ```
-neuronote-monorepo/
-├── frontend/          React 19 + Vite (Atomic Design)
-│   └── src/
-│       ├── atoms/       Button, Logo, DataBadge, SkipLink, TextField, Switch,
-│       │                StatusMessage, PageLoader
-│       ├── molecules/   RouteCompare, LayerToggle, ChoiceGroup, EmptyState
-│       ├── organisms/   SiteHeader, Hero, CityMap, ModulesSection, MapPreview,
-│       │                PurposeSection, SiteFooter, SosFab, CrisisDialog,
-│       │                BrandIntro, SensoryNoteForm, NotesHistory
-│       ├── templates/   MainLayout
-│       ├── pages/       HomePage, CrisisHelpPage, AccessibilityPage, NotesPage,
-│       │                SectionPage, NotFoundPage, RouteErrorPage
-│       ├── providers/   PreferencesProvider, SosProvider (contexto global)
-│       ├── hooks/       useDocumentTitle, usePreferences, useSos
-│       ├── services/    storage.js, preferencesStore.js, notesStore.js
-│       ├── utils/       modules.js, helplines.js, sectionPages.js,
-│       │                validation.js, noteLabels.js
-│       └── styles/      tokens.css (paleta + modos), base.css
-├── backend/           API Express (Fase 4)
-├── audit-engine/      Microservicio PHP 8 + MySQL (Fase 4)
-├── .github/workflows/ CI (lint + build)
-├── PRODUCT.md         Verdad de producto
-└── DESIGN.md          Sistema visual
+                         ┌──────────────── navegador ────────────────┐
+                         │ React 19 + Vite (SPA, Atomic Design)      │
+                         │  Leaflet ← tile.openstreetmap.org         │
+                         │  Nominatim / Overpass / OSRM / Open-Meteo │
+                         │  Supabase Realtime (solo presencia pública)│
+                         └──────────────┬────────────────────────────┘
+                                        │ JWT Bearer
+                         ┌──────────────▼──────────────┐
+                         │ API Node.js + Express 5      │  helmet · CORS · rate limit
+                         │ /api/auth /api/me /api/proxy │  zod · bcrypt · errores seguros
+                         └───┬──────────────┬───────────┘
+            clave secreta    │              │ Mongoose
+       ┌─────────────────────▼───┐   ┌──────▼─────────────────────┐
+       │ Supabase (PostgreSQL)   │   │ MongoDB Atlas (M0)         │
+       │ cuentas, perfiles,      │   │ Sensory Notes, telemetría  │
+       │ favoritos, psicólogos   │   │ anónima del SOS (time-     │
+       │ RLS en todas las tablas │   │ series, caduca en 1 año)   │
+       └─────────────────────────┘   └────────────────────────────┘
+                                        │ /src/verify.php
+                         ┌──────────────▼──────────────┐
+                         │ Motor de auditoría PHP 8     │  ICAS, actas, cédulas,
+                         │ + MySQL (XAMPP) · PDO        │  sellos con HMAC-SHA256
+                         └──────────────────────────────┘
 ```
+
+| Responsabilidad | Tecnología | Dónde |
+|---|---|---|
+| Interfaz, accesibilidad, mapas | React 19, Vite 7, React Router 7, CSS Modules, Leaflet | `frontend/` |
+| API REST, autenticación, proxy con caché | Node.js, Express 5, JWT, bcryptjs, zod, helmet, express-rate-limit | `backend/` |
+| Datos relacionales + RLS + Realtime | Supabase (PostgreSQL 17) | `backend/db/supabase/*.sql` |
+| Notas y telemetría anónima | MongoDB Atlas + Mongoose | `backend/src/models/` |
+| Auditorías, cédulas, sellos | PHP 8.2 + MySQL/MariaDB (PDO, `$_POST`, CSRF) | `audit-engine/` |
 
 ## Requisitos
 
-- [Node.js LTS](https://nodejs.org/) 20.19+ (probado con 24.x) y npm
-- [Git](https://git-scm.com/)
+- [Node.js LTS](https://nodejs.org/) 20.19+ (probado con 24.x) y npm · [Git](https://git-scm.com/)
+- XAMPP (PHP 8.2 + MariaDB) para el motor de auditoría
 - Visual Studio Code (extensiones recomendadas en `.vscode/extensions.json`)
-- XAMPP o Laragon (solo desde la Fase 4)
 
 ## Ejecutar en local (terminal de VS Code)
 
+Abre **tres terminales** (frontend, API y motor PHP):
+
 ```bash
-# 1. Instalar dependencias del frontend
+# Terminal 1 — Frontend → http://localhost:5173
 cd frontend
 npm install
-
-# 2. (Opcional por ahora) variables de entorno
-cp .env.example .env.local      # PowerShell: Copy-Item .env.example .env.local
-
-# 3. Servidor de desarrollo → http://localhost:5173
+cp .env.example .env.local        # PowerShell: Copy-Item .env.example .env.local
 npm run dev
 
-# 4. Calidad
-npm run lint
-npm run build
-npm run preview
+# Terminal 2 — API → http://localhost:4000/api/health
+cd backend
+npm install
+cp .env.example .env              # luego genera JWT_SECRET (instrucciones dentro)
+npm run dev
+
+# Terminal 3 — Motor de auditoría → http://localhost:8080
+# (XAMPP Control Panel: MySQL en Start)
+npm run audit:serve               # desde la raíz del monorepo
 ```
 
-Desde la raíz también funcionan `npm run dev`, `npm run build` y `npm run lint` (delegan en `frontend/`).
+Sin Supabase ni MongoDB configurados, la API arranca en **modo memoria** (lo avisa en consola y en `/api/health`): todo funciona, pero las cuentas y notas se pierden al reiniciar.
 
-## XAMPP (PHP + MySQL, Fase 4)
+### Calidad
 
-Verificado en este equipo (22-nov-2026): XAMPP en `C:\xampp` con **PHP 8.2.12** (extensiones `PDO`, `pdo_mysql`, `mbstring`, `openssl`) y **MariaDB 10.4.32** (compatible con MySQL).
+| Comando | Qué hace |
+|---|---|
+| `npm run lint` (en `frontend/` o `backend/`) | ESLint |
+| `npm test` / `npm run coverage` (frontend) | Vitest + React Testing Library + MSW, con umbral de cobertura del 70 % |
+| `npm test` / `npm run coverage` (backend) | Vitest + Supertest |
+| `C:\xampp\php\php.exe audit-engine/tests/icas_test.php` | Pruebas del ICAS |
+| `npm run storybook` (frontend) | Catálogo de componentes → http://localhost:6006 |
+| `npm run build` / `npm run build-storybook` (frontend) | Compilación de producción y del catálogo |
 
-1. Abre el **XAMPP Control Panel** y pulsa *Start* en **Apache** y **MySQL**.
-2. phpMyAdmin: <http://localhost/phpmyadmin>.
-3. Comprobar PHP desde la raíz del monorepo: `npm run php:version`.
-4. Servir el motor de auditoría (cuando exista código, Fase 4): `npm run audit:serve` → <http://localhost:8080>.
+Resultados al 23-nov-2026: **69 pruebas de frontend** (81.7 % sentencias, 84.8 % líneas), **30 de backend** (95.7 % sentencias, 99.2 % líneas) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
 
-Opcional: para usar `php` directamente en la terminal, añade `C:\xampp\php` a la variable `Path` de tu usuario (Inicio → "Editar las variables de entorno de tu cuenta" → `Path` → Nuevo) y reinicia VS Code.
+## Configurar los servicios en la nube (gratis)
 
-> Seguridad: XAMPP trae el usuario `root` **sin contraseña**. Sirve solo para desarrollo local. En la Fase 4 crearemos un usuario MySQL dedicado (`neuronote_app`) con permisos solo sobre su base de datos.
+### Supabase — PostgreSQL con RLS (ya creado)
 
-## Funciones disponibles (Fase 2)
+El proyecto **`neuronote`** (us-east-1, plan Free, $0) ya tiene aplicadas las migraciones `backend/db/supabase/001_init.sql` y `002_harden_privileges.sql`: 6 tablas, RLS en todas, presencia pública de profesionales para Realtime, y el asesor de seguridad sin advertencias.
 
-| Función | Dónde probarla | Archivos |
-|---|---|---|
-| Modos Calma, Alto Contraste y Noche; tamaño de texto; tipografía (Atkinson, OpenDyslexic, sistema); movimiento | `/accesibilidad` | `pages/AccessibilityPage.jsx`, `providers/PreferencesProvider.jsx`, `styles/tokens.css` |
-| Guardar preferencias solo con permiso ("Recordar en este dispositivo") | `/accesibilidad` | `services/preferencesStore.js`, script en `index.html` |
-| Intro de marca (1.8 s, omitible, una vez por sesión, nunca con movimiento reducido) | Abrir el sitio en una pestaña nueva | `organisms/BrandIntro.jsx` |
-| Modal SOS con `Alt + C` o el botón flotante | Cualquier página | `providers/SosProvider.jsx`, `organisms/CrisisDialog.jsx` |
-| Notas sensoriales: formulario validado, historial, búsqueda, exportar y borrar | `/notas` | `pages/NotesPage.jsx`, `organisms/SensoryNoteForm.jsx`, `organisms/NotesHistory.jsx`, `utils/validation.js` |
-| Estados de carga, error y vacío | Navegación entre páginas, historial vacío | `atoms/PageLoader.jsx`, `pages/RouteErrorPage.jsx`, `molecules/EmptyState.jsx` |
+Falta **una** cosa, que solo tú puedes hacer:
 
-Las notas se guardan **solo en el navegador** hasta la Fase 4, cuando se sincronizarán con la API (con consentimiento).
+1. Entra a <https://supabase.com/dashboard/project/uerubfhrjspfiemgsufn/settings/api-keys>.
+2. En **Secret keys**, crea o copia una clave (`sb_secret_…`).
+3. Pégala en `backend/.env` → `SUPABASE_SECRET_KEY=` (nunca en el frontend ni en el chat).
+4. Reinicia la API: la consola dirá `usuarios: supabase`.
 
-## Integraciones externas (Fase 3)
+### MongoDB Atlas — clúster M0 gratuito
 
-Todas gratuitas. Verificadas el 22-nov-2026; ningún servicio garantiza disponibilidad ni es "gratis para siempre".
+1. Crea una cuenta en <https://www.mongodb.com/cloud/atlas/register> (plan **M0 Free**, sin tarjeta).
+2. **Create cluster → M0 → AWS → us-east-1** (o la región más cercana) → nombre `neuronote`.
+3. **Database Access → Add New Database User**: usuario `neuronote_api`, contraseña generada, rol *Read and write to any database*.
+4. **Network Access → Add IP Address**: tu IP actual (para desarrollo). Para Render, Atlas pide `0.0.0.0/0` porque su plan Free no tiene IP fija.
+5. **Connect → Drivers → Node.js**: copia la cadena `mongodb+srv://…` y pégala en `backend/.env` → `MONGODB_URI=` (reemplaza `<db_password>`).
+6. Reinicia la API: la consola dirá `notas: mongodb`.
 
-| Servicio | Uso en NEURONOTE | Clave | Notas | Archivo |
+### REST Countries
+
+La clave vive ahora en el servidor (`backend/.env → RESTCOUNTRIES_KEY`) y el navegador consulta `/api/proxy/countries` (caché de 24 h). Puedes borrar `VITE_RESTCOUNTRIES_KEY` de `frontend/.env.local`.
+
+## Motor de auditoría (PHP + MySQL)
+
+- Base `neuronote_audit` con usuario dedicado `neuronote_app` (solo SELECT/INSERT/UPDATE/DELETE sobre sus 4 tablas). Credenciales en `audit-engine/.env` (local, no se sube).
+- **Panel pericial** <http://localhost:8080/> (usuario `admin`; contraseña en el comentario de `audit-engine/.env`): aprobar/rechazar actas, emitir sellos, aprobar/suspender/editar/eliminar profesionales.
+- Formularios: `/src/submit_audit.php` (acta + ICAS) y `/src/register_professional.php` (cédula).
+- Verificación pública JSON: `/src/verify.php?folio=NN-2026-000001` u `?osm_id=way-123`. Si alguien altera el acta en la base, el hash HMAC deja de coincidir y responde `"integrity": "alterado"`.
+- **ICAS**: fórmula propia y documentada en `audit-engine/src/icas.php` (no es una norma oficial).
+
+> Nota de este equipo: la tabla del sistema `mysql.db` de tu MariaDB está dañada (pasa cuando XAMPP se cierra de golpe). NEURONOTE no la necesita (usa permisos por tabla), pero puede afectar a otros proyectos. Para repararla: phpMyAdmin → base `mysql` → tabla `db` → *Operaciones* → **Reparar tabla**, o `REPAIR TABLE mysql.db;` como root.
+
+## Despliegue gratuito
+
+| Parte | Servicio | Archivo | Pasos |
+|---|---|---|---|
+| Frontend | **Vercel Hobby** (uso no comercial; se pausa al pasar límites, no cobra) | `frontend/vercel.json` | vercel.com → Add New Project → importa el repo → *Root Directory* `frontend` → variables `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` → Deploy |
+| API | **Render Free** (duerme tras 15 min sin tráfico; ~1 min en despertar) | `render.yaml` | render.com → New → **Blueprint** → elige el repo → completa `CORS_ORIGIN` (tu URL de Vercel), `SUPABASE_SECRET_KEY`, `MONGODB_URI`, `RESTCOUNTRIES_KEY` |
+| Motor PHP | Local (XAMPP). Opcional: Alwaysdata Free (100 MB) | `audit-engine/` | Revisa sus condiciones actuales antes de usarlo |
+
+Al terminar: agrega tu dominio de Vercel a los orígenes permitidos de REST Countries y a `CORS_ORIGIN`. Si Render te pide tarjeta durante el registro (algunas cuentas lo reportan), no la pongas: avísame y movemos la API a otra opción gratuita.
+
+## Accesibilidad y rendimiento (Lighthouse 13, móvil, compilación de producción)
+
+| Página | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| [OpenStreetMap](https://www.openstreetmap.org/) + [Leaflet](https://leafletjs.com/) 1.9 | Mapa (`/mapa`, `/rutas`, `/oasis`, portada) | No | Atribución visible, sin descargas masivas, el mapa se carga solo al verse | `organisms/MapViewLeaflet.jsx` |
-| [Nominatim](https://nominatim.openstreetmap.org/) (buscador oficial de OSM) | **Fuente principal** de parques, jardines, bibliotecas y museos reales como **oasis candidatos sin verificar**, y de cada ficha `/oasis/:id` | No | Política: máx. 1 petición/s (cola de 1.1 s), caché 6 h, sin autocompletado | `services/nominatim.js`, `services/havens.js` |
-| [Overpass API](https://overpass-api.de/) (datos OSM) | **Respaldo** si Nominatim falla | No | Sus servidores públicos se saturan a menudo (406/502/504 el 23-nov-2026): 2 servidores, 12 s. Si todo falla, se usa la última respuesta guardada (≤ 7 días) | `services/overpass.js` |
-| [OSRM de FOSSGIS](https://routing.openstreetmap.de/) | Rutas a pie con alternativas | No | Solo se calcula cuando la persona elige un destino (≤ 12 km) | `services/routing.js` |
-| [Open-Meteo](https://open-meteo.com/) | Temperatura, presión, UV, humedad, viento (6 h atrás + 18 h) | No | Son **pronósticos** de modelo, se etiquetan así; coordenadas redondeadas a ~1 km | `services/openMeteo.js` |
-| [REST Countries v5](https://restcountries.com/) | Lista de países y códigos telefónicos para WhatsApp; idiomas y moneda | **Sí, gratuita** | Plan Free: 1,000 consultas/mes. Sin clave, la app pide el código de país a mano | `services/restCountries.js` |
-| WhatsApp `wa.me` | Mensaje preescrito a una persona de confianza | No | NEURONOTE no envía ni guarda la conversación | `utils/whatsapp.js`, `organisms/TrustedContact.jsx` |
+| Inicio `/` | 99 | 100 | 100 | 100 |
+| Notas `/notas` | 77 | 100 | 100 | 100 |
+| SOS `/auxilio-inmediato` | 74 | 100 | 100* | 100 |
+| Oasis `/oasis` | 60 | 97 | 96 | 100 |
 
-### Configurar REST Countries (opcional, gratis)
-
-1. Crea una cuenta en <https://restcountries.com/sign-up> (plan Free).
-2. En **API Keys**, crea una clave y agrega `localhost` a los orígenes permitidos (y tu dominio cuando despliegues).
-3. Copia `frontend/.env.example` como `frontend/.env.local` y pega la clave en `VITE_RESTCOUNTRIES_KEY=`.
-4. Reinicia `npm run dev`. En la Fase 4 esta llamada pasará por el backend para que la clave no llegue al navegador.
-
-### Nuevas páginas
-
-| Ruta | Qué hace | Archivo |
-|---|---|---|
-| `/mapa` | Mapa con oasis candidatos y microclima de la zona | `pages/MapPage.jsx` |
-| `/rutas` | Origen/destino en el mapa, rutas a pie comparadas por tiempo y cercanía a lugares tranquilos | `pages/RoutesPage.jsx` |
-| `/oasis` | Lista filtrable (tipo, silla de ruedas) + mapa | `pages/HavensPage.jsx` |
-| `/oasis/:id` | Ficha del lugar con datos de OSM, clima y "Planear ruta hasta aquí" | `pages/HavenDetailPage.jsx` |
-| `/microclima` | Panel con gráficas por hora (teclado y tabla accesibles) | `pages/MicroclimatePage.jsx` |
+\*En la medición local hubo errores de CORS porque la vista previa corría en otro puerto; ya está corregido en la configuración local.
+En `/oasis`, Lighthouse marca marcadores del mapa muy juntos (*target-size*); WCAG 2.2 (2.5.8) lo permite porque cada lugar tiene un botón de tamaño completo en la lista de texto. El rendimiento de las páginas con mapa depende de las teselas de OpenStreetMap. No se sacrificó accesibilidad para subir puntuaciones.
 
 ## Datos y honestidad
 
-Cada valor visible indica su procedencia: **Calculado** (p. ej. distancia de una ruta), **Pronóstico** (Open-Meteo), **Estimado**, **Reportado** (comunidad), **Sin verificar** (lugar real aún no evaluado) o **Demostración** (solo el mapa ilustrativo del inicio).
+Cada valor visible indica su procedencia: **Calculado**, **Pronóstico** (Open-Meteo), **Estimado**, **Reportado** (comunidad), **Sin verificar** (lugar real aún no evaluado) o **Demostración** (solo el mapa ilustrativo del inicio). No hay establecimientos, certificaciones ni profesionales inventados.
 
 ## Ayuda en crisis
 

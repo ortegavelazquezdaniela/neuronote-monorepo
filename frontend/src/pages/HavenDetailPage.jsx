@@ -5,6 +5,7 @@ import { DataBadge } from '../atoms/DataBadge';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { MicroclimatePanel } from '../organisms/MicroclimatePanel';
+import { HavenAccountActions } from '../organisms/HavenAccountActions';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useHaven } from '../hooks/useDataHooks';
 import { HAVEN_TYPES } from '../utils/havenTypes';
@@ -106,6 +107,8 @@ export function HavenDetailPage() {
               </Button>
             )}
           </div>
+
+          <HavenAccountActions haven={haven} />
 
           <p className={styles.source}>
             Fuente:{' '}

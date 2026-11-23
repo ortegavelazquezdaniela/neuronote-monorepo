@@ -1,12 +1,12 @@
 import { fetchJSON, ApiError } from './http';
+import { API_URL } from './api';
 
 /**
  * REST Countries v5 (https://restcountries.com).
- * Desde 2026 la API requiere una clave gratuita (plan Free: 1,000 consultas/mes,
- * sin tarjeta según su documentación). En el navegador solo funciona si el
- * hostname (p. ej. localhost) está en los "allowed origins" de la clave.
- * En la Fase 4 esta llamada pasará por el backend para que la clave no viaje
- * al navegador. Cacheamos 24 h: los datos de países casi no cambian.
+ * Requiere una clave gratuita (plan Free: 1,000 consultas/mes).
+ * Desde la Fase 4 la consulta pasa por el backend (/api/proxy/countries), que
+ * guarda la clave y cachea 24 h. La llamada directa con VITE_RESTCOUNTRIES_KEY
+ * queda solo como respaldo para desarrollo sin backend.
  */
 
 const BASE = 'https://api.restcountries.com/countries/v5';
@@ -36,7 +36,19 @@ function toCountry(o) {
   };
 }
 
+const sortCountries = (list) =>
+  list.filter((c) => c.code && c.callingCodes.length).sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
 export async function getCountries({ signal } = {}) {
+  // Preferido (Fase 4): el backend guarda la clave y cachea 24 h → la clave no llega al navegador
+  if (API_URL) {
+    try {
+      const data = await fetchJSON(`${API_URL}/proxy/countries`, { cacheKey: 'countries:proxy', ttl: 24 * 60 * 60_000, retries: 1, signal });
+      return sortCountries(data.data.objects.map(toCountry));
+    } catch (err) {
+      if (signal?.aborted || !restCountriesKey) throw err; // sin clave local no hay respaldo
+    }
+  }
   if (!restCountriesKey) {
     if (import.meta.env.DEV) console.info('REST Countries: falta VITE_RESTCOUNTRIES_KEY en frontend/.env.local');
     throw new ApiError('La lista de países todavía no está configurada.', { kind: 'config' });
@@ -55,5 +67,5 @@ export async function getCountries({ signal } = {}) {
     all.push(...data.data.objects.map(toCountry));
     if (!data.data.meta?.more) break;
   }
-  return all.filter((c) => c.code && c.callingCodes.length).sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return sortCountries(all);
 }

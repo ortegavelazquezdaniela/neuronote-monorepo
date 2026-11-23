@@ -20,6 +20,9 @@ export class ApiError extends Error {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const memory = new Map();
 
+/** Vacía la caché en memoria (usado por las pruebas). */
+export const clearMemoryCache = () => memory.clear();
+
 function readCache(key) {
   const hit = memory.get(key) ?? readJSON(`nn-cache:${key}`, null, 'session');
   if (hit && hit.expires > Date.now()) return hit.value;
@@ -95,6 +98,8 @@ export function describeError(err) {
   if (!navigator.onLine) return 'Parece que no tienes conexión a internet.';
   if (err?.kind === 'timeout') return 'El servicio tardó demasiado en responder.';
   if (err?.kind === 'config') return err.message;
+  if (err?.kind === 'http' && err.status < 500 && err.status !== 429 && err.message && !/^HTTP \d/.test(err.message))
+    return err.message;
   if (err?.status === 429) return 'El servicio recibió demasiadas consultas. Intenta en unos minutos.';
   return 'El servicio no está disponible en este momento.';
 }
