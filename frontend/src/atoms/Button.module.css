@@ -1,0 +1,93 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 3rem; /* objetivo táctil ≥ 44 px */
+  padding: 0 var(--space-5);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-base);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover .icon:last-child {
+    transform: translateX(2px);
+  }
+}
+
+.sm {
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  font-size: var(--fs-sm);
+}
+
+.lg {
+  min-height: 3.5rem;
+  padding: 0 var(--space-6);
+}
+
+.primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.primary:hover {
+  background: var(--color-primary-hover);
+  color: var(--color-on-primary);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+.secondary:hover {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+  color: var(--color-primary);
+}
+
+.calm {
+  background: var(--color-sos);
+  color: #fff;
+}
+
+.calm:hover {
+  background: var(--color-sos-hover);
+  color: #fff;
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text);
+  padding-inline: var(--space-3);
+}
+
+.ghost:hover {
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+  color: var(--color-text);
+}

@@ -1,0 +1,266 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* El desenfoque vive en un pseudo-elemento: un backdrop-filter en el propio
+   header crearía un bloque contenedor y recortaría el menú móvil (fixed). */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .header::before {
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+    backdrop-filter: saturate(1.2) blur(10px);
+  }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  min-height: var(--header-h);
+}
+
+.brand {
+  display: inline-flex;
+  text-decoration: none;
+  margin-right: auto;
+  border-radius: var(--radius-sm);
+}
+
+/* --- Navegación principal (escritorio) --- */
+.primary {
+  display: none;
+}
+
+.primary ul {
+  display: flex;
+  gap: var(--space-1);
+  list-style: none;
+  padding: 0;
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 0.45rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover::after {
+    transform: scaleX(0.4);
+  }
+}
+
+.active {
+  color: var(--color-primary);
+}
+
+.active::after,
+.active:hover::after {
+  transform: scaleX(1);
+}
+
+/* --- Herramientas de la derecha --- */
+.tools {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sos {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-calm);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.sos svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--nn-petrol);
+}
+
+.sos:hover {
+  background: color-mix(in srgb, var(--nn-sage) 45%, var(--color-bg));
+  color: var(--color-text);
+}
+
+.sos:active {
+  transform: scale(0.97);
+}
+
+.iconLink {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--color-text);
+  transition: background-color var(--dur-fast) ease;
+}
+
+.iconLink svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.iconLink:hover {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  color: var(--color-primary);
+}
+
+.iconLink.active {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.iconLink::after {
+  display: none;
+}
+
+.iconLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Tooltip visible con hover y con foco de teclado */
+.iconLink {
+  position: relative;
+}
+
+.iconLink:hover .iconLabel,
+.iconLink:focus-visible .iconLabel {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--nn-ink);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* --- Botón de menú (móvil / tablet) --- */
+.menuBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+}
+
+.menuBtn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.drawer {
+  position: fixed;
+  inset: var(--header-h) 0 0 0;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-line);
+  overflow-y: auto;
+  padding-block: var(--space-5) var(--space-8);
+}
+
+.drawer[hidden] {
+  display: none;
+}
+
+.drawerList {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+
+.drawerList li + li {
+  border-top: 1px solid var(--color-line);
+}
+
+.drawerList .link {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0;
+  font-size: var(--fs-md);
+  font-family: var(--font-display);
+}
+
+.drawerList .link::after {
+  display: none;
+}
+
+.drawerSos {
+  margin-top: var(--space-5);
+  min-height: 3.25rem;
+  width: 100%;
+  justify-content: center;
+  font-size: var(--fs-base);
+}
+
+@media (min-width: 1180px) {
+  .primary,
+  .tools {
+    display: flex;
+  }
+
+  .menuBtn,
+  .drawer {
+    display: none;
+  }
+}

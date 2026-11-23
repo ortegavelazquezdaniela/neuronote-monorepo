@@ -1,0 +1,35 @@
+.fab {
+  position: fixed;
+  right: max(var(--space-4), env(safe-area-inset-right));
+  bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 3.25rem;
+  padding: 0 var(--space-5) 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-sos);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 650;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgb(19 35 59 / 0.12), 0 12px 28px -10px rgb(19 35 59 / 0.45);
+  transition:
+    background-color var(--dur-fast) ease,
+    transform var(--dur-press) var(--ease-out);
+}
+
+.fab svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.fab:hover {
+  background: var(--color-sos-hover);
+  color: #fff;
+}
+
+.fab:active {
+  transform: scale(0.97);
+}

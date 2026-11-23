@@ -1,0 +1,168 @@
+/* ==========================================================================
+   NEURONOTE · Design tokens
+   Paleta derivada de las tres referencias cromáticas del proyecto.
+   Toda la UI consume estos tokens; los modos de accesibilidad (Fase 2)
+   solo redefinen los tokens semánticos de abajo.
+   ========================================================================== */
+
+:root {
+  /* --- Paleta principal (referencias 1 y 2) --- */
+  --nn-deep-blue: #184077;   /* navegación, acción primaria */
+  --nn-petrol: #407076;      /* texto informativo, enlaces secundarios */
+  --nn-aqua: #5aa2ab;        /* elementos informativos, ruta de calma */
+  --nn-sage: #97b1a6;        /* superficies secundarias */
+  --nn-rose: #ebbab9;        /* acentos pequeños */
+  --nn-warm-grey: #c9c5ba;   /* separadores */
+  --nn-rose-light: #ffd9d4;  /* acentos suaves */
+
+  /* --- Paleta secundaria (referencia 3): solo con motivo visual --- */
+  --nn-sun: #f5c63c;         /* microclima / calor (relleno, nunca texto) */
+  --nn-coral: #f47f6b;       /* ruta con más estímulo (relleno, nunca texto) */
+  --nn-magenta: #bb5098;
+  --nn-violet: #7a5197;
+  --nn-indigo: #5344a9;
+
+  /* --- Derivados tonales (mezclas de la paleta, no colores nuevos) --- */
+  --nn-paper: #fbf8f3;       /* blanco cálido */
+  --nn-paper-2: #f3eee6;
+  --nn-sage-wash: #e6ede9;   /* salvia al ~25 % sobre blanco cálido */
+  --nn-aqua-wash: #e1eff0;
+  --nn-rose-wash: #fcebe7;
+  --nn-sun-wash: #fdf1cf;
+  --nn-ink: #13233b;         /* azul profundo oscurecido para texto */
+  --nn-ink-soft: #46566a;
+  --nn-line: #e2ddd3;
+
+  /* --- Tokens semánticos (los que cambian por modo) --- */
+  --color-bg: var(--nn-paper);
+  --color-bg-alt: var(--nn-paper-2);
+  --color-surface: #fffdf9;
+  --color-surface-calm: var(--nn-sage-wash);
+  --color-text: var(--nn-ink);
+  --color-text-soft: var(--nn-ink-soft);
+  --color-heading: var(--nn-deep-blue);
+  --color-link: var(--nn-petrol);
+  --color-primary: var(--nn-deep-blue);
+  --color-primary-hover: #12335f;
+  --color-on-primary: #ffffff;
+  --color-info: var(--nn-aqua);
+  --color-line: var(--nn-line);
+  --color-line-strong: var(--nn-warm-grey);
+  --color-focus: var(--nn-deep-blue);
+  --color-focus-halo: #ffd9d4;
+  --color-sos: var(--nn-petrol);
+  --color-sos-hover: #345c61;
+  --color-footer-bg: var(--nn-deep-blue);
+  --color-footer-text: #e7eef4;
+
+  /* --- Tipografía --- */
+  --font-display: 'Schibsted Grotesk Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible Next', 'Segoe UI', system-ui, sans-serif;
+  --text-scale: 1; /* Fase 2: ajustable por la persona usuaria */
+
+  --fs-xs: calc(0.8125rem * var(--text-scale));
+  --fs-sm: calc(0.9375rem * var(--text-scale));
+  --fs-base: calc(1.0625rem * var(--text-scale));
+  --fs-md: calc(1.25rem * var(--text-scale));
+  --fs-lg: calc(clamp(1.5rem, 1.2rem + 1.2vw, 2rem) * var(--text-scale));
+  --fs-xl: calc(clamp(2rem, 1.4rem + 2.4vw, 3rem) * var(--text-scale));
+  --fs-hero: calc(clamp(2.6rem, 1.6rem + 4.4vw, 5rem) * var(--text-scale));
+
+  --lh-tight: 1.08;
+  --lh-heading: 1.18;
+  --lh-body: 1.6;
+
+  /* --- Espaciado (escala de 4 px) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+
+  /* --- Layout --- */
+  --wrap-max: 76rem;
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --header-h: 4.5rem;
+
+  /* --- Forma y profundidad --- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+  --shadow-soft: 0 1px 2px rgb(19 35 59 / 0.06), 0 8px 24px -8px rgb(19 35 59 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(19 35 59 / 0.06), 0 16px 40px -12px rgb(19 35 59 / 0.2);
+
+  /* --- Movimiento (Emil Kowalski / skills-main:animate) --- */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 120ms;
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+  --dur-enter: 520ms;
+}
+
+/* ==========================================================================
+   Modos de accesibilidad — tokens preparados en Fase 1,
+   el selector de modo se conecta en Fase 2.
+   ========================================================================== */
+
+/* Modo Calma: menos contraste cromático, superficies salvia, sin movimiento */
+:root[data-theme='calm'] {
+  --color-bg: #f4f2ec;
+  --color-bg-alt: #ebeee9;
+  --color-surface: #f8f7f2;
+  --color-surface-calm: #e3e9e5;
+  --color-heading: #2f4f63;
+  --color-primary: #345c61;
+  --color-primary-hover: #2a4b50;
+  --color-info: #6d9a9e;
+  --dur-enter: 0ms;
+}
+
+/* Modo Alto Contraste: ratios ≥ 7:1 y foco muy visible */
+:root[data-theme='contrast'] {
+  --color-bg: #ffffff;
+  --color-bg-alt: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-calm: #ffffff;
+  --color-text: #000000;
+  --color-text-soft: #1a1a1a;
+  --color-heading: #0b1f3d;
+  --color-link: #0b1f3d;
+  --color-primary: #0b1f3d;
+  --color-primary-hover: #000000;
+  --color-line: #000000;
+  --color-line-strong: #000000;
+  --color-focus: #000000;
+  --color-focus-halo: #f5c63c;
+  --color-sos: #0b1f3d;
+  --color-footer-bg: #000000;
+  --color-footer-text: #ffffff;
+}
+
+/* Modo Noche: fondos oscuros, acentos moderados */
+:root[data-theme='night'] {
+  --color-bg: #0f1a2a;
+  --color-bg-alt: #13213a;
+  --color-surface: #172741;
+  --color-surface-calm: #1b2f3a;
+  --color-text: #e8ecf1;
+  --color-text-soft: #b7c2cf;
+  --color-heading: #d9e6f2;
+  --color-link: #8fc5cc;
+  --color-primary: #5aa2ab;
+  --color-primary-hover: #6fb2ba;
+  --color-on-primary: #0f1a2a;
+  --color-line: #2a3b55;
+  --color-line-strong: #3a4d6a;
+  --color-focus: #ffd9d4;
+  --color-focus-halo: #0f1a2a;
+  --color-sos: #407076;
+  --color-footer-bg: #0b1422;
+  --color-footer-text: #d5dde7;
+}

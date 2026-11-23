@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Builds y cobertura
+dist/
+build/
+coverage/
+storybook-static/
+
+# Variables de entorno (NUNCA subir credenciales)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / SO
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Herramientas locales
+.claude/
+.taste-skill/
+.impeccable/review/
+.impeccable/mocks/

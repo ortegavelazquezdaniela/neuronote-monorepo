@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "deque-systems.vscode-axe-linter",
+    "bmewburn.vscode-intelephense-client",
+    "editorconfig.editorconfig",
+    "vitest.explorer"
+  ]
+}

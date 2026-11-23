@@ -1,0 +1,89 @@
+.footer {
+  background: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  /* espacio inferior extra para que el botón SOS flotante no tape el texto */
+  padding-block: var(--space-8) calc(var(--space-6) + 4.5rem);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.tagline {
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: #fff;
+}
+
+.note {
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  max-width: 34ch;
+  opacity: 0.85;
+}
+
+.colTitle {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #fff;
+}
+
+.col ul {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--space-3);
+  display: grid;
+}
+
+.col a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 2.75rem;
+  color: var(--color-footer-text);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+}
+
+.col a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.col strong {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.footer :focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 7px var(--color-footer-bg);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+  font-size: var(--fs-xs);
+  opacity: 0.85;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  }
+}

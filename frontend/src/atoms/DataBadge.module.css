@@ -1,0 +1,49 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2em 0.65em;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--nn-ink);
+  background: var(--nn-paper-2);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.real {
+  background: var(--nn-aqua-wash);
+}
+.real .dot {
+  color: var(--nn-petrol);
+}
+
+.estimated {
+  background: var(--nn-sun-wash);
+}
+.estimated .dot {
+  color: #b38a10;
+}
+
+.reported {
+  background: var(--nn-sage-wash);
+}
+.reported .dot {
+  color: #5e7e71;
+}
+
+.demo {
+  background: var(--nn-rose-wash);
+}
+.demo .dot {
+  color: #c26b68;
+}

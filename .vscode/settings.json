@@ -1,0 +1,11 @@
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+  "files.eol": "\n",
+  "eslint.workingDirectories": ["frontend"],
+  "[php]": { "editor.tabSize": 4 },
+  "php.validate.executablePath": "C:\\xampp\\php\\php.exe",
+  "intelephense.environment.phpVersion": "8.2.12"
+}

@@ -1,0 +1,51 @@
+.page {
+  padding-block: var(--space-8) var(--space-section);
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+.title {
+  font-size: var(--fs-xl);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.en {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--color-text-soft);
+}
+
+.intro {
+  margin-top: var(--space-5);
+  font-size: var(--fs-md);
+  max-width: 54ch;
+}
+
+.subtitle {
+  margin-top: var(--space-7);
+  font-size: var(--fs-md);
+}
+
+.points {
+  margin-top: var(--space-3);
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--space-2);
+  max-width: 60ch;
+}
+
+.points li::marker {
+  color: var(--nn-aqua);
+}
+
+.status {
+  margin-block: var(--space-7) var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-calm);
+  max-width: 60ch;
+}

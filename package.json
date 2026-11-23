@@ -1,0 +1,19 @@
+{
+  "name": "neuronote-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "NEURONOTE (NEUROROUTE): plataforma geoespacial de descompresión sensorial y movilidad urbana.",
+  "license": "MIT",
+  "scripts": {
+    "install:frontend": "npm install --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
+    "php:version": "C:/xampp/php/php.exe -v",
+    "audit:serve": "C:/xampp/php/php.exe -S localhost:8080 -t audit-engine"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

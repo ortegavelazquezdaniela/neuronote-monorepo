@@ -1,0 +1,106 @@
+.map {
+  width: 100%;
+  height: auto;
+  font-family: var(--font-display);
+}
+
+.ground {
+  fill: #ece6dc;
+}
+
+.block {
+  fill: #f8f4ee;
+  stroke: #e2dbcf;
+  stroke-width: 1;
+}
+
+.park {
+  fill: #c9d8cf;
+}
+
+.trail {
+  fill: none;
+  stroke: #f8f4ee;
+  stroke-width: 3;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+
+.tree {
+  fill: var(--nn-sage);
+}
+
+.avenue {
+  fill: #ddd6ca;
+}
+
+.streetLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: #8a8478;
+}
+
+.climate circle {
+  fill: var(--nn-sun);
+  fill-opacity: 0.22;
+}
+
+.routeBusy {
+  fill: none;
+  stroke: var(--nn-coral);
+  stroke-width: 4;
+  stroke-dasharray: 2 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+}
+
+.routeCalmHalo {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+.routeCalm {
+  fill: none;
+  stroke: var(--nn-petrol);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.havenRing {
+  fill: #fff;
+  stroke: var(--nn-sage);
+  stroke-width: 3;
+}
+
+.havenDot {
+  fill: #5e7e71;
+}
+
+.pinA {
+  fill: var(--nn-rose-light);
+  stroke: var(--nn-deep-blue);
+  stroke-width: 2;
+}
+
+.pinB {
+  fill: var(--nn-deep-blue);
+}
+
+.pinText,
+.pinTextLight {
+  font-size: 12px;
+  font-weight: 750;
+  fill: var(--nn-deep-blue);
+}
+
+.pinTextLight {
+  fill: #fff;
+}

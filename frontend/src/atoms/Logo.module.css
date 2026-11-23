@@ -1,0 +1,30 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-heading);
+}
+
+.word {
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-size: 1.125rem;
+  letter-spacing: 0.04em;
+}
+
+.light {
+  font-weight: 450;
+  color: var(--color-link);
+}
+
+.inverted {
+  color: #fff;
+}
+
+.inverted rect {
+  fill: rgb(255 255 255 / 0.12);
+}
+
+.inverted .light {
+  color: var(--nn-sage);
+}

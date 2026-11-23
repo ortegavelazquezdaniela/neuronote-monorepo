@@ -1,0 +1,161 @@
+.section {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--color-line);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  max-width: 16ch;
+}
+
+.text {
+  margin-top: var(--space-4);
+  color: var(--color-text-soft);
+  max-width: 40ch;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-md);
+}
+
+.icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 1.75;
+}
+
+/* Un tono por módulo, aplicado solo al icono: nunca todos los colores a la vez en bloque */
+.aqua .icon {
+  background: var(--nn-aqua-wash);
+  color: var(--nn-petrol);
+}
+.sage .icon {
+  background: var(--nn-sage-wash);
+  color: #4f6d61;
+}
+.sun .icon {
+  background: var(--nn-sun-wash);
+  color: #8c6a07;
+}
+.rose .icon {
+  background: var(--nn-rose-wash);
+  color: #a4504d;
+}
+.petrol .icon {
+  background: var(--nn-petrol);
+  color: #fff;
+}
+
+.name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem var(--space-3);
+  font-size: var(--fs-lg);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--color-text-soft);
+}
+
+.summary {
+  margin-top: var(--space-2);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+.detail {
+  margin-top: var(--space-2);
+  color: var(--color-text-soft);
+  font-size: var(--fs-sm);
+  max-width: 60ch;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.more:hover {
+  text-decoration-color: currentColor;
+}
+
+.more svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .more:hover svg:last-child {
+    transform: translateX(3px);
+  }
+}
+
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .intro {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+  }
+
+  .item {
+    gap: var(--space-6);
+  }
+
+  /* El primer módulo, el corazón del producto, recibe más peso */
+  .item:first-child .name {
+    font-size: var(--fs-xl);
+  }
+}
