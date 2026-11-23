@@ -1,11 +1,27 @@
 # audit-engine — Motor de auditoría (PHP 8 + MySQL)
 
-Se implementa en la **Fase 4**. Responsabilidades según la propuesta técnica:
+```bash
+# Base de datos (una vez, con XAMPP/MySQL encendido)
+C:\xampp\mysql\bin\mysql.exe -u root < db/schema.sql
+cp .env.example .env        # usuario de BD dedicado, hash de la contraseña del panel y BADGE_SECRET
 
-- `src/calculate_index.php` — cálculo del Índice de Confort Acústico y Sensorial (ICAS).
-- `src/submit_audit.php` — formulario de acreditación de oasis y psicólogos (`$_POST`, sanitización, validación).
-- `src/generate_badge.php` — emisión de dictamen con hash criptográfico.
-- `db/schema.sql` — tablas MySQL de peritaje y folios.
-- CRUD con PDO y sentencias preparadas.
+# Servidor (desde la raíz del monorepo)
+npm run audit:serve         # http://localhost:8080
 
-Requisitos locales: XAMPP instalado en `C:\xampp` (PHP 8.2.12 con PDO MySQL, MariaDB 10.4.32), verificado el 22-nov-2026. Servidor de desarrollo: `npm run audit:serve` desde la raíz del monorepo.
+# Pruebas
+C:\xampp\php\php.exe tests/icas_test.php
+```
+
+| Archivo | Responsabilidad |
+|---|---|
+| `index.php` | Panel pericial (HTTP Basic + `password_verify`): CRUD de actas y profesionales |
+| `src/icas.php` | Índice de Confort Acústico y Sensorial (fórmula y pesos documentados) |
+| `src/calculate_index.php` | Endpoint JSON del ICAS (POST, no guarda nada) |
+| `src/submit_audit.php` | Formulario de acta (`$_POST`, CSRF, validación, transacción PDO) |
+| `src/register_professional.php` | Registro de psicólogos con cédula (7–8 dígitos) |
+| `src/generate_badge.php` | Emite el sello (ICAS ≥ 75, acta aprobada) y muestra el dictamen |
+| `src/badge.php` | Hash HMAC-SHA256 del acta con `BADGE_SECRET` |
+| `src/verify.php` | Verificación pública en JSON (la usa la API Express) |
+| `db/schema.sql` | Tablas `establishments`, `audits`, `professionals`, `badges` |
+
+Seguridad: sentencias preparadas (`ATTR_EMULATE_PREPARES = false`), `htmlspecialchars` en toda salida, tokens CSRF, cookies `HttpOnly` + `SameSite=Strict`, cabeceras CSP y `X-Frame-Options`, archivos internos no accesibles por URL.

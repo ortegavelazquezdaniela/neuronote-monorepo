@@ -13,12 +13,15 @@ import '@fontsource/opendyslexic/latin-700.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import { PreferencesProvider } from './providers/PreferencesProvider';
+import { AuthProvider } from './providers/AuthProvider';
 import App from './App';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PreferencesProvider>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </PreferencesProvider>
   </StrictMode>,
 );

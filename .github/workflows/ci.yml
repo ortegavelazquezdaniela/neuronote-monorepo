@@ -1,5 +1,6 @@
-# CI de NEURONOTE — Fase 1: lint + build del frontend.
-# En Fase 5 se añaden tests (Vitest/RTL/MSW/Supertest) y despliegue.
+# CI de NEURONOTE: cada push a main/develop y cada pull request ejecuta
+# lint + pruebas + build de las tres partes. El despliegue lo hacen Vercel
+# (frontend) y Render (API) automáticamente al llegar cambios a main.
 name: CI
 
 on:
@@ -7,8 +8,12 @@ on:
     branches: [main, develop]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   frontend:
+    name: Frontend (React + Vite)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,4 +27,53 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
+      - name: Pruebas (Vitest + RTL + MSW) con cobertura mínima de 70 %
+        run: npm run coverage
       - run: npm run build
+        env:
+          VITE_API_URL: https://neuronote-api.onrender.com/api
+      - run: npm run build-storybook
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: cobertura-frontend
+          path: frontend/coverage/
+          retention-days: 14
+
+  backend:
+    name: Backend (Express + Supertest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run coverage
+
+  audit-engine:
+    name: Motor de auditoría (PHP 8 + MySQL)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-solo-pruebas
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-solo-pruebas"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Sintaxis de todos los archivos PHP
+        run: find audit-engine -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Pruebas del ICAS
+        run: php audit-engine/tests/icas_test.php
+      - name: El esquema MySQL se crea sin errores
+        run: mysql -h 127.0.0.1 -uroot -pci-solo-pruebas < audit-engine/db/schema.sql

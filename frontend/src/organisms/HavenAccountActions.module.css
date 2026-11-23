@@ -1,0 +1,32 @@
+.box {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  margin-top: var(--space-5);
+}
+
+.cert {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-calm);
+  border: 1.5px solid var(--nn-sage);
+}
+
+.cert svg {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-link);
+}
+
+.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}

@@ -1,0 +1,5 @@
+# NEURONOTE — todas las páginas públicas pueden indexarse.
+# Las páginas personales (/perfil, /notas) no tienen contenido sin sesión.
+User-agent: *
+Disallow: /perfil
+Allow: /

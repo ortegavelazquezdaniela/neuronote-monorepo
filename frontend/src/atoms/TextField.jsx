@@ -29,11 +29,8 @@ export function TextField({
     <div className={`${styles.field} ${error ? styles.hasError : ''} ${className}`}>
       <label htmlFor={fieldId} className={styles.label}>
         {label}
-        {required ? (
-          <span className={styles.req}> (obligatorio)</span>
-        ) : (
-          <span className={styles.opt}> (opcional)</span>
-        )}
+        {' '}
+        {required ? <span className={styles.req}>(obligatorio)</span> : <span className={styles.opt}>(opcional)</span>}
       </label>
       {hint && (
         <p id={hintId} className={styles.hint}>
