@@ -1,0 +1,125 @@
+.figure {
+  --chart-line: var(--nn-petrol);
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+:global(:root[data-theme='night']) .figure {
+  --chart-line: var(--nn-aqua);
+}
+
+:global(:root[data-theme='contrast']) .figure {
+  --chart-line: #0b1f3d;
+}
+
+.title {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+}
+
+.plot {
+  position: relative;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+  cursor: crosshair;
+  font-family: var(--font-body);
+}
+
+.svg:focus-visible {
+  outline-offset: 4px;
+}
+
+.grid {
+  stroke: var(--color-line);
+  stroke-width: 1;
+}
+
+.axis {
+  font-size: 10px;
+  fill: var(--color-text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.now {
+  stroke: var(--color-text-soft);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.nowLabel {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--color-text-soft);
+}
+
+.line {
+  fill: none;
+  stroke: var(--chart-line);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.cross {
+  stroke: var(--color-text-soft);
+  stroke-width: 1;
+}
+
+.dot {
+  fill: var(--chart-line);
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+
+.tooltip {
+  position: absolute;
+  top: -0.25rem;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.live {
+  min-height: 1.4em;
+  font-size: var(--fs-xs);
+  color: var(--color-text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.table summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-link);
+  cursor: pointer;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-line);
+}

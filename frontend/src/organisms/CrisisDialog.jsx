@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import { ArrowRight, Phone, Siren, X } from 'lucide-react';
 import { HELPLINES } from '../utils/helplines';
+import { TrustedContact } from './TrustedContact';
 import styles from './CrisisDialog.module.css';
 
 /**
@@ -81,9 +82,16 @@ export function CrisisDialog({ open, onClose }) {
           </ol>
         </section>
 
+        <section className={styles.whatsapp} aria-labelledby="sos-wa">
+          <h3 id="sos-wa" className={styles.h3}>
+            Escribir a alguien de confianza
+          </h3>
+          {open && <TrustedContact compact />}
+        </section>
+
         <p className={styles.note}>
-          Contacto por WhatsApp con profesionales verificados: se habilita en la Fase 3, solo con
-          profesionales cuya cédula esté validada.
+          Profesionales verificados por WhatsApp: todavía no hay psicólogas o psicólogos con cédula
+          validada en NEURONOTE. No mostramos disponibilidad que no podamos confirmar.
         </p>
 
         <Link to="/auxilio-inmediato" className={styles.more} onClick={onClose}>

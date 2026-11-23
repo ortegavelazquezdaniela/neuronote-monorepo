@@ -41,6 +41,21 @@
   color: #5e7e71;
 }
 
+.forecast {
+  background: var(--nn-aqua-wash);
+}
+.forecast .dot {
+  color: #2f6f78;
+}
+
+.unverified {
+  background: var(--nn-paper-2);
+  box-shadow: inset 0 0 0 1px var(--nn-warm-grey);
+}
+.unverified .dot {
+  color: #7d786d;
+}
+
 .demo {
   background: var(--nn-rose-wash);
 }

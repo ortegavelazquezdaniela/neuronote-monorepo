@@ -1,29 +1,32 @@
-import { useState } from 'react';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { lazy, Suspense, useRef, useState } from 'react';
+import { useInView } from '../hooks/useInView';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { DataBadge, DATA_KINDS } from '../atoms/DataBadge';
 import { LayerToggle } from '../molecules/LayerToggle';
-import { CityMap } from './CityMap';
+import { LocationControl } from '../molecules/LocationControl';
+import { useGeolocation } from '../hooks/useGeolocation';
+import { useHavens } from '../hooks/useDataHooks';
+import { DEFAULT_CENTER } from '../utils/geo';
 import styles from './MapPreview.module.css';
 
-const LAYERS = [
-  { id: 'routes', label: 'Rutas' },
-  { id: 'havens', label: 'Oasis' },
-  { id: 'climate', label: 'Zonas cálidas' },
-];
+// Leaflet (~150 kB) se descarga solo cuando esta sección se acerca a la pantalla
+const MapViewLeaflet = lazy(() => import('./MapViewLeaflet').then((m) => ({ default: m.MapViewLeaflet })));
 
 /**
- * Vista previa del mapa.
- * Fase 1: mapa esquemático con capas conmutables (funcionales).
- * Fase 3: se sustituye <CityMap> por <MapViewLeaflet> con OpenStreetMap,
- * ubicación del usuario (con consentimiento) y datos de Open-Meteo.
+ * Vista previa del mapa real (Leaflet + OpenStreetMap) en la página principal.
+ * El mapa y los lugares solo se cargan cuando la sección entra en pantalla.
  */
 export function MapPreview() {
-  const [layers, setLayers] = useState({ routes: true, havens: true, climate: true });
-  const toggle = (id) => setLayers((l) => ({ ...l, [id]: !l[id] }));
+  const sectionRef = useRef(null);
+  const inView = useInView(sectionRef);
+  const geo = useGeolocation();
+  const [showHavens, setShowHavens] = useState(true);
+  const point = geo.position ?? DEFAULT_CENTER;
+  const havens = useHavens(point, 1200, inView);
 
   return (
-    <section className={styles.section} aria-labelledby="mapa-title" id="mapa-preview">
+    <section ref={sectionRef} className={styles.section} aria-labelledby="mapa-title" id="mapa-preview">
       <div className={`wrap ${styles.grid}`}>
         <div className={styles.copy}>
           <h2 id="mapa-title" className={styles.title}>
@@ -35,16 +38,9 @@ export function MapPreview() {
           </p>
 
           <div className={styles.toggles} role="group" aria-label="Capas del mapa">
-            {LAYERS.map((l) => (
-              <LayerToggle
-                key={l.id}
-                swatch={l.id}
-                pressed={layers[l.id]}
-                onToggle={() => toggle(l.id)}
-              >
-                {l.label}
-              </LayerToggle>
-            ))}
+            <LayerToggle swatch="havens" pressed={showHavens} onToggle={() => setShowHavens((v) => !v)}>
+              Oasis candidatos
+            </LayerToggle>
           </div>
 
           <h3 className={styles.legendTitle}>Procedencia de los datos</h3>
@@ -59,10 +55,9 @@ export function MapPreview() {
             ))}
           </dl>
 
-          <p className={styles.privacy}>
-            <MapPin aria-hidden="true" />
-            Tu ubicación solo se usa si la autorizas, y nunca se guarda sin tu permiso.
-          </p>
+          <div className={styles.location}>
+            <LocationControl geo={geo} />
+          </div>
 
           <Button to="/mapa" icon={ArrowRight} className={styles.cta}>
             Explorar el mapa
@@ -71,9 +66,23 @@ export function MapPreview() {
 
         <div className={styles.visual}>
           <div className={styles.frame}>
-            <CityMap layers={layers} title="Mapa esquemático con capas de rutas, oasis y zonas cálidas" />
-            <DataBadge kind="demo" className={styles.demoBadge} />
+            {inView && (
+              <Suspense fallback={<p className={styles.mapLoading}>Cargando el mapa…</p>}>
+                <MapViewLeaflet
+                  center={point}
+                  zoom={15}
+                  havens={showHavens ? havens.data ?? [] : []}
+                  user={geo.position}
+                  label="Vista previa del mapa con oasis sensoriales candidatos"
+                />
+              </Suspense>
+            )}
           </div>
+          {havens.status === 'error' && (
+            <p className={styles.mapNote} role="status">
+              No pudimos cargar los lugares en este momento; el mapa sigue disponible.
+            </p>
+          )}
         </div>
       </div>
     </section>

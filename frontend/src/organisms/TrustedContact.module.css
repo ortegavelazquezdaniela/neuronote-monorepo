@@ -1,0 +1,70 @@
+.box {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.intro {
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}
+
+.phoneRow {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 560px) {
+  .phoneRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+}
+
+.code {
+  max-width: 12rem;
+}
+
+.countryInfo {
+  font-size: var(--fs-xs);
+  color: var(--color-text-soft);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.wa {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-calm);
+  border: 1.5px solid color-mix(in srgb, var(--nn-sage) 70%, transparent);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease;
+}
+
+.wa:hover {
+  border-color: var(--color-link);
+  color: var(--color-text);
+}
+
+.wa svg {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-link);
+}
+
+.wa > span {
+  display: grid;
+}
+
+.waSub {
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}

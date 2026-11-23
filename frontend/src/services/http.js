@@ -1,0 +1,95 @@
+import { readJSON, writeJSON } from './storage';
+
+/**
+ * Cliente HTTP común para las APIs externas gratuitas.
+ * - Tiempo límite con AbortController.
+ * - Reintentos con espera creciente ante fallos de red o errores 5xx/429.
+ * - Caché en sessionStorage (TTL) para no repetir peticiones: respetamos las
+ *   políticas de uso de servicios gratuitos (OpenStreetMap, Overpass, etc.).
+ */
+
+export class ApiError extends Error {
+  constructor(message, { status = 0, kind = 'network' } = {}) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.kind = kind; // network | timeout | http | config
+  }
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const memory = new Map();
+
+function readCache(key) {
+  const hit = memory.get(key) ?? readJSON(`nn-cache:${key}`, null, 'session');
+  if (hit && hit.expires > Date.now()) return hit.value;
+  return undefined;
+}
+
+function writeCache(key, value, ttl) {
+  const entry = { value, expires: Date.now() + ttl };
+  memory.set(key, entry);
+  writeJSON(`nn-cache:${key}`, entry, 'session');
+}
+
+/**
+ * @param {string} url
+ * @param {object} opts
+ * @param {RequestInit} [opts.init]
+ * @param {number} [opts.timeout=12000]
+ * @param {number} [opts.retries=2]
+ * @param {string} [opts.cacheKey]
+ * @param {number} [opts.ttl=600000] 10 min
+ * @param {AbortSignal} [opts.signal]
+ */
+export async function fetchJSON(url, { init = {}, timeout = 12_000, retries = 2, cacheKey, ttl = 600_000, signal } = {}) {
+  if (cacheKey) {
+    const cached = readCache(cacheKey);
+    if (cached !== undefined) return cached;
+  }
+
+  let lastError;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort('timeout'), timeout);
+    const onAbort = () => controller.abort('cancelled');
+    signal?.addEventListener('abort', onAbort);
+
+    try {
+      const res = await fetch(url, { ...init, signal: controller.signal });
+      if (!res.ok) {
+        const retryable = res.status >= 500 || res.status === 429;
+        lastError = new ApiError(`HTTP ${res.status}`, { status: res.status, kind: 'http' });
+        if (!retryable) throw lastError;
+      } else {
+        const data = await res.json();
+        if (cacheKey) writeCache(cacheKey, data, ttl);
+        return data;
+      }
+    } catch (err) {
+      if (signal?.aborted) throw err; // el componente se desmontó: no reintentar
+      if (err instanceof ApiError && err.kind === 'http' && !(err.status >= 500 || err.status === 429)) throw err;
+      lastError =
+        err instanceof ApiError
+          ? err
+          : new ApiError(err?.message ?? 'network', {
+              kind: controller.signal.reason === 'timeout' ? 'timeout' : 'network',
+            });
+    } finally {
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', onAbort);
+    }
+
+    if (attempt < retries) await sleep(600 * 2 ** attempt);
+  }
+  throw lastError;
+}
+
+/** Mensaje claro para mostrar a la persona según el tipo de error. */
+export function describeError(err) {
+  if (!navigator.onLine) return 'Parece que no tienes conexión a internet.';
+  if (err?.kind === 'timeout') return 'El servicio tardó demasiado en responder.';
+  if (err?.kind === 'config') return err.message;
+  if (err?.status === 429) return 'El servicio recibió demasiadas consultas. Intenta en unos minutos.';
+  return 'El servicio no está disponible en este momento.';
+}

@@ -1,41 +1,8 @@
-import { MODULE_BY_ID } from './modules';
-
 /**
  * Contenido de las páginas de sección que todavía no tienen funcionalidad.
  * Cada entrada declara la fase en que se implementa (sin simular datos).
  */
-const fromModule = (id, points) => {
-  const m = MODULE_BY_ID[id];
-  return { path: m.path, title: m.label, englishName: m.name, intro: m.summary, points, phase: m.phase };
-};
-
 export const SECTION_PAGES = [
-  {
-    path: '/mapa',
-    title: 'Explorar mapa',
-    intro:
-      'El mapa interactivo reunirá rutas, oasis sensoriales e información ambiental sobre OpenStreetMap.',
-    points: [
-      'Mapa Leaflet con teselas de OpenStreetMap, respetando su política de uso.',
-      'Tu ubicación solo con autorización explícita.',
-      'Capas que puedes activar y desactivar para reducir la carga visual.',
-    ],
-    phase: 3,
-  },
-  fromModule('routes', [
-    'Comparación de rutas por ruido reportado, temperatura y exposición al sol.',
-    'Preferencias sensoriales personales que cambian la prioridad de cada factor.',
-    'Etiqueta de procedencia en cada dato: medido, estimado o reportado.',
-  ]),
-  fromModule('havens', [
-    'Ficha con ubicación, fotografías, accesibilidad y características ambientales.',
-    'Estado de verificación visible. No se publican establecimientos inventados.',
-  ]),
-  fromModule('microclimate', [
-    'Temperatura, presión barométrica y radiación UV de Open-Meteo.',
-    'Gráficos simples de variación durante el día.',
-    'Lenguaje informativo: no es diagnóstico médico.',
-  ]),
   {
     path: '/perfil',
     title: 'Perfil',

@@ -1,0 +1,96 @@
+.panel {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.loading {
+  color: var(--color-text-soft);
+  font-size: var(--fs-sm);
+  padding-block: var(--space-4);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.place {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+}
+
+.place svg {
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--color-link);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-4) var(--space-5);
+}
+
+.stats > div {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-line);
+}
+
+.stats dt {
+  font-size: var(--fs-sm);
+  color: var(--color-text-soft);
+}
+
+.stats dd {
+  display: grid;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 650;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero dd {
+  font-size: var(--fs-xl);
+}
+
+.sub {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--color-text-soft);
+}
+
+.charts {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .charts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.note {
+  font-size: var(--fs-xs);
+  color: var(--color-text-soft);
+  max-width: 70ch;
+}
+
+.compact .hero dd {
+  font-size: var(--fs-lg);
+}
+
+.compact .stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}

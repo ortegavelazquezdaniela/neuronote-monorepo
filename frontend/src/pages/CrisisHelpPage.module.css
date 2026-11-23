@@ -88,6 +88,10 @@
   background: var(--color-primary-hover);
 }
 
+.spaced {
+  margin-top: var(--space-7);
+}
+
 .small {
   margin-top: var(--space-4);
   font-size: var(--fs-sm);

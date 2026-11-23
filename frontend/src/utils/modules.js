@@ -12,9 +12,9 @@ export const MODULES = [
     path: '/rutas',
     tone: 'aqua',
     summary:
-      'Compara rutas peatonales según ruido reportado, temperatura, exposición al sol y tus propias preferencias sensoriales.',
+      'Compara caminos a pie por tiempo y cercanía a parques y bibliotecas, según lo que prefieras ese día.',
     detail:
-      'Cada dato indica su origen: medido (Open-Meteo), estimado o reportado por la comunidad. Ninguna ruta se presenta como libre de estímulos para todas las personas.',
+      'Cada dato indica su origen: calculado, estimado o reportado por la comunidad (los reportes de ruido llegan con las cuentas). Ninguna ruta se presenta como libre de estímulos para todas las personas.',
     phase: 3,
   },
   {
@@ -24,9 +24,9 @@ export const MODULES = [
     path: '/oasis',
     tone: 'sage',
     summary:
-      'Directorio de espacios de descanso con accesibilidad, características ambientales y estado de verificación.',
+      'Parques, jardines, bibliotecas y museos reales cerca de ti, con su accesibilidad y estado de verificación.',
     detail:
-      'Solo se publican lugares reales con su nivel de confort documentado. Si un oasis no está verificado, se indica con claridad.',
+      'Los lugares vienen de OpenStreetMap y se muestran como candidatos sin verificar hasta que una auditoría documente su nivel de confort.',
     phase: 3,
   },
   {
@@ -38,7 +38,7 @@ export const MODULES = [
     summary:
       'Temperatura, presión barométrica, radiación UV y variaciones del día en gráficos sencillos.',
     detail:
-      'Datos de Open-Meteo. Es información ambiental, no un diagnóstico médico ni una predicción garantizada de migrañas.',
+      'Pronósticos de Open-Meteo. Es información ambiental, no un diagnóstico médico ni una predicción garantizada de migrañas.',
     phase: 3,
   },
   {

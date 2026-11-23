@@ -1,4 +1,6 @@
-import { Phone, Siren } from 'lucide-react';
+import { Phone, Siren, UserCheck } from 'lucide-react';
+import { EmptyState } from '../molecules/EmptyState';
+import { TrustedContact } from '../organisms/TrustedContact';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { HELPLINES } from '../utils/helplines';
 import styles from './CrisisHelpPage.module.css';
@@ -40,11 +42,14 @@ export function CrisisHelpPage() {
               <span className={styles.desc}>{emergencias.description}</span>
             </span>
           </a>
-          <p className={styles.small}>
-            Contacto por WhatsApp con profesionales verificados: disponible cuando existan
-            profesionales con cédula validada (Fases 3–4). No mostramos disponibilidad que no podamos
-            confirmar.
-          </p>
+          <h2 className={`${styles.h2} ${styles.spaced}`}>Escribir a alguien de confianza</h2>
+          <TrustedContact />
+
+          <h2 className={`${styles.h2} ${styles.spaced}`}>Profesionales verificados</h2>
+          <EmptyState icon={UserCheck} title="Aún no hay profesionales registrados">
+            Solo publicaremos psicólogas y psicólogos con cédula profesional validada, y su
+            disponibilidad real en ese momento. No inventamos contactos ni horarios.
+          </EmptyState>
         </div>
 
         <div className={styles.ground}>
