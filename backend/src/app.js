@@ -8,6 +8,7 @@ import { createCache } from './services/cache.js';
 import { authRoutes } from './routes/auth.js';
 import { meRoutes } from './routes/me.js';
 import { publicRoutes } from './routes/public.js';
+import { docsRoutes } from './routes/docs.js';
 
 /**
  * Crea la aplicación Express. Los repositorios se inyectan, así las pruebas
@@ -39,6 +40,7 @@ export function createApp({ repos, config = defaultConfig, fetchImpl, limits = {
   app.get('/api/health', (_req, res) =>
     res.json({ ok: true, service: 'neuronote-api', storage: repos.kind ?? { users: 'supabase', notes: 'mongodb' } }),
   );
+  app.use('/api', docsRoutes());
   app.use('/api/auth', authRoutes({ repos, limiters }));
   app.use('/api/me', meRoutes({ repos }));
   app.use('/api', publicRoutes({ repos, limiters, cache, config, fetchImpl }));

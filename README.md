@@ -21,8 +21,12 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | 1 | Entorno, design system, página principal responsive | ✅ |
 | 2 | Modos de accesibilidad, intro, modal SOS (Alt + C), formularios, estados | ✅ |
 | 3 | Leaflet + OSM, Nominatim/Overpass, rutas a pie, Open-Meteo, REST Countries, WhatsApp | ✅ |
-| 4 | API Express (JWT + bcrypt), Supabase/PostgreSQL con RLS, MongoDB Atlas, motor PHP + MySQL | ✅ (Supabase y MongoDB necesitan tus claves, ver abajo) |
-| 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, configuración de despliegue | ✅ (el despliegue necesita tus cuentas de Vercel y Render) |
+| 4 | API Express (JWT + bcrypt), Supabase/PostgreSQL con RLS, MongoDB Atlas, motor PHP + MySQL | ✅ |
+| 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, despliegue (Vercel + Render + TiDB Cloud) | ✅ |
+| 6 | Documentación de la API: OpenAPI 3.1 + Swagger UI (`/api/docs`), colección de Postman, monitoreo de errores con Sentry | ✅ (Sentry es opcional y necesita tu cuenta) |
+| 7 | Rendimiento (Lighthouse 95+ en todas las páginas) y SEO (metadatos, sitemap) | Pendiente |
+| 8 | Ficha WCAG 2.2 AA, documento de arquitectura cloud y costos, badges, Storybook publicado | Pendiente |
+| 9 | Presentación de defensa y guion del video de 3 minutos | Pendiente |
 
 ## Arquitectura
 
@@ -100,8 +104,11 @@ Sin Supabase ni MongoDB configurados, la API arranca en **modo memoria** (lo avi
 | `C:\xampp\php\php.exe audit-engine/tests/icas_test.php` | Pruebas del ICAS |
 | `npm run storybook` (frontend) | Catálogo de componentes → http://localhost:6006 |
 | `npm run build` / `npm run build-storybook` (frontend) | Compilación de producción y del catálogo |
+| `npm run postman` (backend) | Regenera la colección de Postman desde la especificación OpenAPI |
 
-Resultados al 23-nov-2026: **69 pruebas de frontend** (81.7 % sentencias, 84.8 % líneas), **30 de backend** (95.7 % sentencias, 99.2 % líneas) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
+**Documentación de la API:** Swagger UI en <http://localhost:4000/api/docs> (en producción, `/api/docs` de tu URL de Render), especificación en `/api/openapi.json` y colección de Postman en [`backend/docs/`](backend/docs/neuronote-api.postman_collection.json). Detalles y configuración de Sentry en [`backend/README.md`](backend/README.md).
+
+Resultados al 23-nov-2026: **69 pruebas de frontend** (81.7 % sentencias, 84.8 % líneas), **39 de backend** (94.1 % sentencias, 97.3 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
 
 ## Configurar los servicios en la nube (gratis)
 

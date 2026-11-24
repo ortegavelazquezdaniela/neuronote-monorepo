@@ -3,6 +3,7 @@ import { createApp } from './app.js';
 import { createMemoryRepos } from './services/memoryRepos.js';
 import { createSupabaseRepos } from './services/supabaseRepos.js';
 import { createMongoRepos, connectMongo } from './services/mongoRepos.js';
+import { initMonitoring } from './monitoring.js';
 
 /**
  * Servidor HTTP. Usa Supabase y MongoDB si están configurados en .env;
@@ -34,6 +35,7 @@ async function buildRepos() {
   return repos;
 }
 
+if (await initMonitoring(config.sentry)) console.log('Monitoreo de errores (Sentry) activo, sin datos personales.');
 const repos = await buildRepos();
 const app = createApp({ repos });
 app.listen(config.port, () => {
