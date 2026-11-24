@@ -30,3 +30,33 @@ services:
         sync: false
       - key: RESTCOUNTRIES_KEY
         sync: false
+      - key: AUDIT_ENGINE_URL
+        sync: false # URL pública de neuronote-audit, p. ej. https://neuronote-audit.onrender.com
+
+  # Motor de auditoría PHP 8 (Docker). La base es TiDB Cloud Starter (compatible
+  # con MySQL, gratis y sin tarjeta con límite de gasto 0); exige TLS.
+  - type: web
+    name: neuronote-audit
+    runtime: docker
+    plan: free
+    rootDir: audit-engine
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /src/health.php
+    envVars:
+      - key: DB_HOST
+        sync: false # gateway01.<región>.prod.aws.tidbcloud.com
+      - key: DB_PORT
+        value: "4000"
+      - key: DB_NAME
+        value: neuronote_audit
+      - key: DB_USER
+        sync: false # <prefijo>.root (lo muestra TiDB en "Connect")
+      - key: DB_PASS
+        sync: false
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS_HASH
+        sync: false
+      - key: BADGE_SECRET
+        generateValue: true

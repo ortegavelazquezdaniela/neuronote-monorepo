@@ -145,9 +145,54 @@ La clave vive ahora en el servidor (`backend/.env → RESTCOUNTRIES_KEY`) y el n
 |---|---|---|---|
 | Frontend | **Vercel Hobby** (uso no comercial; se pausa al pasar límites, no cobra) | `frontend/vercel.json` | vercel.com → Add New Project → importa el repo → *Root Directory* `frontend` → variables `VITE_API_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` → Deploy |
 | API | **Render Free** (duerme tras 15 min sin tráfico; ~1 min en despertar) | `render.yaml` | render.com → New → **Blueprint** → elige el repo → completa `CORS_ORIGIN` (tu URL de Vercel), `SUPABASE_SECRET_KEY`, `MONGODB_URI`, `RESTCOUNTRIES_KEY` |
-| Motor PHP | Local (XAMPP). Opcional: Alwaysdata Free (100 MB) | `audit-engine/` | Revisa sus condiciones actuales antes de usarlo |
+| Motor PHP | **Render Free** (Docker) + **TiDB Cloud Starter** (compatible con MySQL, 5 GiB gratis, sin tarjeta) | `audit-engine/Dockerfile`, `render.yaml` | Pasos abajo |
 
 Al terminar: agrega tu dominio de Vercel a los orígenes permitidos de REST Countries y a `CORS_ORIGIN`. Si Render te pide tarjeta durante el registro (algunas cuentas lo reportan), no la pongas: avísame y movemos la API a otra opción gratuita.
+
+### Publicar el motor PHP (Render + TiDB Cloud)
+
+**1. Base de datos en TiDB Cloud Starter**
+
+1. Crea una cuenta en <https://tidbcloud.com> (GitHub o Google). **No agregues tarjeta.**
+2. Crea un clúster **Starter**. Deja el **límite de gasto en 0**, así nunca cobra: si se agota la cuota gratuita, se pone lento, pero no factura.
+3. Abre el clúster → **SQL Editor**, pega el contenido de `audit-engine/db/schema.sql` y ejecútalo (crea la base `neuronote_audit` y sus 4 tablas).
+4. Pulsa **Connect** y anota *Host*, *Port* (4000) y *User* (`<prefijo>.root`). Genera la contraseña ahí mismo. **No la pegues en el chat**: solo va en el panel de Render.
+5. En **Networking**, deja activo el acceso público. Render Free no tiene una IP fija para filtrar; la conexión va cifrada con TLS y protegida por contraseña.
+
+**2. Servicio `neuronote-audit` en Render**
+
+- Si creaste la API con **Blueprint**: Render → tu Blueprint → **Manual Sync**. Detecta `neuronote-audit` en `render.yaml` y te pide sus variables.
+- Si la creaste a mano: **New → Web Service** → el repo → *Language* **Docker** → *Root Directory* `audit-engine` → plan **Free** → *Health Check Path* `/src/health.php`.
+
+Variables del servicio:
+
+| Variable | Valor |
+|---|---|
+| `DB_HOST` | El *Host* de TiDB (`gateway01.….prod.aws.tidbcloud.com`) |
+| `DB_PORT` | `4000` |
+| `DB_NAME` | `neuronote_audit` |
+| `DB_USER` | El *User* de TiDB (`<prefijo>.root`) |
+| `DB_PASS` | La contraseña de TiDB |
+| `ADMIN_USER` | `admin` |
+| `ADMIN_PASS_HASH` | El mismo hash de tu `audit-engine/.env`, o uno nuevo: `C:\xampp\php\php.exe -r "echo password_hash('TU_CONTRASEÑA', PASSWORD_DEFAULT);"` |
+| `BADGE_SECRET` | Lo genera el Blueprint. A mano: `C:\xampp\php\php.exe -r "echo bin2hex(random_bytes(32));"` |
+
+La imagen ya define `TRUST_PROXY=1` (HTTPS detrás del proxy de Render) y `DB_SSL_CA` (TLS verificado hacia TiDB).
+
+**3. Conectar la API**
+
+En el servicio de la API (`neuronote-api`), agrega `AUDIT_ENGINE_URL` con la URL pública del motor, **sin barra final** (p. ej. `https://neuronote-audit-xxxx.onrender.com`), y guarda; Render la vuelve a desplegar.
+
+**4. Comprobar**
+
+- `https://<motor>/src/health.php` → `{"ok":true,...}`
+- `https://<motor>/src/verify.php?osm_id=way-1` → `{"certified":false}` (conecta con TiDB)
+- `https://<api>/api/havens/way-1/certification` → `{"certified":false}`
+- `https://<motor>/` pide usuario y contraseña (panel pericial)
+
+Notas:
+- La base en la nube empieza vacía: las actas y los sellos de tu XAMPP no se copian, y los sellos solo se verifican con el `BADGE_SECRET` con el que se emitieron.
+- Los dos servicios gratuitos de Render comparten 750 horas al mes y se duermen tras 15 min sin uso. Si el motor está dormido, la primera consulta de un sello puede fallar (la API espera 10 s); la página del oasis solo oculta el sello y lo muestra en la siguiente visita.
 
 ## Accesibilidad y rendimiento (Lighthouse 13, móvil, compilación de producción)
 
