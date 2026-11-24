@@ -3,7 +3,7 @@ import { Button } from '../atoms/Button';
 import { Switch } from '../atoms/Switch';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { ChoiceGroup } from '../molecules/ChoiceGroup';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { usePreferences } from '../hooks/usePreferences';
 import styles from './AccessibilityPage.module.css';
 
@@ -77,7 +77,11 @@ const MOTION = [
 ];
 
 export function AccessibilityPage() {
-  useDocumentTitle('Preferencias de accesibilidad');
+  usePageMeta({
+    title: 'Preferencias de accesibilidad',
+    description:
+      'Ajusta NEURONOTE a ti: modo calma, alto contraste, modo noche, fuente para dislexia, tamaño de texto y movimiento reducido.',
+  });
   const { prefs, update, reset, saveError } = usePreferences();
 
   return (

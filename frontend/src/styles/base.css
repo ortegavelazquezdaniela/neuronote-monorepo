@@ -41,6 +41,12 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* El contenido ocupa al menos la pantalla visible: mientras una página diferida
+   carga, el pie de página no aparece arriba para luego saltar (CLS). */
+#contenido {
+  min-height: calc(100svh - var(--header-h));
+}
+
 img,
 svg,
 picture {

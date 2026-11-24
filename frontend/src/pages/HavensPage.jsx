@@ -7,7 +7,7 @@ import { StatusMessage } from '../atoms/StatusMessage';
 import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { HavenResults } from '../organisms/HavenResults';
 import { SensoryDashboardLayout } from '../templates/SensoryDashboardLayout';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useHavens } from '../hooks/useDataHooks';
 import { HAVEN_TYPES } from '../utils/havenTypes';
@@ -19,7 +19,11 @@ const TYPE_OPTIONS = [
 ];
 
 export function HavensPage() {
-  useDocumentTitle('Oasis sensoriales');
+  usePageMeta({
+    title: 'Oasis sensoriales',
+    description:
+      'Parques, bibliotecas y otros lugares públicos cercanos que podrían servirte para descansar. Sin verificar, salvo los que tienen sello NEURONOTE.',
+  });
   const geo = useGeolocation();
   const [picked, setPicked] = useState(null);
   const [type, setType] = useState('all');
@@ -53,8 +57,8 @@ export function HavensPage() {
         <>
           <StatusMessage tone="info" title="Cómo leer esta lista">
             Los datos vienen de OpenStreetMap, editado por voluntarios. Un lugar «Sin verificar» existe,
-            pero nadie ha documentado todavía su ruido, luz o aforo. Las auditorías llegarán con el motor
-            de certificación (Fase 4).
+            pero nadie ha documentado todavía su ruido, luz o aforo. Los lugares auditados por NEURONOTE
+            muestran su sello y su ICAS en su página.
           </StatusMessage>
           <LocationControl geo={geo} />
           <PanelSection id="havens-filters" title="Filtrar">

@@ -4,7 +4,7 @@ import { CloudUpload, ShieldCheck } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { useAuth } from '../hooks/useAuth';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { notesStore } from '../services/notesStore';
 import { notesApiStore } from '../services/notesApiStore';
 import { describeError } from '../services/http';
@@ -17,7 +17,11 @@ import styles from './NotesPage.module.css';
  * Con sesión: notas en la cuenta (MongoDB), con opción de subir las locales.
  */
 export function NotesPage() {
-  useDocumentTitle('Notas sensoriales');
+  usePageMeta({
+    title: 'Notas sensoriales',
+    description:
+      'Anota cómo te sentiste en cada lugar: ruido, luz, gente y comodidad. Tus notas se quedan en tu navegador o en tu cuenta; tú decides.',
+  });
   const { status: authStatus } = useAuth();
   const synced = authStatus === 'authenticated';
   const store = synced ? notesApiStore : notesStore;

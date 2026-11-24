@@ -1,12 +1,16 @@
 import { LocationControl } from '../molecules/LocationControl';
 import { MicroclimatePanel } from '../organisms/MicroclimatePanel';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { DEFAULT_CENTER } from '../utils/geo';
 import styles from './SectionPage.module.css';
 
 export function MicroclimatePage() {
-  useDocumentTitle('Microclima');
+  usePageMeta({
+    title: 'Microclima',
+    description:
+      'Temperatura, sensación térmica, índice UV y presión atmosférica de tu zona, con el pronóstico de Open-Meteo.',
+  });
   const geo = useGeolocation();
   const point = geo.position ?? DEFAULT_CENTER;
 

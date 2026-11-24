@@ -1,7 +1,7 @@
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { Home, RotateCcw } from 'lucide-react';
 import { Button } from '../atoms/Button';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { HELPLINES } from '../utils/helplines';
 import styles from './SectionPage.module.css';
 
@@ -12,7 +12,7 @@ import styles from './SectionPage.module.css';
  */
 export function RouteErrorPage() {
   const error = useRouteError();
-  useDocumentTitle('Algo no salió bien');
+  usePageMeta({ title: 'Algo no salió bien', noindex: true });
   const notFound = isRouteErrorResponse(error) && error.status === 404;
 
   if (import.meta.env.DEV) console.error(error);

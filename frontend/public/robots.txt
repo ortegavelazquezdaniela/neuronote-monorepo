@@ -1,5 +1,6 @@
-# NEURONOTE — todas las páginas públicas pueden indexarse.
-# Las páginas personales (/perfil, /notas) no tienen contenido sin sesión.
+# NEURONOTE: las páginas públicas pueden indexarse.
+# /perfil es personal y requiere sesión.
+# En producción, `npm run build` reescribe este archivo con la línea Sitemap.
 User-agent: *
 Disallow: /perfil
 Allow: /

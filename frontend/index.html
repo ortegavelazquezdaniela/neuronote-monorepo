@@ -9,13 +9,55 @@
       content="NEURONOTE ayuda a personas neurodivergentes y con sensibilidad sensorial a encontrar rutas peatonales más tranquilas, oasis sensoriales e información ambiental."
     />
     <meta name="theme-color" content="#184077" />
-    <meta property="og:title" content="NEURONOTE · Find your calm. Find your way." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="%SITE_URL%/" />
+    <!-- Vistas previas en redes y mensajería (los rastreadores no ejecutan JavaScript:
+         estos son los valores por defecto; cada página los actualiza al cargarse). -->
+    <meta property="og:site_name" content="NEURONOTE" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:title" content="NEURONOTE · Rutas de calma y espacios sensoriales" />
     <meta
       property="og:description"
       content="Rutas más tranquilas, espacios de calma y una forma más cómoda de recorrer la ciudad."
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="%SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="NEURONOTE: Encuentra tu calma. Encuentra tu camino. Rutas a pie más tranquilas, lugares para descansar y el clima de tu zona."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEURONOTE · Rutas de calma y espacios sensoriales" />
+    <meta
+      name="twitter:description"
+      content="Rutas más tranquilas, espacios de calma y una forma más cómoda de recorrer la ciudad."
+    />
+    <meta name="twitter:image" content="%SITE_URL%/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "NEURONOTE",
+        "alternateName": "NEUROROUTE",
+        "url": "%SITE_URL%/",
+        "description": "Plataforma de código abierto que ayuda a personas neurodivergentes y con sensibilidad sensorial a encontrar rutas peatonales más tranquilas, lugares para descansar e información ambiental.",
+        "inLanguage": "es-MX",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "isAccessibleForFree": true,
+        "accessibilityFeature": ["highContrastDisplay", "largePrint", "readingOrder", "structuralNavigation"],
+        "accessibilityHazard": "noFlashingHazard",
+        "accessibilityControl": ["fullKeyboardControl", "fullMouseControl", "fullTouchControl"],
+        "license": "https://opensource.org/licenses/MIT"
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Los mosaicos del mapa son el contenido principal de /mapa, /rutas y /oasis:
+         abrir la conexión antes ahorra varios viajes de red. -->
+    <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
     <script>
       // Aplica las preferencias guardadas (solo existen si la persona dio su permiso)
       // antes del primer pintado, para evitar un destello de colores no deseados.

@@ -1,0 +1,123 @@
+<!doctype html>
+<!--
+  Tarjeta para vistas previas en redes y mensajería (Open Graph, 1200 × 630).
+  Regenerar el PNG: npm run og-image   (usa Chrome sin ventana)
+-->
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face {
+        font-family: 'Schibsted';
+        src: url('../node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2')
+          format('woff2');
+        font-weight: 400 900;
+      }
+      @font-face {
+        font-family: 'Atkinson';
+        src: url('../node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-400-normal.woff2')
+          format('woff2');
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: 'Atkinson';
+        src: url('../node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-700-normal.woff2')
+          format('woff2');
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        background: #fbf8f3;
+        color: #184077;
+        font-family: 'Atkinson', sans-serif;
+        display: grid;
+        grid-template-columns: 1fr 430px;
+      }
+      .copy {
+        padding: 72px 0 64px 80px;
+        display: flex;
+        flex-direction: column;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-family: 'Schibsted', sans-serif;
+        font-weight: 750;
+        font-size: 34px;
+        letter-spacing: 0.04em;
+      }
+      .brand svg {
+        width: 64px;
+        height: 64px;
+      }
+      h1 {
+        margin-top: 64px;
+        font-family: 'Schibsted', sans-serif;
+        font-weight: 700;
+        font-size: 66px;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        max-width: 14ch;
+      }
+      p {
+        margin-top: 28px;
+        font-size: 28px;
+        line-height: 1.35;
+        color: #407076;
+        max-width: 30ch;
+      }
+      .url {
+        margin-top: auto;
+        font-size: 22px;
+        font-weight: 700;
+        color: #407076;
+      }
+      .art {
+        background: #184077;
+        position: relative;
+      }
+      .art svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="copy">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="#184077" />
+          <path d="M8 22c3-0 4-3 6-6s3.5-6 10-6" fill="none" stroke="#97B1A6" stroke-width="2.6" stroke-linecap="round" />
+          <circle cx="8" cy="22" r="2.6" fill="#FFD9D4" />
+          <circle cx="24" cy="10" r="2.6" fill="#5AA2AB" />
+        </svg>
+        NEURONOTE
+      </div>
+      <h1>Encuentra tu calma. Encuentra tu camino.</h1>
+      <p>Rutas a pie más tranquilas, lugares para descansar y el clima de tu zona.</p>
+      <div class="url">neuronote-monorepo.vercel.app</div>
+    </div>
+    <div class="art" aria-hidden="true">
+      <!-- La misma idea del logo: un recorrido suave entre dos puntos, sin datos ni mapas inventados. -->
+      <svg viewBox="0 0 430 630">
+        <path d="M70 520 C 150 520, 180 430, 215 330 S 280 130, 370 120" fill="none" stroke="#97B1A6" stroke-width="14" stroke-linecap="round" />
+        <path d="M70 520 C 150 520, 180 430, 215 330 S 280 130, 370 120" fill="none" stroke="#5AA2AB" stroke-width="14" stroke-linecap="round" stroke-dasharray="2 34" opacity="0.6" />
+        <circle cx="70" cy="520" r="30" fill="#FFD9D4" />
+        <circle cx="370" cy="120" r="30" fill="#5AA2AB" />
+        <circle cx="215" cy="330" r="12" fill="#EBBAB9" />
+      </svg>
+    </div>
+  </body>
+</html>

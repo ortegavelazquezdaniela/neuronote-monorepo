@@ -5,7 +5,7 @@ import { Button } from '../atoms/Button';
 import { TextField } from '../atoms/TextField';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { useAuth } from '../hooks/useAuth';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { describeError } from '../services/http';
 import styles from './AuthPage.module.css';
 
@@ -31,7 +31,11 @@ function validate(mode, f) {
 /** /entrar y /registro */
 export function AuthPage({ mode = 'login' }) {
   const isRegister = mode === 'register';
-  useDocumentTitle(isRegister ? 'Crear cuenta' : 'Iniciar sesión');
+  usePageMeta({
+    title: isRegister ? 'Crear cuenta' : 'Iniciar sesión',
+    description: 'Tu cuenta de NEURONOTE guarda tu perfil sensorial, tus oasis favoritos y tus notas para usarlos en cualquier dispositivo.',
+    noindex: true,
+  });
   const { login, register, status, enabled } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();

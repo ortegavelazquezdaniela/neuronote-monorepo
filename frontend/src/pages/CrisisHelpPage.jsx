@@ -3,7 +3,7 @@ import { Phone, Siren } from 'lucide-react';
 import { reportCrisisOpen } from '../services/telemetry';
 import { TrustedContact } from '../organisms/TrustedContact';
 import { PsychologistList } from '../organisms/PsychologistList';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { HELPLINES } from '../utils/helplines';
 import styles from './CrisisHelpPage.module.css';
 
@@ -13,7 +13,11 @@ import styles from './CrisisHelpPage.module.css';
  * WhatsApp y profesionales verificados llegan en Fases 3–4.
  */
 export function CrisisHelpPage() {
-  useDocumentTitle('Ayuda SOS');
+  usePageMeta({
+    title: 'Ayuda SOS',
+    description:
+      'Ayuda inmediata cuando todo es demasiado: Línea de la Vida, un mensaje listo para alguien de confianza, respiración a tu ritmo y cómo bajar el estímulo.',
+  });
   useEffect(() => reportCrisisOpen('page'), []);
   const { lineaDeLaVida, emergencias } = HELPLINES;
 

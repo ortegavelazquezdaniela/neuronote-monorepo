@@ -38,15 +38,31 @@ describe('Página principal y navegación', () => {
     expect(toggle).toHaveFocus();
   });
 
-  it('páginas informativas y 404', () => {
-    renderApp(<SectionPage title="Privacidad" intro="Texto" points={['Uno']} phase={4} />);
+  it('páginas informativas: título, resumen y metadatos para buscadores', async () => {
+    renderApp(<SectionPage title="Privacidad" intro="Usamos el mínimo de datos." points={['Uno']} />, {
+      route: '/privacidad',
+    });
     expect(screen.getByRole('heading', { name: 'Privacidad' })).toBeInTheDocument();
-    expect(screen.getByRole('note')).toHaveTextContent('Fase 4');
+    expect(screen.getByRole('heading', { name: 'En resumen' })).toBeInTheDocument();
+    await waitFor(() => expect(document.title).toBe('Privacidad · NEURONOTE'));
+    const meta = (sel) => document.head.querySelector(sel)?.getAttribute('content');
+    expect(meta('meta[name="description"]')).toBe('Usamos el mínimo de datos.');
+    expect(meta('meta[property="og:title"]')).toBe('Privacidad · NEURONOTE');
+    expect(meta('meta[property="og:url"]')).toBe('https://neuronote-monorepo.vercel.app/privacidad');
+    expect(meta('meta[name="robots"]')).toBe('index, follow');
+    expect(document.head.querySelector('link[rel="canonical"]').href).toBe(
+      'https://neuronote-monorepo.vercel.app/privacidad',
+    );
+    // No duplica etiquetas al actualizar
+    expect(document.head.querySelectorAll('meta[name="description"]')).toHaveLength(1);
   });
 
-  it('404', () => {
-    renderApp(<NotFoundPage />);
+  it('404: no se indexa', async () => {
+    renderApp(<NotFoundPage />, { route: '/no-existe' });
     expect(screen.getByRole('heading', { name: 'Esta página no existe' })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(document.head.querySelector('meta[name="robots"]').getAttribute('content')).toBe('noindex, nofollow'),
+    );
   });
 });
 
