@@ -45,11 +45,19 @@ function db(): PDO
             nn_env('DB_PORT', '3306'),
             nn_env('DB_NAME', 'neuronote_audit')
         );
-        $pdo = new PDO($dsn, nn_env('DB_USER', 'root'), nn_env('DB_PASS', ''), [
+        $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
+        ];
+        // Bases en la nube (p. ej. TiDB Cloud) exigen TLS: DB_SSL_CA apunta al
+        // paquete de certificados del sistema y se verifica el certificado del servidor.
+        $ca = nn_env('DB_SSL_CA', '');
+        if ($ca !== '') {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $ca;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+        }
+        $pdo = new PDO($dsn, nn_env('DB_USER', 'root'), nn_env('DB_PASS', ''), $options);
     }
     return $pdo;
 }
@@ -76,10 +84,20 @@ function post_number(string $key, float $min, float $max): ?float
     return ($v === false || $v < $min || $v > $max) ? null : (float) $v;
 }
 
+/** HTTPS directo o detrás del proxy de la plataforma (TRUST_PROXY=1, como en Render). */
+function is_https(): bool
+{
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        return true;
+    }
+    return nn_env('TRUST_PROXY', '') === '1'
+        && strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
+}
+
 function start_session(): void
 {
     if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => !empty($_SERVER['HTTPS'])]);
+        session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => is_https()]);
         session_start();
     }
 }
@@ -127,6 +145,9 @@ function send_security_headers(): void
     header('X-Frame-Options: DENY');
     header('Referrer-Policy: same-origin');
     header("Content-Security-Policy: default-src 'self'; style-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'");
+    if (is_https()) {
+        header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+    }
 }
 
 function json_response(array $data, int $status = 200): never

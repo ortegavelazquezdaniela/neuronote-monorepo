@@ -77,3 +77,22 @@ jobs:
         run: php audit-engine/tests/icas_test.php
       - name: El esquema MySQL se crea sin errores
         run: mysql -h 127.0.0.1 -uroot -pci-solo-pruebas < audit-engine/db/schema.sql
+      - name: La imagen Docker (Render) se construye y responde
+        run: |
+          docker build -t neuronote-audit audit-engine
+          docker run -d --name audit --network host \
+            -e PORT=8080 -e DB_HOST=127.0.0.1 -e DB_USER=root -e DB_PASS=ci-solo-pruebas -e DB_SSL_CA= \
+            -e BADGE_SECRET=ci-solo-pruebas neuronote-audit
+          for i in $(seq 1 20); do curl -sf http://127.0.0.1:8080/src/health.php && break; sleep 1; done
+          set -x
+          test "$(curl -s 'http://127.0.0.1:8080/src/verify.php?osm_id=way-1')" = '{"certified":false}'
+          curl -s -X POST -d 'avg_db=40&peak_db=60&reverberation_s=0.5&lux=300&crowd_density=0.5' \
+            http://127.0.0.1:8080/src/calculate_index.php | grep -q '"icas"'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/)" = 401
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/src/bootstrap.php)" = 404
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/.env)" = 404
+          curl -s -D - -o /dev/null -H 'X-Forwarded-Proto: https' http://127.0.0.1:8080/src/health.php | grep -qi strict-transport
+          ! curl -s -D - -o /dev/null http://127.0.0.1:8080/src/health.php | grep -qi 'x-powered-by'
+      - name: Registros del contenedor
+        if: failure()
+        run: docker logs audit || true

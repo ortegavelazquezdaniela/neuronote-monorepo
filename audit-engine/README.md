@@ -22,6 +22,8 @@ C:\xampp\php\php.exe tests/icas_test.php
 | `src/generate_badge.php` | Emite el sello (ICAS ≥ 75, acta aprobada) y muestra el dictamen |
 | `src/badge.php` | Hash HMAC-SHA256 del acta con `BADGE_SECRET` |
 | `src/verify.php` | Verificación pública en JSON (la usa la API Express) |
-| `db/schema.sql` | Tablas `establishments`, `audits`, `professionals`, `badges` |
+| `src/health.php` | Comprobación de vida para Render (no usa la base) |
+| `db/schema.sql` | Tablas `establishments`, `audits`, `professionals`, `badges` (MySQL, MariaDB o TiDB) |
+| `Dockerfile` | Imagen PHP 8.3 + Apache para Render Free (ver el README raíz) |
 
 Seguridad: sentencias preparadas (`ATTR_EMULATE_PREPARES = false`), `htmlspecialchars` en toda salida, tokens CSRF, cookies `HttpOnly` + `SameSite=Strict`, cabeceras CSP y `X-Frame-Options`, archivos internos no accesibles por URL.
