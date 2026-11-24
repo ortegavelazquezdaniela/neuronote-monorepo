@@ -16,6 +16,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + var(--space-4));
+  /* WCAG 2.4.11: al navegar con Tab, el elemento enfocado no queda debajo del botón SOS fijo */
+  scroll-padding-bottom: calc(3.25rem + var(--space-4) * 2);
   color-scheme: light;
 }
 
@@ -39,6 +41,33 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* WCAG 1.4.10 y 1.4.12: palabras y direcciones largas (URL, correos) se parten
+   en vez de desbordar la pantalla a 320 px o con espaciado de texto ampliado. */
+p,
+li,
+dd,
+dt,
+h1,
+h2,
+h3,
+label,
+legend {
+  overflow-wrap: anywhere;
+}
+
+/* Los elementos de grid/flex pueden encogerse por debajo del ancho de su contenido;
+   si no, un campo o una palabra larga ensancha toda la columna y aparece scroll
+   horizontal (WCAG 1.4.10 / 1.4.12). :where() no suma especificidad. */
+:where(main) :where(div, section, article, aside, form, fieldset, ul, ol, dl, li) {
+  min-width: 0;
+}
+
+input,
+select,
+textarea {
+  max-width: 100%;
 }
 
 /* El contenido ocupa al menos la pantalla visible: mientras una página diferida

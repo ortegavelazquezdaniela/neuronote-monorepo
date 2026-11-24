@@ -7,12 +7,25 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 
 **Presupuesto: $0.00 MXN** — solo herramientas gratuitas y open source.
 
-![CI](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml/badge.svg)
-![Pruebas](https://img.shields.io/badge/pruebas-99%20pasando-2f5d55)
-![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-82%25-407076)
-![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-96%25-407076)
-![Lighthouse](https://img.shields.io/badge/Lighthouse%20inicio-98%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)
+[![CI](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml)
+[![Storybook](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/storybook.yml/badge.svg)](https://ortegavelazquezdaniela.github.io/neuronote-monorepo/)
+![Pruebas](https://img.shields.io/badge/pruebas-119%20pasando-2f5d55)
+![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-83%25-407076)
+![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-94%25-407076)
+[![Lighthouse](https://img.shields.io/badge/Lighthouse%20SOS-100%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)](#accesibilidad-rendimiento-y-seo-lighthouse-136-móvil-compilación-de-producción)
+[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG%202.2%20AA-autoevaluaci%C3%B3n-5aa2ab)](docs/accesibilidad-wcag-2.2.md)
+[![Presupuesto](https://img.shields.io/badge/presupuesto-%240.00%20MXN-97b1a6)](docs/arquitectura-cloud-costos.md)
 ![Licencia MIT](https://img.shields.io/badge/licencia-MIT-c9c5ba)
+
+| | |
+|---|---|
+| **App** | <https://neuronote-monorepo.vercel.app> |
+| **API y documentación (Swagger)** | <https://neuronote-api-pnnf.onrender.com/api/docs> |
+| **Catálogo de componentes (Storybook)** | <https://ortegavelazquezdaniela.github.io/neuronote-monorepo/> |
+| **Ficha de accesibilidad WCAG 2.2 AA** | [docs/accesibilidad-wcag-2.2.md](docs/accesibilidad-wcag-2.2.md) |
+| **Arquitectura cloud y costos** | [docs/arquitectura-cloud-costos.md](docs/arquitectura-cloud-costos.md) |
+
+> Render Free se duerme tras 15 minutos sin uso: la primera visita a la API o al motor puede tardar hasta un minuto.
 
 ## Estado
 

@@ -20,7 +20,7 @@
   gap: var(--space-3);
   min-height: 3rem;
   padding: var(--space-3) var(--space-4);
-  border: 1.5px solid var(--color-line-strong);
+  border: 1.5px solid var(--color-control-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   cursor: pointer;

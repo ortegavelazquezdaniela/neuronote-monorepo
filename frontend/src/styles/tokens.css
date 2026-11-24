@@ -48,6 +48,9 @@
   --color-info: var(--nn-aqua);
   --color-line: var(--nn-line);
   --color-line-strong: var(--nn-warm-grey);
+  /* Borde de campos y controles: ≥ 3:1 contra fondo y superficies (WCAG 1.4.11).
+     --color-line-strong queda solo para separadores decorativos. */
+  --color-control-border: #827d72;
   --color-focus: var(--nn-deep-blue);
   --color-focus-halo: #ffd9d4;
   --color-sos: var(--nn-petrol);
@@ -153,6 +156,7 @@
   --color-primary-hover: #000000;
   --color-line: #000000;
   --color-line-strong: #000000;
+  --color-control-border: #000000;
   --color-focus: #000000;
   --color-focus-halo: #f5c63c;
   --color-sos: #0b1f3d;
@@ -179,6 +183,7 @@
   --color-on-primary: #0f1a2a;
   --color-line: #2a3b55;
   --color-line-strong: #3a4d6a;
+  --color-control-border: #7f93ad;
   --color-focus: #ffd9d4;
   --color-focus-halo: #0f1a2a;
   --color-sos: #407076;

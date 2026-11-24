@@ -29,7 +29,7 @@
   width: 4.75rem;
   height: 2.75rem;
   padding: 0;
-  border: 1.5px solid var(--color-line-strong);
+  border: 1.5px solid var(--color-control-border);
   border-radius: var(--radius-pill);
   background: var(--color-bg-alt);
   transition:

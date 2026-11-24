@@ -30,10 +30,13 @@ export const SECTION_PAGES = [
     path: '/declaracion-accesibilidad',
     title: 'Declaración de accesibilidad',
     intro:
-      'NEURONOTE se diseña con el objetivo de cumplir WCAG 2.2 nivel AA: navegación completa por teclado, foco visible, contraste suficiente, compatibilidad con lectores de pantalla y modos Calma, Alto contraste y Noche.',
+      'NEURONOTE cumple parcialmente WCAG 2.2 nivel AA (autoevaluación del 23 de noviembre de 2026): 45 de los 47 criterios aplicables se cumplen en los cuatro temas (Predeterminado, Calma, Alto contraste y Noche).',
     points: [
-      'Las pruebas automáticas y la auditoría Lighthouse se documentan en el README del repositorio.',
-      'Limitación conocida: el mapa de Leaflet se maneja con teclado (flechas y + / −), pero toda su información también está disponible como lista de texto.',
+      'Ayuda SOS cumple todos los criterios aplicables, con un contraste mínimo de 5.5:1 en todos los temas.',
+      'Pendiente: elegir un punto libre del mapa (origen o destino de una ruta) requiere un clic. Con teclado puedes usar tu ubicación o cualquier oasis de la lista («Planear ruta hasta aquí»).',
+      'Pendiente: la sesión con cuenta caduca a las 2 horas sin aviso previo. Las notas sin cuenta no tienen límite de tiempo.',
+      'Cómo se evaluó: axe-core en 16 páginas y 4 temas, Lighthouse, medición de contraste, reflow a 320 px y espaciado de texto. Falta probar con lectores de pantalla y con personas usuarias.',
+      'La ficha completa está en el repositorio: docs/accesibilidad-wcag-2.2.md.',
     ],
   },
   {
