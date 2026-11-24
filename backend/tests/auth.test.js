@@ -30,6 +30,16 @@ describe('API de autenticación (JWT + bcrypt)', () => {
     expect(fields).toEqual(expect.arrayContaining(['email', 'password', 'displayName']));
   });
 
+  it('responde en español aunque falte un campo', async () => {
+    const { api } = makeApp();
+    const res = await api.post('/api/auth/register').send({ email: 'ana@example.com', password: 'segura12345' });
+    expect(res.status).toBe(400);
+    expect(res.body.fields).toEqual([{ field: 'displayName', message: 'Escribe un nombre de 2 a 40 caracteres' }]);
+    const login = await api.post('/api/auth/login').send({});
+    expect(login.status).toBe(400);
+    for (const f of login.body.fields) expect(f.message).not.toMatch(/Invalid|expected/);
+  });
+
   it('inicia sesión con credenciales correctas y rechaza las incorrectas sin revelar cuál falló', async () => {
     const { api } = makeApp();
     await api.post('/api/auth/register').send(validUser);

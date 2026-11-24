@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+// Mensajes por defecto de zod en español (respaldo para los campos sin mensaje propio).
+z.config(z.locales.es());
+
 /**
  * Esquemas de validación (zod). El servidor nunca confía en el cliente:
  * repite las reglas del frontend y limpia el texto antes de guardarlo.
@@ -13,7 +16,11 @@ export const clean = (s) =>
     .replace(/[ \t]+/g, ' ')
     .trim();
 
-const text = (min, max) => z.string().transform(clean).pipe(z.string().min(min).max(max));
+const text = (min, max, message) =>
+  z
+    .string(message ? { error: message } : undefined)
+    .transform(clean)
+    .pipe(z.string().min(min, message).max(max, message));
 
 export const registerSchema = z.object({
   email: z.string().trim().toLowerCase().email('Correo no válido').max(254),
@@ -22,7 +29,7 @@ export const registerSchema = z.object({
     .min(10, 'La contraseña debe tener al menos 10 caracteres')
     .max(128)
     .refine((p) => /[a-zA-Z]/.test(p) && /\d/.test(p), 'Usa letras y al menos un número'),
-  displayName: text(2, 40),
+  displayName: text(2, 40, 'Escribe un nombre de 2 a 40 caracteres'),
 });
 
 export const loginSchema = z.object({
