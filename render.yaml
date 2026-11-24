@@ -32,6 +32,8 @@ services:
         sync: false
       - key: AUDIT_ENGINE_URL
         sync: false # URL pública de neuronote-audit, p. ej. https://neuronote-audit.onrender.com
+      - key: SENTRY_DSN
+        sync: false # opcional: monitoreo de errores (Sentry Developer, gratis)
 
   # Motor de auditoría PHP 8 (Docker). La base es TiDB Cloud Starter (compatible
   # con MySQL, gratis y sin tarjeta con límite de gasto 0); exige TLS.

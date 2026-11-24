@@ -8,7 +8,7 @@ import { EmptyState } from '../molecules/EmptyState';
 import { PanelSection } from '../molecules/PanelSection';
 import { useAuth } from '../hooks/useAuth';
 import { useAsync } from '../hooks/useAsync';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { api } from '../services/api';
 import { describeError } from '../services/http';
 import styles from './ProfilePage.module.css';
@@ -78,7 +78,7 @@ function SensoryProfileForm({ initial }) {
 }
 
 export function ProfilePage() {
-  useDocumentTitle('Perfil');
+  usePageMeta({ title: 'Perfil', noindex: true });
   const { user, logout, deleteAccount } = useAuth();
   const profile = useAsync((signal) => api('/me/profile', { signal }), []);
   const favorites = useAsync((signal) => api('/me/favorites', { signal }), []);

@@ -13,7 +13,9 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "og-image": "node scripts/build-og-image.mjs",
+    "postbuild": "node scripts/build-sitemap.mjs"
   },
   "dependencies": {
     "@fontsource-variable/schibsted-grotesk": "^5.3.0",

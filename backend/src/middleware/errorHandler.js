@@ -1,4 +1,5 @@
 import { ZodError } from 'zod';
+import { reportError } from '../monitoring.js';
 
 /** Error con código HTTP y mensaje seguro para mostrar. */
 export class HttpError extends Error {
@@ -28,7 +29,11 @@ export function errorHandler(err, req, res, _next) {
   if (err?.type === 'entity.parse.failed') return res.status(400).json({ error: 'JSON mal formado' });
 
   const status = err instanceof HttpError ? err.status : 500;
-  if (status >= 500) console.error(`[${new Date().toISOString()}] ${req.method} ${req.path}`, err);
+  if (status >= 500) {
+    console.error(`[${new Date().toISOString()}] ${req.method} ${req.path}`, err);
+    // 502/503 de servicios externos ya están previstos (motor dormido, API caída): no son fallos del código.
+    if (!(err instanceof HttpError)) reportError(err, req);
+  }
   res.status(status).json({
     error: status >= 500 ? 'Error interno. Inténtalo de nuevo más tarde.' : err.message,
     ...(err.details ? { details: err.details } : {}),

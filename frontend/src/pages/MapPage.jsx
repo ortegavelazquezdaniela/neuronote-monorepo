@@ -8,13 +8,17 @@ import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { MicroclimatePanel } from '../organisms/MicroclimatePanel';
 import { HavenResults } from '../organisms/HavenResults';
 import { SensoryDashboardLayout } from '../templates/SensoryDashboardLayout';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useHavens } from '../hooks/useDataHooks';
 import { DEFAULT_CENTER } from '../utils/geo';
 
 export function MapPage() {
-  useDocumentTitle('Explorar mapa');
+  usePageMeta({
+    title: 'Explorar mapa',
+    description:
+      'Mapa de OpenStreetMap con lugares públicos donde podrías descansar y el clima de la zona. Cada dato indica de dónde viene.',
+  });
   const geo = useGeolocation();
   const [picked, setPicked] = useState(null);
   const [showHavens, setShowHavens] = useState(true);

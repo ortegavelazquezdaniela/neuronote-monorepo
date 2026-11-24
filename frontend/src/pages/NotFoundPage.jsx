@@ -5,6 +5,7 @@ export function NotFoundPage() {
     <SectionPage
       title="Esta página no existe"
       intro="Puede que el enlace haya cambiado. Desde el inicio puedes llegar a cualquier módulo."
+      noindex
     />
   );
 }

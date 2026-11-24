@@ -9,7 +9,7 @@ import { PanelSection } from '../molecules/PanelSection';
 import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { RouteOptions } from '../organisms/RouteOptions';
 import { SensoryDashboardLayout } from '../templates/SensoryDashboardLayout';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useHavens, useSensoryRoute } from '../hooks/useDataHooks';
 import { describeError } from '../services/http';
@@ -30,7 +30,11 @@ function parseTarget(params) {
 }
 
 export function RoutesPage() {
-  useDocumentTitle('Rutas de calma');
+  usePageMeta({
+    title: 'Rutas de calma',
+    description:
+      'Compara rutas a pie entre dos puntos y elige la más tranquila o la más rápida, con datos abiertos de OpenStreetMap.',
+  });
   const [params] = useSearchParams();
   const geo = useGeolocation();
   const [origin, setOrigin] = useState(null);

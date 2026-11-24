@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
+import { usePageMeta } from './usePageMeta';
 
-const BASE = 'NEURONOTE';
-
-/** Actualiza el <title> en cada página para lectores de pantalla y pestañas. */
+/**
+ * Atajo histórico: solo el título (la descripción queda la general del sitio).
+ * Las páginas nuevas deberían usar usePageMeta con su propia descripción.
+ */
 export function useDocumentTitle(title) {
-  useEffect(() => {
-    document.title = title ? `${title} · ${BASE}` : `${BASE} · Rutas de calma y espacios sensoriales`;
-  }, [title]);
+  usePageMeta({ title });
 }

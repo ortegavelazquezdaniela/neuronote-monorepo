@@ -11,7 +11,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 ![Pruebas](https://img.shields.io/badge/pruebas-99%20pasando-2f5d55)
 ![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-82%25-407076)
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-96%25-407076)
-![Lighthouse](https://img.shields.io/badge/Lighthouse%20inicio-99%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)
+![Lighthouse](https://img.shields.io/badge/Lighthouse%20inicio-98%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)
 ![Licencia MIT](https://img.shields.io/badge/licencia-MIT-c9c5ba)
 
 ## Estado
@@ -21,8 +21,12 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | 1 | Entorno, design system, página principal responsive | ✅ |
 | 2 | Modos de accesibilidad, intro, modal SOS (Alt + C), formularios, estados | ✅ |
 | 3 | Leaflet + OSM, Nominatim/Overpass, rutas a pie, Open-Meteo, REST Countries, WhatsApp | ✅ |
-| 4 | API Express (JWT + bcrypt), Supabase/PostgreSQL con RLS, MongoDB Atlas, motor PHP + MySQL | ✅ (Supabase y MongoDB necesitan tus claves, ver abajo) |
-| 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, configuración de despliegue | ✅ (el despliegue necesita tus cuentas de Vercel y Render) |
+| 4 | API Express (JWT + bcrypt), Supabase/PostgreSQL con RLS, MongoDB Atlas, motor PHP + MySQL | ✅ |
+| 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, despliegue (Vercel + Render + TiDB Cloud) | ✅ |
+| 6 | Documentación de la API: OpenAPI 3.1 + Swagger UI (`/api/docs`), colección de Postman, monitoreo de errores con Sentry | ✅ (Sentry es opcional y necesita tu cuenta) |
+| 7 | Rendimiento (CLS, SOS al 100) y SEO (metadatos por página, Open Graph, JSON-LD, sitemap) | ✅ (las páginas con mapa quedan en 79, ver Lighthouse) |
+| 8 | Ficha WCAG 2.2 AA, documento de arquitectura cloud y costos, badges, Storybook publicado | Pendiente |
+| 9 | Presentación de defensa y guion del video de 3 minutos | Pendiente |
 
 ## Arquitectura
 
@@ -100,8 +104,11 @@ Sin Supabase ni MongoDB configurados, la API arranca en **modo memoria** (lo avi
 | `C:\xampp\php\php.exe audit-engine/tests/icas_test.php` | Pruebas del ICAS |
 | `npm run storybook` (frontend) | Catálogo de componentes → http://localhost:6006 |
 | `npm run build` / `npm run build-storybook` (frontend) | Compilación de producción y del catálogo |
+| `npm run postman` (backend) | Regenera la colección de Postman desde la especificación OpenAPI |
 
-Resultados al 23-nov-2026: **69 pruebas de frontend** (81.7 % sentencias, 84.8 % líneas), **30 de backend** (95.7 % sentencias, 99.2 % líneas) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
+**Documentación de la API:** Swagger UI en <http://localhost:4000/api/docs> (en producción, `/api/docs` de tu URL de Render), especificación en `/api/openapi.json` y colección de Postman en [`backend/docs/`](backend/docs/neuronote-api.postman_collection.json). Detalles y configuración de Sentry en [`backend/README.md`](backend/README.md).
+
+Resultados al 23-nov-2026: **73 pruebas de frontend** (83.0 % sentencias, 86.2 % líneas), **39 de backend** (94.1 % sentencias, 97.3 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
 
 ## Configurar los servicios en la nube (gratis)
 
@@ -194,17 +201,38 @@ Notas:
 - La base en la nube empieza vacía: las actas y los sellos de tu XAMPP no se copian, y los sellos solo se verifican con el `BADGE_SECRET` con el que se emitieron.
 - Los dos servicios gratuitos de Render comparten 750 horas al mes y se duermen tras 15 min sin uso. Si el motor está dormido, la primera consulta de un sello puede fallar (la API espera 10 s); la página del oasis solo oculta el sello y lo muestra en la siguiente visita.
 
-## Accesibilidad y rendimiento (Lighthouse 13, móvil, compilación de producción)
+## Accesibilidad, rendimiento y SEO (Lighthouse 13.6, móvil, compilación de producción)
+
+Medido el 23-nov-2026 con `npx lighthouse@13.6.0` sobre `npm run preview` (emulación de Moto G, 4G lenta y CPU ×4).
 
 | Página | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| Inicio `/` | 99 | 100 | 100 | 100 |
-| Notas `/notas` | 77 | 100 | 100 | 100 |
-| SOS `/auxilio-inmediato` | 74 | 100 | 100* | 100 |
-| Oasis `/oasis` | 60 | 97 | 96 | 100 |
+| Inicio `/` | 98 | 100 | 100 | 100 |
+| Ayuda SOS `/auxilio-inmediato` | **100** | 100 | 100 | 100 |
+| Microclima `/microclima` | 98 | 100 | 100 | 100 |
+| Notas `/notas` | 96 | 100 | 100 | 100 |
+| Accesibilidad `/accesibilidad` | 95 | 100 | 100 | 100 |
+| Acerca, Privacidad, Declaración, Contacto | 100 | 100 | 100 | 100 |
+| Ficha de oasis `/oasis/:id` | 92 | 100 | 100 | 100 |
+| Mapa `/mapa` | 79 | 97 | 96 | 100 |
+| Rutas `/rutas` · Oasis `/oasis` | 79 | 100 | 96 | 100 |
+| Iniciar sesión, Crear cuenta, 404 | 98–100 | 100 | 100 | 66† |
 
-\*En la medición local hubo errores de CORS porque la vista previa corría en otro puerto; ya está corregido en la configuración local.
-En `/oasis`, Lighthouse marca marcadores del mapa muy juntos (*target-size*); WCAG 2.2 (2.5.8) lo permite porque cada lugar tiene un botón de tamaño completo en la lista de texto. El rendimiento de las páginas con mapa depende de las teselas de OpenStreetMap. No se sacrificó accesibilidad para subir puntuaciones.
+Qué se corrigió en la fase 7:
+- **CLS de 0.417 → 0.001** en todas las páginas diferidas: el pie de página saltaba cuando llegaba el contenido. `<main>` reserva ahora el alto de la pantalla.
+- **Ayuda SOS 69 → 100** (LCP 3.9 s → 0.8 s): va en el paquete principal, porque en una crisis no debe esperar una segunda descarga, y Supabase Realtime se descarga cuando el navegador queda libre.
+- Preconexión a `tile.openstreetmap.org` para los mapas.
+
+Límites conocidos (decisiones, no descuidos):
+- **Páginas con mapa (79):** su contenido principal son unos 8 mosaicos PNG de OpenStreetMap (~290 KB) que, en la 4G lenta simulada, tardan ~5 s. En una conexión normal el LCP medido es de **0.55 s**. Reducir el mapa solo subía a 82 y empeoraba la experiencia en móvil, así que se dejó.
+- **Buenas prácticas 96:** los mosaicos de OSM son de 256 px; pedirlos en alta densidad cuadruplicaría su número y peso (y la carga sobre los servidores voluntarios de OSM).
+- **Accesibilidad 97 en `/mapa`:** marcadores juntos (*target-size*). WCAG 2.2 (2.5.8) lo permite porque cada lugar tiene un botón de tamaño completo en la lista.
+- †**SEO 66** en `/entrar`, `/registro` y la 404: llevan `noindex` a propósito y Lighthouse descuenta a toda página que pide no ser indexada.
+
+### SEO
+- Cada página define título, descripción, `canonical`, Open Graph y tarjeta de X/Twitter con `usePageMeta` (`frontend/src/hooks/usePageMeta.js`, equivalente a react-helmet sin dependencias). `/perfil`, `/entrar`, `/registro`, errores y 404 llevan `noindex`.
+- `index.html` trae valores por defecto para rastreadores sin JavaScript (WhatsApp, Facebook), la imagen de vista previa `og-image.png` (1200 × 630, `npm run og-image`) y datos estructurados JSON-LD (`WebApplication`).
+- `npm run build` genera `sitemap.xml` y `robots.txt` con el dominio de `VITE_SITE_URL` (por defecto `https://neuronote-monorepo.vercel.app`). Una prueba comprueba que cada URL del sitemap sea una ruta real de la app.
 
 ## Datos y honestidad
 

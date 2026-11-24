@@ -27,6 +27,11 @@ export const config = {
   mongoUri: env.MONGODB_URI || '',
   restCountriesKey: env.RESTCOUNTRIES_KEY || '',
   auditEngineUrl: env.AUDIT_ENGINE_URL || '',
+  sentry: {
+    dsn: env.SENTRY_DSN || '',
+    environment: env.NODE_ENV || 'development',
+    release: env.RENDER_GIT_COMMIT || undefined, // Render define el commit desplegado
+  },
 };
 
 export const hasSupabase = () => Boolean(config.supabase.url && config.supabase.secretKey);

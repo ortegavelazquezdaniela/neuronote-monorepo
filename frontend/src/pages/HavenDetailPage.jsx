@@ -6,7 +6,7 @@ import { StatusMessage } from '../atoms/StatusMessage';
 import { MapViewLeaflet } from '../organisms/MapViewLeaflet';
 import { MicroclimatePanel } from '../organisms/MicroclimatePanel';
 import { HavenAccountActions } from '../organisms/HavenAccountActions';
-import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { useHaven } from '../hooks/useDataHooks';
 import { HAVEN_TYPES } from '../utils/havenTypes';
 import { describeError } from '../services/http';
@@ -25,7 +25,12 @@ export function HavenDetailPage() {
   const { id } = useParams();
   const query = useHaven(id);
   const haven = query.data;
-  useDocumentTitle(haven?.name ?? 'Oasis sensorial');
+  usePageMeta({
+    title: haven?.name ?? 'Oasis sensorial',
+    description: haven
+      ? `${haven.name}: lugar público de OpenStreetMap que podría servirte para descansar. Revisa su ubicación, cómo llegar y si tiene sello NEURONOTE.`
+      : undefined,
+  });
 
   if (query.status === 'loading') {
     return (
@@ -93,7 +98,10 @@ export function HavenDetailPage() {
             </div>
             <div>
               <dt>Nivel de confort</dt>
-              <dd>Sin auditoría. Se calculará con el Índice de Confort Acústico y Sensorial (Fase 4).</dd>
+              <dd>
+                Se mide con el Índice de Confort Acústico y Sensorial (ICAS) cuando el lugar recibe una auditoría
+                de NEURONOTE. Si la tiene, verás su sello en esta página.
+              </dd>
             </div>
           </dl>
 

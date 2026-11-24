@@ -56,6 +56,11 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run coverage
+      - name: La colección de Postman está al día con la especificación
+        run: |
+          npm run postman
+          git diff --exit-code -- docs/neuronote-api.postman_collection.json \
+            || (echo "::error::Ejecuta 'npm run postman' en backend/ y sube la colección actualizada." && exit 1)
 
   audit-engine:
     name: Motor de auditoría (PHP 8 + MySQL)

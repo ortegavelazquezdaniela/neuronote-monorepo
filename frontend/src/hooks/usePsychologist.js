@@ -20,7 +20,9 @@ export function usePsychologist() {
     let channel;
     let client;
     let cancelled = false;
-    import('@supabase/supabase-js').then(({ createClient }) => {
+    // supabase-js (~60 kB comprimido) se descarga cuando el navegador queda libre,
+    // para no competir con el contenido de Ayuda SOS, que debe verse primero.
+    const connect = () => import('@supabase/supabase-js').then(({ createClient }) => {
       if (cancelled) return;
       client = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } });
       channel = client
@@ -31,8 +33,12 @@ export function usePsychologist() {
         })
         .subscribe((state) => setLive(state === 'SUBSCRIBED'));
     });
+    const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 1500));
+    const cancelIdle = window.cancelIdleCallback ?? clearTimeout;
+    const idleId = idle(connect, { timeout: 3000 });
     return () => {
       cancelled = true;
+      cancelIdle(idleId);
       if (client && channel) client.removeChannel(channel);
     };
   }, []);
