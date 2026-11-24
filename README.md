@@ -40,7 +40,16 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | 7 | Rendimiento (CLS, SOS al 100) y SEO (metadatos por página, Open Graph, JSON-LD, sitemap) | ✅ (las páginas con mapa quedan en 79, ver Lighthouse) |
 | 8 | Ficha WCAG 2.2 AA, documento de arquitectura cloud y costos, badges, Storybook publicado | ✅ (Storybook necesita activar GitHub Pages) |
 | Extra | Acceso para auditores en el pie, clínicas psicológicas cercanas (OpenStreetMap), monitor de pulso experimental (Web Bluetooth) | ✅ |
-| 9 | Presentación de defensa y guion del video de 3 minutos | Pendiente |
+| 9 | Defensa: guía de demostración, resumen, guion del video y presentación | ✅ (grabar el video y presentar te toca a ti) |
+
+### Para la defensa (fase 9)
+
+| Documento | Para qué |
+|---|---|
+| [docs/guia-demostracion.md](docs/guia-demostracion.md) | Recorrido de 10–12 min (o 5 min con los pasos ⭐): qué hacer, qué decir y qué hacer si algo falla |
+| [docs/resumen-proyecto.md](docs/resumen-proyecto.md) | El proyecto en una frase, en un minuto, la tabla técnica y los números clave |
+| [docs/guion-video.md](docs/guion-video.md) | Guion por segundos del video de 3 minutos (rutas de calma y auxilio por WhatsApp) |
+| Presentación (13 diapositivas, se descarga en PowerPoint o PDF) | Enlace privado en claude.ai: compártelo desde su menú *Share* si alguien más debe verlo |
 
 ### Extensiones (después de la fase 8)
 
