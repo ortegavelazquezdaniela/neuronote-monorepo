@@ -9,7 +9,7 @@ import { HAVEN_TYPES, typeFromTags, makeHaven } from '../utils/havenTypes';
 
 const SERVERS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
 
-async function query(ql, { cacheKey, signal }) {
+export async function overpassQuery(ql, { cacheKey, signal, timeout = 12_000 }) {
   let lastError;
   for (const server of SERVERS) {
     try {
@@ -19,7 +19,7 @@ async function query(ql, { cacheKey, signal }) {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams({ data: ql }),
         },
-        timeout: 12_000,
+        timeout,
         retries: 0,
         cacheKey,
         ttl: 6 * 60 * 60_000,
@@ -50,12 +50,12 @@ export async function overpassHavens({ lat, lon }, { radius, signal }) {
     .map((t) => `nwr["${t.key}"="${t.value}"]["name"]${around};`)
     .join('\n  ');
   const ql = `[out:json][timeout:20];\n(\n  ${selectors}\n);\nout center tags 80;`;
-  const data = await query(ql, { cacheKey: `ovp:${lat.toFixed(3)},${lon.toFixed(3)},${radius}`, signal });
+  const data = await overpassQuery(ql, { cacheKey: `ovp:${lat.toFixed(3)},${lon.toFixed(3)},${radius}`, signal });
   return data.elements.map(fromElement).filter((h) => h.type && Number.isFinite(h.lat));
 }
 
 export async function overpassHaven(osmType, osmId, { signal }) {
-  const data = await query(`[out:json][timeout:20];${osmType}(${osmId});out center tags;`, {
+  const data = await overpassQuery(`[out:json][timeout:20];${osmType}(${osmId});out center tags;`, {
     cacheKey: `ovp:${osmType}-${osmId}`,
     signal,
   });

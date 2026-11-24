@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router';
 import { Phone, Siren } from 'lucide-react';
 import { reportCrisisOpen } from '../services/telemetry';
 import { TrustedContact } from '../organisms/TrustedContact';
 import { PsychologistList } from '../organisms/PsychologistList';
+import { NearbyClinics } from '../organisms/NearbyClinics';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { HELPLINES } from '../utils/helplines';
 import styles from './CrisisHelpPage.module.css';
@@ -52,8 +54,13 @@ export function CrisisHelpPage() {
           <h2 className={`${styles.h2} ${styles.spaced}`}>Escribir a alguien de confianza</h2>
           <TrustedContact />
 
-          <h2 className={`${styles.h2} ${styles.spaced}`}>Profesionales verificados</h2>
-          <PsychologistList />
+          <h2 className={`${styles.h2} ${styles.spaced}`}>Clínicas psicológicas cerca de ti</h2>
+          <NearbyClinics />
+
+          <PsychologistList
+            hideWhenEmpty
+            heading={<h2 className={`${styles.h2} ${styles.spaced}`}>Profesionales verificados por NEURONOTE</h2>}
+          />
         </div>
 
         <div className={styles.ground}>
@@ -71,6 +78,11 @@ export function CrisisHelpPage() {
             <li>Usa audífonos o tapones si los llevas contigo.</li>
             <li>Baja el brillo de tu pantalla o mira un punto fijo cercano.</li>
           </ul>
+          <h2 className={styles.h2}>¿Tu reloj mide tu pulso?</h2>
+          <p>
+            Con el <Link to="/pulso">monitor de pulso (experimental)</Link> puedes recibir un aviso tranquilo para
+            hacer una pausa cuando tu pulso se mantiene alto.
+          </p>
         </div>
       </div>
 

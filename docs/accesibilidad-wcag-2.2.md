@@ -17,7 +17,7 @@
 
 ## 2. Alcance
 
-- **Páginas:** inicio, mapa, rutas, oasis (lista y ficha), microclima, notas, Ayuda SOS (página y modal), preferencias de accesibilidad, iniciar sesión, crear cuenta, perfil, acerca, privacidad, declaración de accesibilidad, contacto y 404.
+- **Páginas:** inicio, mapa, rutas, oasis (lista y ficha), microclima, notas, Ayuda SOS (página, modal y clínicas cercanas), monitor de pulso (con el aviso activo), preferencias de accesibilidad, iniciar sesión, crear cuenta, perfil, acerca, privacidad, declaración de accesibilidad, contacto y 404.
 - **Temas:** Predeterminado, Calma, Alto contraste y Noche.
 - **Tamaños:** 320 px, 375 px, 412 px (móvil), 640 px con texto al 150 % y escritorio.
 - **Fuera del alcance:** el panel pericial PHP (uso interno de auditores) y los mosaicos del mapa, que son imágenes de OpenStreetMap.
@@ -126,6 +126,16 @@
 2. **Bordes de controles (1.4.11):** nuevo token `--color-control-border` (≥ 3.3:1 en Predeterminado y Calma, ≥ 4.4:1 en Noche) para campos, interruptores, opciones, búsqueda y menú.
 3. **Reflow y espaciado (1.4.10, 1.4.12):** las palabras y URL largas se parten (`overflow-wrap`), los elementos de grid y flex pueden encogerse (`min-width: 0`) y el texto de los botones puede ocupar dos líneas.
 4. **Foco no oculto (2.4.11):** `scroll-padding-bottom` reserva el espacio del botón SOS fijo.
+
+### Extensiones (clínicas cercanas y monitor de pulso)
+
+Revisadas con axe-core en los 4 temas, con la lista de clínicas cargada y con el aviso del monitor activo, más reflow a 320 px y espaciado ampliado: **0 infracciones** tras estas correcciones:
+
+5. **Nombre accesible de los enlaces (2.5.3 / 4.1.2):** el espacio antes del texto oculto se perdía («Llamara Clínica…»). Ahora va fuera del `<span>` oculto.
+6. **Contraste en Ayuda SOS, tema Calma (1.4.3):** el enlace al monitor sobre el fondo de calma daba 4.4:1; ahora usa el color de texto.
+7. **Aviso del monitor en el tema Noche (1.4.3):** usa las superficies del tema, porque el botón claro no contrastaba sobre el fondo amarillo.
+
+El monitor de pulso no usa animaciones ni destellos: el aviso es un bloque estático con `role="alert"` y una vibración opcional (desactivada por defecto). La lectura del pulso no se anuncia cada segundo, para no saturar al lector de pantalla; el aviso sí.
 
 ## 7. Contacto sobre accesibilidad
 

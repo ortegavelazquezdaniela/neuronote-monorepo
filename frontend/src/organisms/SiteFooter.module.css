@@ -87,3 +87,8 @@
     grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   }
 }
+
+.hint {
+  font-size: var(--fs-sm);
+  opacity: 0.85;
+}

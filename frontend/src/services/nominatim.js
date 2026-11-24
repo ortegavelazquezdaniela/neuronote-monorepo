@@ -35,7 +35,7 @@ const get = (url, cacheKey, signal) =>
     throttled(() => fetchJSON(url, { cacheKey, ttl: 6 * 60 * 60_000, retries: 1, timeout: 10_000, signal })),
   );
 
-function viewbox({ lat, lon }, radius) {
+export function viewbox({ lat, lon }, radius) {
   const dLat = radius / 111_320;
   const dLon = radius / (111_320 * Math.cos((lat * Math.PI) / 180));
   return [lon - dLon, lat + dLat, lon + dLon, lat - dLat].map((n) => n.toFixed(4)).join(',');
@@ -79,4 +79,12 @@ export async function nominatimHaven(osmType, osmId, { signal }) {
   const url = `${BASE}/lookup?osm_ids=${LOOKUP_PREFIX[osmType]}${osmId}&format=jsonv2&extratags=1&addressdetails=1&accept-language=es`;
   const data = await get(url, `nom:${osmType}-${osmId}`, signal);
   return data[0] ? fromResult(data[0]) : null;
+}
+
+/** Búsqueda libre acotada a una zona (p. ej. «salud mental»), con la misma cola y caché. */
+export function nominatimSearch(text, point, radius, { signal } = {}) {
+  const vb = viewbox(point, radius);
+  const q = encodeURIComponent(text);
+  const url = `${BASE}/search?q=${q}&format=jsonv2&viewbox=${vb}&bounded=1&limit=20&extratags=1&addressdetails=1&accept-language=es`;
+  return get(url, `nom:q:${text}:${vb}`, signal);
 }

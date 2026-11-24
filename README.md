@@ -9,7 +9,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 
 [![CI](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml)
 [![Storybook](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/storybook.yml/badge.svg)](https://ortegavelazquezdaniela.github.io/neuronote-monorepo/)
-![Pruebas](https://img.shields.io/badge/pruebas-119%20pasando-2f5d55)
+![Pruebas](https://img.shields.io/badge/pruebas-140%20pasando-2f5d55)
 ![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-83%25-407076)
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-94%25-407076)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse%20SOS-100%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)](#accesibilidad-rendimiento-y-seo-lighthouse-136-móvil-compilación-de-producción)
@@ -38,8 +38,15 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | 5 | Vitest + RTL + MSW, Supertest, Storybook, CI/CD, Lighthouse, despliegue (Vercel + Render + TiDB Cloud) | ✅ |
 | 6 | Documentación de la API: OpenAPI 3.1 + Swagger UI (`/api/docs`), colección de Postman, monitoreo de errores con Sentry | ✅ (Sentry es opcional y necesita tu cuenta) |
 | 7 | Rendimiento (CLS, SOS al 100) y SEO (metadatos por página, Open Graph, JSON-LD, sitemap) | ✅ (las páginas con mapa quedan en 79, ver Lighthouse) |
-| 8 | Ficha WCAG 2.2 AA, documento de arquitectura cloud y costos, badges, Storybook publicado | Pendiente |
+| 8 | Ficha WCAG 2.2 AA, documento de arquitectura cloud y costos, badges, Storybook publicado | ✅ (Storybook necesita activar GitHub Pages) |
+| Extra | Acceso para auditores en el pie, clínicas psicológicas cercanas (OpenStreetMap), monitor de pulso experimental (Web Bluetooth) | ✅ |
 | 9 | Presentación de defensa y guion del video de 3 minutos | Pendiente |
+
+### Extensiones (después de la fase 8)
+
+- **Acceso para auditores:** enlace en el pie de página → panel pericial del motor PHP (`VITE_AUDIT_URL`, por defecto `https://neuronote-audit.onrender.com/`). El navegador pide usuario (`admin`) y la contraseña configurada en Render.
+- **Clínicas psicológicas cercanas** (Ayuda SOS): lugares **reales** de OpenStreetMap con etiquetas o nombres de salud mental, a menos de 10 km, ordenados por distancia y marcados «Sin verificar». Fuentes: Overpass → Nominatim → última búsqueda guardada. La ubicación se pide solo al pulsar el botón; el enlace a Google Maps es opcional y avisa que Google recibe la zona (~1 km). Los **profesionales verificados** (Supabase Realtime) siguen debajo y aparecen solo cuando existen.
+- **Monitor de pulso** (`/pulso`, experimental): se conecta por **Web Bluetooth** a bandas o relojes que transmiten el perfil estándar *Heart Rate* (0x180D) y avisa con calma cuando el pulso pasa del umbral que la persona eligió durante 30 s, 1 o 2 min, con pasos para regularse y el 911 siempre visible. Funciona en Chrome/Edge (Android y computadora), no en iPhone. Galaxy Watch necesita una app que transmita el pulso; Galaxy Ring y Apple Watch no son compatibles. Las lecturas no se guardan ni se envían. Incluye un **modo demostración** etiquetado. **No es un dispositivo médico.**
 
 ## Arquitectura
 
@@ -121,7 +128,7 @@ Sin Supabase ni MongoDB configurados, la API arranca en **modo memoria** (lo avi
 
 **Documentación de la API:** Swagger UI en <http://localhost:4000/api/docs> (en producción, `/api/docs` de tu URL de Render), especificación en `/api/openapi.json` y colección de Postman en [`backend/docs/`](backend/docs/neuronote-api.postman_collection.json). Detalles y configuración de Sentry en [`backend/README.md`](backend/README.md).
 
-Resultados al 23-nov-2026: **73 pruebas de frontend** (83.0 % sentencias, 86.2 % líneas), **39 de backend** (94.1 % sentencias, 97.3 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
+Resultados al 23-nov-2026: **94 pruebas de frontend** (83.5 % sentencias, 86.7 % líneas), **39 de backend** (94.1 % sentencias, 97.3 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
 
 ## Configurar los servicios en la nube (gratis)
 
@@ -152,7 +159,7 @@ La clave vive ahora en el servidor (`backend/.env → RESTCOUNTRIES_KEY`) y el n
 ## Motor de auditoría (PHP + MySQL)
 
 - Base `neuronote_audit` con usuario dedicado `neuronote_app` (solo SELECT/INSERT/UPDATE/DELETE sobre sus 4 tablas). Credenciales en `audit-engine/.env` (local, no se sube).
-- **Panel pericial** <http://localhost:8080/> (usuario `admin`; contraseña en el comentario de `audit-engine/.env`): aprobar/rechazar actas, emitir sellos, aprobar/suspender/editar/eliminar profesionales.
+- **Panel pericial:** en producción <https://neuronote-audit.onrender.com/> (enlace «Acceso para auditores» en el pie de la app; usuario `admin` y la contraseña cuyo hash está en Render). En local <http://localhost:8080/> (contraseña en el comentario de `audit-engine/.env`). Permite aprobar o rechazar actas, emitir sellos y aprobar, suspender, editar o eliminar profesionales.
 - Formularios: `/src/submit_audit.php` (acta + ICAS) y `/src/register_professional.php` (cédula).
 - Verificación pública JSON: `/src/verify.php?folio=NN-2026-000001` u `?osm_id=way-123`. Si alguien altera el acta en la base, el hash HMAC deja de coincidir y responde `"integrity": "alterado"`.
 - **ICAS**: fórmula propia y documentada en `audit-engine/src/icas.php` (no es una norma oficial).
