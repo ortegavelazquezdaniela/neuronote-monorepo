@@ -4,7 +4,7 @@ import { Button } from './Button';
 export default {
   title: 'Átomos/Button',
   component: Button,
-  args: { children: 'Explore sensory routes', variant: 'primary', size: 'md' },
+  args: { children: 'Explorar rutas de calma', variant: 'primary', size: 'md' },
   argTypes: {
     variant: { control: 'select', options: ['primary', 'secondary', 'calm', 'ghost', 'danger'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
@@ -12,7 +12,7 @@ export default {
 };
 
 export const Primario = { args: { icon: ArrowRight } };
-export const Secundario = { args: { variant: 'secondary', children: 'Discover calm spaces' } };
+export const Secundario = { args: { variant: 'secondary', children: 'Descubrir oasis sensoriales' } };
 export const Calma = { args: { variant: 'calm', icon: LifeBuoy, iconPosition: 'start', children: 'Ayuda SOS' } };
 export const Peligro = { args: { variant: 'danger', size: 'sm', children: 'Borrar todas' } };
 export const Deshabilitado = { args: { disabled: true, children: 'Guardando…' } };

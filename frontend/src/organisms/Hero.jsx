@@ -15,19 +15,19 @@ export function Hero() {
             <br />
             <span className={styles.second}>Find your way.</span>
           </h1>
-          <p className={styles.lead} lang="en" data-enter style={{ '--enter-i': 1 }}>
-            Discover quieter routes, calming spaces and a more comfortable way to experience the city.
+          <p className={styles.lead} data-enter style={{ '--enter-i': 1 }}>
+            Descubre rutas más tranquilas, espacios de calma y una forma más cómoda de recorrer la ciudad.
           </p>
           <p className={styles.leadEs} data-enter style={{ '--enter-i': 2 }}>
             Rutas peatonales con menos ruido, calor y aglomeración, elegidas según tus propias
             preferencias sensoriales.
           </p>
           <div className={styles.actions} data-enter style={{ '--enter-i': 3 }}>
-            <Button to="/rutas" size="lg" icon={ArrowRight} lang="en">
-              Explore sensory routes
+            <Button to="/rutas" size="lg" icon={ArrowRight}>
+              Explorar rutas de calma
             </Button>
-            <Button to="/oasis" size="lg" variant="secondary" lang="en">
-              Discover calm spaces
+            <Button to="/oasis" size="lg" variant="secondary">
+              Descubrir oasis sensoriales
             </Button>
           </div>
         </div>
