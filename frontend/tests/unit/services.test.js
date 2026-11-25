@@ -62,6 +62,9 @@ describe('fetchJSON', () => {
     expect(describeError(new ApiError('x', { status: 429, kind: 'http' }))).toMatch(/demasiadas/);
     expect(describeError(new ApiError('Correo o contraseña incorrectos', { status: 401, kind: 'http' }))).toBe('Correo o contraseña incorrectos');
     expect(describeError(new ApiError('HTTP 500', { status: 500, kind: 'http' }))).toMatch(/no está disponible/);
+    // Sin respuesta o 502/503 del proxy de Render: se explica que el servidor puede estar despertando
+    expect(describeError(new ApiError('x', { kind: 'network' }))).toMatch(/despertar/);
+    expect(describeError(new ApiError('x', { status: 503, kind: 'http' }))).toMatch(/despertar/);
   });
 });
 

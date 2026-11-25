@@ -307,6 +307,20 @@ function buildSpec(serverUrl) {
         },
       },
       '/me/notes/{id}': {
+        put: {
+          tags: ['Sensory Notes'],
+          summary: 'Editar una nota',
+          description: 'Reemplaza el contenido de una nota propia. Los campos opcionales que no se envían quedan vacíos.',
+          security: bearer,
+          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+          requestBody: { required: true, content: json(fromZod(noteSchema), NOTE_EXAMPLE) },
+          responses: {
+            200: ok('Nota actualizada', { type: 'object', properties: { item: ref('Note') } }),
+            400: err('ValidationError'),
+            401: err('Unauthorized'),
+            404: err('NotFound'),
+          },
+        },
         delete: {
           tags: ['Sensory Notes'],
           summary: 'Borrar una nota',

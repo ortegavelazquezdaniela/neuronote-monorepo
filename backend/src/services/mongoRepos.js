@@ -14,6 +14,7 @@ const toNote = (d) => ({
   crowd: d.crowd,
   text: d.text,
   createdAt: d.createdAt?.toISOString(),
+  updatedAt: d.updatedAt?.toISOString(),
 });
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -38,6 +39,16 @@ export function createMongoRepos() {
       },
       async create(userId, data) {
         return toNote(await SensoryNote.create({ ...data, userId }));
+      },
+      /** Reemplaza el contenido de una nota propia (el filtro por userId impide editar notas ajenas). */
+      async update(userId, id, data) {
+        if (!mongoose.isValidObjectId(id)) return null;
+        const doc = await SensoryNote.findOneAndUpdate(
+          { _id: id, userId },
+          { $set: { light: null, crowd: null, text: '', ...data } },
+          { new: true, runValidators: true, lean: true },
+        );
+        return doc ? toNote(doc) : null;
       },
       async remove(userId, id) {
         if (!mongoose.isValidObjectId(id)) return false;

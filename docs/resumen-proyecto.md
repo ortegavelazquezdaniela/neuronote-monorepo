@@ -31,10 +31,10 @@
 ## Números para recordar
 
 - **9 fases** de desarrollo más extensiones, cada una con su pull request revisado.
-- **140 pruebas automatizadas**: 94 de frontend (83 % de cobertura), 39 de backend (94 %) y 7 del índice ICAS.
+- **143 pruebas automatizadas**: 96 de frontend (83 % de cobertura), 40 de backend (94 %) y 7 del índice ICAS.
 - **Lighthouse:** Ayuda SOS con **100** en las cuatro categorías; accesibilidad en 100 en todas las páginas salvo el mapa (97).
 - **WCAG 2.2 AA:** 45 de 47 criterios aplicables; las 2 brechas están documentadas con su plan.
-- **20 endpoints** documentados con OpenAPI (Swagger) y una colección de Postman.
+- **21 endpoints** documentados con OpenAPI (Swagger) y una colección de Postman.
 - **US$ 0 al mes** de operación. Si fuera un servicio comercial: unos **US$ 67–89 al mes** (`docs/arquitectura-cloud-costos.md`).
 
 ## Decisiones de las que puedes hablar

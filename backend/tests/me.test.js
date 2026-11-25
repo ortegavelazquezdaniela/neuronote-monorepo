@@ -59,6 +59,23 @@ describe('Sensory Notes (MongoDB) — CRUD, paginación y filtros', () => {
     expect((await api.delete(`/api/me/notes/${created.body.item.id}`).set(auth)).status).toBe(204);
   });
 
+  it('edita una nota propia (PUT), valida los datos y no permite editar notas ajenas', async () => {
+    const created = await api.post('/api/me/notes').set(auth).send(note({ text: 'Mucho eco' }));
+    const id = created.body.item.id;
+
+    const edited = await api.put(`/api/me/notes/${id}`).set(auth).send(note({ place: 'Biblioteca Central', noise: 4, light: undefined }));
+    expect(edited.status).toBe(200);
+    expect(edited.body.item).toMatchObject({ id, place: 'Biblioteca Central', noise: 4, light: null, text: '' });
+    expect((await api.get('/api/me/notes').set(auth)).body.items[0].place).toBe('Biblioteca Central');
+
+    expect((await api.put(`/api/me/notes/${id}`).set(auth).send(note({ comfort: 0 }))).status).toBe(400);
+    expect((await api.put('/api/me/notes/no-existe').set(auth).send(note())).status).toBe(404);
+
+    const other = await registerAndLogin(api, { email: 'otra@neuronote.test', password: 'otraclave2026', displayName: 'Otra' });
+    const res = await api.put(`/api/me/notes/${id}`).set({ Authorization: `Bearer ${other.token}` }).send(note({ place: 'Intruso' }));
+    expect(res.status).toBe(404);
+  });
+
   it('borra todas las notas', async () => {
     await api.post('/api/me/notes').set(auth).send(note());
     await api.post('/api/me/notes').set(auth).send(note());

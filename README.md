@@ -9,7 +9,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 
 [![CI](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/ci.yml)
 [![Storybook](https://github.com/ortegavelazquezdaniela/neuronote-monorepo/actions/workflows/storybook.yml/badge.svg)](https://ortegavelazquezdaniela.github.io/neuronote-monorepo/)
-![Pruebas](https://img.shields.io/badge/pruebas-140%20pasando-2f5d55)
+![Pruebas](https://img.shields.io/badge/pruebas-143%20pasando-2f5d55)
 ![Cobertura frontend](https://img.shields.io/badge/cobertura%20frontend-83%25-407076)
 ![Cobertura backend](https://img.shields.io/badge/cobertura%20backend-94%25-407076)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse%20SOS-100%20%C2%B7%20100%20%C2%B7%20100%20%C2%B7%20100-184077)](#accesibilidad-rendimiento-y-seo-lighthouse-136-móvil-compilación-de-producción)
@@ -49,6 +49,7 @@ Plataforma web de descompresión sensorial e inteligencia geoespacial para perso
 | [docs/guia-demostracion.md](docs/guia-demostracion.md) | Recorrido de 10–12 min (o 5 min con los pasos ⭐): qué hacer, qué decir y qué hacer si algo falla |
 | [docs/resumen-proyecto.md](docs/resumen-proyecto.md) | El proyecto en una frase, en un minuto, la tabla técnica y los números clave |
 | [docs/guion-video.md](docs/guion-video.md) | Guion por segundos del video de 3 minutos (rutas de calma y auxilio por WhatsApp) |
+| [docs/autoevaluacion-rubrica.md](docs/autoevaluacion-rubrica.md) | La rúbrica del curso criterio por criterio, con la evidencia de cada tema de la hoja de cotejo |
 | Presentación (13 diapositivas, se descarga en PowerPoint o PDF) | Enlace privado en claude.ai: compártelo desde su menú *Share* si alguien más debe verlo |
 
 ### Extensiones (después de la fase 8)
@@ -137,7 +138,7 @@ Sin Supabase ni MongoDB configurados, la API arranca en **modo memoria** (lo avi
 
 **Documentación de la API:** Swagger UI en <http://localhost:4000/api/docs> (en producción, `/api/docs` de tu URL de Render), especificación en `/api/openapi.json` y colección de Postman en [`backend/docs/`](backend/docs/neuronote-api.postman_collection.json). Detalles y configuración de Sentry en [`backend/README.md`](backend/README.md).
 
-Resultados al 23-nov-2026: **94 pruebas de frontend** (83.5 % sentencias, 86.7 % líneas), **39 de backend** (94.1 % sentencias, 97.3 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
+Resultados al 24-nov-2026: **96 pruebas de frontend** (83.6 % sentencias, 86.9 % líneas), **40 de backend** (94.2 % sentencias, 97.4 % líneas; incluye la validación de OpenAPI y la limpieza de datos para Sentry) y **7 del ICAS**, todas pasando. La CI (`.github/workflows/ci.yml`) repite todo en cada pull request, incluida la creación del esquema MySQL.
 
 ## Configurar los servicios en la nube (gratis)
 

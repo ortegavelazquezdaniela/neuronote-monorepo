@@ -50,7 +50,7 @@ export const MODULES = [
     summary:
       'Registra cómo se sintió un lugar o un trayecto y consulta tu historial cuando lo necesites.',
     detail:
-      'Tus notas son privadas: sin cuenta viven en tu navegador y con cuenta se guardan en tu perfil. Puedes borrarlas en cualquier momento.',
+      'Tus notas son privadas: sin cuenta viven en tu navegador y con cuenta se guardan en tu perfil. Puedes editarlas, descargarlas en un archivo o borrarlas en cualquier momento.',
     phase: 2,
   },
   {

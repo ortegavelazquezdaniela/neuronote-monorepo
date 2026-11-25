@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Download, NotebookPen, Search, Trash2 } from 'lucide-react';
+import { Download, NotebookPen, Pencil, Search, Trash2 } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { EmptyState } from '../molecules/EmptyState';
@@ -16,7 +16,7 @@ function exportNotes(notes) {
   URL.revokeObjectURL(url);
 }
 
-function NoteItem({ note, onDelete }) {
+function NoteItem({ note, onDelete, onEdit }) {
   const [confirming, setConfirming] = useState(false);
   return (
     <li className={styles.item}>
@@ -65,16 +65,30 @@ function NoteItem({ note, onDelete }) {
               </Button>
             </>
           ) : (
-            <Button
-              size="sm"
-              variant="ghost"
-              icon={Trash2}
-              iconPosition="start"
-              onClick={() => setConfirming(true)}
-              aria-label={`Borrar la nota de ${note.place}`}
-            >
-              Borrar
-            </Button>
+            <>
+              {onEdit && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  icon={Pencil}
+                  iconPosition="start"
+                  onClick={() => onEdit(note)}
+                  aria-label={`Editar la nota de ${note.place}`}
+                >
+                  Editar
+                </Button>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                icon={Trash2}
+                iconPosition="start"
+                onClick={() => setConfirming(true)}
+                aria-label={`Borrar la nota de ${note.place}`}
+              >
+                Borrar
+              </Button>
+            </>
           )}
         </div>
       </article>
@@ -83,10 +97,10 @@ function NoteItem({ note, onDelete }) {
 }
 
 /**
- * Historial de notas con búsqueda, exportación y borrado.
+ * Historial de notas con búsqueda, descarga, edición y borrado.
  * status: 'loading' | 'ready' | 'error'
  */
-export function NotesHistory({ notes, status, onDelete, onClearAll, onRetry }) {
+export function NotesHistory({ notes, status, onDelete, onEdit, onClearAll, onRetry }) {
   const [query, setQuery] = useState('');
   const [confirmAll, setConfirmAll] = useState(false);
 
@@ -155,7 +169,7 @@ export function NotesHistory({ notes, status, onDelete, onClearAll, onRetry }) {
           ) : (
             <ul className={styles.list}>
               {visible.map((n) => (
-                <NoteItem key={n.id} note={n} onDelete={onDelete} />
+                <NoteItem key={n.id} note={n} onDelete={onDelete} onEdit={onEdit} />
               ))}
             </ul>
           )}

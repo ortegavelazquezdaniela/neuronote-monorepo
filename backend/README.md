@@ -44,7 +44,7 @@ Si `SENTRY_DSN` está definido, los errores **inesperados** (500) se envían a S
 | GET / DELETE | `/api/auth/me` | Bearer | Ver / borrar la cuenta y sus notas |
 | GET / PUT | `/api/me/profile` | Bearer | Perfil sensorial (PostgreSQL) |
 | GET / POST / DELETE | `/api/me/favorites[/:osmId]` | Bearer | Oasis favoritos |
-| GET / POST / DELETE | `/api/me/notes[/:id]` | Bearer | Sensory Notes (MongoDB) con `?page&limit&q&from&to` |
+| GET / POST / PUT / DELETE | `/api/me/notes[/:id]` | Bearer | Sensory Notes (MongoDB): CRUD completo, con `?page&limit&q&from&to` |
 | POST | `/api/telemetry/crisis` | — | Telemetría anónima del SOS (20/h por IP) |
 | GET | `/api/telemetry/crisis/summary` | Bearer + rol `admin` | Activaciones por hora |
 | GET | `/api/psychologists` | — | Solo profesionales con cédula verificada y aprobados |
