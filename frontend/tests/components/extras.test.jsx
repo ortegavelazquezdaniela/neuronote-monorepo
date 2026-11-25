@@ -118,4 +118,54 @@ describe('Monitor de pulso', () => {
     await user.click(screen.getByRole('button', { name: 'Detener demostración' }));
     expect(screen.getByText('Sin dispositivo conectado.')).toBeInTheDocument();
   });
+
+  describe('vibración', () => {
+    afterEach(() => {
+      delete navigator.vibrate;
+    });
+
+    it('sin API de vibración (iPhone) lo explica y no muestra el interruptor', () => {
+      renderApp(<HeartRatePage />);
+      expect(screen.getByText(/Tu navegador no permite vibrar/)).toBeInTheDocument();
+      expect(screen.queryByRole('switch', { name: 'Vibrar al avisar' })).not.toBeInTheDocument();
+    });
+
+    it('«Probar vibración» vibra y explica qué revisar si no se siente', async () => {
+      navigator.vibrate = vi.fn(() => true);
+      renderApp(<HeartRatePage />);
+      await userEvent.click(screen.getByRole('button', { name: 'Probar vibración' }));
+      expect(navigator.vibrate).toHaveBeenCalledWith([250, 150, 250]);
+      expect(screen.getByText(/revisa que tu celular no esté en silencio/)).toBeInTheDocument();
+    });
+
+    it('si el navegador bloquea la vibración, lo dice', async () => {
+      navigator.vibrate = vi.fn(() => false);
+      renderApp(<HeartRatePage />);
+      await userEvent.click(screen.getByRole('button', { name: 'Probar vibración' }));
+      expect(screen.getByText(/El navegador no permitió vibrar/)).toBeInTheDocument();
+    });
+
+    it('vibra al aparecer el aviso y también si se activa con el aviso ya en pantalla', async () => {
+      navigator.vibrate = vi.fn(() => true);
+      vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+      const user = userEvent.setup();
+      renderApp(<HeartRatePage />);
+      await user.type(screen.getByLabelText(/Avisarme si mi pulso pasa de/), '100');
+      await user.click(screen.getByRole('radio', { name: '30 segundos' }));
+      await user.click(screen.getByRole('button', { name: 'Probar con datos de demostración' }));
+      await act(async () => {
+        vi.advanceTimersByTime(60 * 250);
+      });
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+      expect(navigator.vibrate).not.toHaveBeenCalled(); // interruptor apagado: no vibra
+
+      await user.click(screen.getByRole('switch', { name: 'Vibrar al avisar' }));
+      expect(navigator.vibrate).toHaveBeenCalledTimes(1); // se activó con el aviso visible
+
+      await act(async () => {
+        vi.advanceTimersByTime(10 * 250);
+      });
+      expect(navigator.vibrate).toHaveBeenCalledTimes(1); // un solo aviso, una sola vibración
+    });
+  });
 });

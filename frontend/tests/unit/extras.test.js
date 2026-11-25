@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseHeartRate, isPlausibleBpm, sustainedAbove, demoBpm } from '../../src/utils/heartRate';
+import { parseHeartRate, isPlausibleBpm, sustainedAbove, demoBpm, canVibrate, vibrateOnce, ALERT_PATTERN } from '../../src/utils/heartRate';
 import { toClinic, clinicKind, buildClinicsQuery, mapsSearchUrl, fromNominatim } from '../../src/services/clinics';
 
 const view = (bytes) => new DataView(new Uint8Array(bytes).buffer);
@@ -41,6 +41,22 @@ describe('Monitor de pulso: aviso sostenido', () => {
 
   it('sin umbral no hay avisos', () => {
     expect(sustainedAbove([{ t: 0, bpm: 200 }], 0, 1).sustained).toBe(false);
+  });
+
+  it('vibración: sin API devuelve false; con API usa el patrón suave', () => {
+    expect(canVibrate()).toBe(false);
+    expect(vibrateOnce()).toBe(false);
+    navigator.vibrate = () => false; // bloqueada por el navegador
+    expect(vibrateOnce()).toBe(false);
+    let got;
+    navigator.vibrate = (p) => {
+      got = p;
+      return true;
+    };
+    expect(canVibrate()).toBe(true);
+    expect(vibrateOnce()).toBe(true);
+    expect(got).toEqual(ALERT_PATTERN);
+    delete navigator.vibrate;
   });
 
   it('la demostración empieza en reposo y supera el umbral', () => {

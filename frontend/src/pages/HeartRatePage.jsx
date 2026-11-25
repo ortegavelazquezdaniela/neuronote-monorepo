@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { Bluetooth, HeartPulse, PlayCircle, PowerOff, Siren } from 'lucide-react';
+import { Bluetooth, HeartPulse, PlayCircle, PowerOff, Siren, Vibrate } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { DataBadge } from '../atoms/DataBadge';
 import { StatusMessage } from '../atoms/StatusMessage';
@@ -9,7 +9,7 @@ import { TextField } from '../atoms/TextField';
 import { ChoiceGroup } from '../molecules/ChoiceGroup';
 import { useHeartRateMonitor } from '../hooks/useHeartRateMonitor';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { sustainedAbove } from '../utils/heartRate';
+import { sustainedAbove, canVibrate, vibrateOnce } from '../utils/heartRate';
 import { HELPLINES } from '../utils/helplines';
 import styles from './HeartRatePage.module.css';
 
@@ -38,6 +38,7 @@ export function HeartRatePage() {
   const [thresholdText, setThresholdText] = useState('');
   const [duration, setDuration] = useState('60');
   const [vibrate, setVibrate] = useState(false);
+  const [vibrationTest, setVibrationTest] = useState(null);
   const [snoozedUntil, setSnoozedUntil] = useState(0);
   const [now, setNow] = useState(() => Date.now());
 
@@ -61,12 +62,26 @@ export function HeartRatePage() {
     return () => clearInterval(id);
   }, []);
 
-  // Una sola vibración suave al empezar el aviso, solo si la persona lo activó
-  const wasAlerting = useRef(false);
+  // Una vibración suave por cada aviso, solo si la persona lo activó. Si activa el
+  // interruptor con el aviso ya en pantalla, también vibra (antes no lo hacía).
+  const vibratedThisAlert = useRef(false);
   useEffect(() => {
-    if (alerting && !wasAlerting.current && vibrate && 'vibrate' in navigator) navigator.vibrate(300);
-    wasAlerting.current = alerting;
+    if (!alerting) {
+      vibratedThisAlert.current = false;
+      return;
+    }
+    if (vibrate && !vibratedThisAlert.current) {
+      vibratedThisAlert.current = true;
+      vibrateOnce();
+    }
   }, [alerting, vibrate]);
+
+  const testVibration = () =>
+    setVibrationTest(
+      vibrateOnce()
+        ? 'Listo. Si no sentiste nada, revisa que tu celular no esté en silencio ni en «No molestar»: en esos modos el sistema no vibra.'
+        : 'El navegador no permitió vibrar. Deja esta página a la vista (con la pantalla encendida) e inténtalo de nuevo.',
+    );
 
   const recent = hr.samples.map((s) => s.bpm);
   const min = recent.length ? Math.min(...recent) : null;
@@ -116,12 +131,28 @@ export function HeartRatePage() {
             value={duration}
             onChange={setDuration}
           />
-          <Switch
-            label="Vibrar una vez al avisar"
-            description="Solo en teléfonos que lo permiten. Desactivado por defecto."
-            checked={vibrate}
-            onChange={setVibrate}
-          />
+          {canVibrate() ? (
+            <div className={styles.vibration}>
+              <Switch
+                label="Vibrar al avisar"
+                description="Dos pulsos cortos cuando aparece el aviso. Desactivado por defecto."
+                checked={vibrate}
+                onChange={setVibrate}
+              />
+              <Button size="sm" variant="ghost" icon={Vibrate} iconPosition="start" onClick={testVibration}>
+                Probar vibración
+              </Button>
+              {vibrationTest && (
+                <p className={styles.meta} role="status">
+                  {vibrationTest}
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className={styles.meta}>
+              Tu navegador no permite vibrar (por ejemplo, Safari en iPhone). El aviso se muestra en pantalla.
+            </p>
+          )}
 
           <h2 className={`${styles.h2} ${styles.spaced}`}>2. Conectar tu dispositivo</h2>
           {hr.status === 'unsupported' && (
