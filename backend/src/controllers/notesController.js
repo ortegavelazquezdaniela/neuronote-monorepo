@@ -11,6 +11,11 @@ export function createNotesController({ notes }) {
     async create(req, res) {
       res.status(201).json({ item: await notes.create(req.user.id, req.body) });
     },
+    async update(req, res) {
+      const item = await notes.update(req.user.id, req.params.id, req.body);
+      if (!item) throw new HttpError(404, 'Nota no encontrada');
+      res.json({ item });
+    },
     async remove(req, res) {
       const ok = await notes.remove(req.user.id, req.params.id);
       if (!ok) throw new HttpError(404, 'Nota no encontrada');

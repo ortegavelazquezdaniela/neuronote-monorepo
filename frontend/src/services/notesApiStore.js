@@ -17,6 +17,9 @@ export const notesApiStore = {
   async add(data) {
     return (await api('/me/notes', { method: 'POST', body: data })).item;
   },
+  async update(id, data) {
+    return (await api(`/me/notes/${encodeURIComponent(id)}`, { method: 'PUT', body: data })).item;
+  },
   async remove(id) {
     await api(`/me/notes/${encodeURIComponent(id)}`, { method: 'DELETE' });
   },

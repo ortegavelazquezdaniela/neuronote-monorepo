@@ -95,6 +95,39 @@ describe('Notas sensoriales (sin cuenta)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Sí, borrar' }));
     expect(await screen.findByText('Todavía no tienes notas')).toBeInTheDocument();
   });
+
+  it('edita una nota: la abre en el formulario, guarda los cambios y permite cancelar', async () => {
+    localStorage.setItem(
+      'nn-notes',
+      JSON.stringify([
+        { id: 'a1', place: 'Parque', when: '2026-11-20T15:00:00.000Z', noise: 2, comfort: 4, light: 'suave', crowd: null, text: 'Sombra', createdAt: '2026-11-20T15:01:00.000Z' },
+      ]),
+    );
+    renderApp(<NotesPage />);
+    await userEvent.click(await screen.findByRole('button', { name: 'Editar la nota de Parque' }));
+
+    const heading = screen.getByRole('heading', { name: 'Editar nota' });
+    await waitFor(() => expect(heading).toHaveFocus());
+    const place = screen.getByRole('textbox', { name: /Lugar o trayecto/ });
+    expect(place).toHaveValue('Parque');
+    expect(within(screen.getByRole('group', { name: /Ruido percibido/ })).getByRole('radio', { name: /2/ })).toBeChecked();
+
+    await userEvent.clear(place);
+    await userEvent.type(place, 'Parque Hundido');
+    await userEvent.click(within(screen.getByRole('group', { name: /Ruido percibido/ })).getByRole('radio', { name: /4/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+
+    expect(await screen.findByText('Se guardaron los cambios de «Parque Hundido».')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Nueva nota' })).toBeInTheDocument();
+    const saved = JSON.parse(localStorage.getItem('nn-notes'));
+    expect(saved).toHaveLength(1);
+    expect(saved[0]).toMatchObject({ id: 'a1', place: 'Parque Hundido', noise: 4, createdAt: '2026-11-20T15:01:00.000Z' });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Editar la nota de Parque Hundido' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Cancelar edición' }));
+    expect(screen.getByRole('heading', { name: 'Nueva nota' })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /Lugar o trayecto/ })).toHaveValue('');
+  });
 });
 
 describe('Cuentas (API)', () => {
@@ -186,7 +219,27 @@ describe('Cuentas (API)', () => {
     await userEvent.click(within(screen.getByRole('group', { name: /Cómo te sentiste/ })).getByRole('radio', { name: /5/ }));
     await userEvent.click(screen.getByRole('button', { name: /Guardar nota/ }));
     await waitFor(() => expect(posted).toMatchObject({ place: 'Museo', noise: 1, comfort: 5 }));
+    expect(await screen.findByText(/Se guardó en tu cuenta/)).toBeInTheDocument();
     expect(localStorage.getItem('nn-notes')).toBeNull();
+  });
+
+  it('notas con sesión: editar envía PUT a la API', async () => {
+    fakeSession();
+    let put;
+    const note = { id: 'n9', place: 'Museo', when: '2026-11-20T15:00:00.000Z', noise: 3, comfort: 3, light: null, crowd: null, text: '' };
+    server.use(
+      http.get(`${API}/me/notes`, () => HttpResponse.json({ items: [note], pages: 1 })),
+      http.put(`${API}/me/notes/n9`, async ({ request }) => {
+        put = await request.json();
+        return HttpResponse.json({ item: { ...note, ...put } });
+      }),
+    );
+    renderApp(<NotesPage />);
+    await userEvent.click(await screen.findByRole('button', { name: 'Editar la nota de Museo' }));
+    await userEvent.type(screen.getByRole('textbox', { name: /Nota/ }), 'Mucho eco');
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+    await waitFor(() => expect(put).toMatchObject({ place: 'Museo', text: 'Mucho eco' }));
+    expect(await screen.findByText('Se guardaron los cambios de «Museo».')).toBeInTheDocument();
   });
 });
 

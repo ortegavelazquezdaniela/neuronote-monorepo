@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Save } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { TextField } from '../atoms/TextField';
 import { StatusMessage } from '../atoms/StatusMessage';
@@ -46,6 +46,17 @@ const emptyForm = () => ({
   text: '',
 });
 
+/** Valores del formulario a partir de una nota guardada (para editarla). */
+const formFromNote = (note) => ({
+  place: note.place,
+  when: toLocalInput(new Date(note.when)),
+  noise: note.noise,
+  comfort: note.comfort,
+  light: note.light ?? '',
+  crowd: note.crowd ?? '',
+  text: note.text ?? '',
+});
+
 /** Lleva el foco al campo con error (el primer radio si es un grupo). */
 function focusField(key) {
   const el = document.getElementById(FIELD_IDS[key]);
@@ -53,8 +64,13 @@ function focusField(key) {
   target?.focus();
 }
 
-export function SensoryNoteForm({ onSave }) {
-  const [form, setForm] = useState(emptyForm);
+/**
+ * Formulario de nota sensorial. Con `editing` (una nota) funciona en modo edición:
+ * el padre lo vuelve a montar con otra `key` para cambiar de nota.
+ * `synced` indica si se guarda en la cuenta o solo en este navegador.
+ */
+export function SensoryNoteForm({ onSave, editing = null, onCancel, synced = false, headingRef }) {
+  const [form, setForm] = useState(() => (editing ? formFromNote(editing) : emptyForm()));
   const [errors, setErrors] = useState({});
   const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState(null); // null | 'saving' | 'saved' | 'error'
@@ -93,8 +109,8 @@ export function SensoryNoteForm({ onSave }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate aria-labelledby="note-form-title">
-      <h2 id="note-form-title" className={styles.title}>
-        Nueva nota
+      <h2 id="note-form-title" className={styles.title} ref={headingRef} tabIndex={-1}>
+        {editing ? 'Editar nota' : 'Nueva nota'}
       </h2>
 
       {errorKeys.length > 0 && (
@@ -210,20 +226,27 @@ export function SensoryNoteForm({ onSave }) {
 
       {status === 'error' && (
         <StatusMessage tone="error" title="No se pudo guardar la nota">
-          Este navegador no permite guardar datos (por ejemplo, en modo privado). Lo que escribiste
-          sigue en el formulario.
+          {synced
+            ? 'No pudimos conectar con tu cuenta. Revisa tu conexión e inténtalo de nuevo.'
+            : 'Este navegador no permite guardar datos (por ejemplo, en modo privado).'}{' '}
+          Lo que escribiste sigue en el formulario.
         </StatusMessage>
       )}
       {status === 'saved' && (
         <StatusMessage tone="success" title="Nota guardada">
-          Se guardó solo en este dispositivo. La verás en tu historial.
+          {synced ? 'Se guardó en tu cuenta.' : 'Se guardó solo en este dispositivo.'} La verás en tu historial.
         </StatusMessage>
       )}
 
       <div className={styles.actions}>
         <Button type="submit" icon={Save} iconPosition="start" disabled={status === 'saving'}>
-          {status === 'saving' ? 'Guardando…' : 'Guardar nota'}
+          {status === 'saving' ? 'Guardando…' : editing ? 'Guardar cambios' : 'Guardar nota'}
         </Button>
+        {editing && (
+          <Button type="button" variant="ghost" icon={X} iconPosition="start" onClick={onCancel}>
+            Cancelar edición
+          </Button>
+        )}
       </div>
     </form>
   );

@@ -81,6 +81,21 @@ export function createMemoryRepos() {
         notes.get(userId).set(note.id, note);
         return note;
       },
+      /** Reemplaza el contenido de una nota propia; null si no existe o es de otra persona. */
+      async update(userId, id, data) {
+        const current = notes.get(userId)?.get(id);
+        if (!current) return null;
+        const note = {
+          ...current,
+          light: null,
+          crowd: null,
+          ...data,
+          when: new Date(data.when).toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        notes.get(userId).set(id, note);
+        return note;
+      },
       async remove(userId, id) {
         return notes.get(userId)?.delete(id) ?? false;
       },

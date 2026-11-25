@@ -29,6 +29,16 @@ export const notesStore = {
     return note;
   },
 
+  /** Reemplaza el contenido de una nota; conserva su id y fecha de creación. */
+  async update(id, data) {
+    const notes = await this.list();
+    const current = notes.find((n) => n.id === id);
+    if (!current) throw new Error('note-not-found');
+    const note = { id, createdAt: current.createdAt, ...data, updatedAt: new Date().toISOString() };
+    if (!writeJSON(KEY, notes.map((n) => (n.id === id ? note : n)))) throw new Error('storage-write-failed');
+    return note;
+  },
+
   async remove(id) {
     const notes = await this.list();
     if (!writeJSON(KEY, notes.filter((n) => n.id !== id))) throw new Error('storage-write-failed');

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { CloudUpload, ShieldCheck } from 'lucide-react';
 import { Button } from '../atoms/Button';
@@ -30,6 +30,9 @@ export function NotesPage() {
   const [status, setStatus] = useState('loading');
   const [localCount, setLocalCount] = useState(0);
   const [upload, setUpload] = useState(null);
+  const [editing, setEditing] = useState(null); // nota abierta en el formulario, o null
+  const [notice, setNotice] = useState(null);
+  const formHeadingRef = useRef(null);
 
   const load = useCallback(async () => {
     setStatus('loading');
@@ -48,15 +51,34 @@ export function NotesPage() {
   }, [load]);
 
   const handleSave = async (data) => {
+    if (editing) {
+      const updated = await store.update(editing.id, data);
+      setNotes((prev) => prev.map((n) => (n.id === updated.id ? updated : n)).sort((a, b) => b.when.localeCompare(a.when)));
+      setEditing(null);
+      setNotice(`Se guardaron los cambios de «${updated.place}».`);
+      return;
+    }
     const note = await store.add(data);
     setNotes((prev) => [note, ...prev].sort((a, b) => b.when.localeCompare(a.when)));
+    setNotice(null);
     setStatus('ready');
+  };
+
+  /** Abre la nota en el formulario y lleva el foco a su título (el formulario está arriba). */
+  const handleEdit = (note) => {
+    setNotice(null);
+    setEditing(note);
+    requestAnimationFrame(() => {
+      formHeadingRef.current?.scrollIntoView({ block: 'start' });
+      formHeadingRef.current?.focus({ preventScroll: true });
+    });
   };
 
   const handleDelete = async (id) => {
     try {
       await store.remove(id);
       setNotes((prev) => prev.filter((n) => n.id !== id));
+      if (editing?.id === id) setEditing(null); // se borró la nota que estaba abierta
     } catch {
       setStatus('error');
     }
@@ -125,8 +147,29 @@ export function NotesPage() {
       </header>
 
       <div className={styles.grid}>
-        <SensoryNoteForm onSave={handleSave} />
-        <NotesHistory notes={notes} status={status} onDelete={handleDelete} onClearAll={handleClearAll} onRetry={load} />
+        <div className={styles.formCol}>
+          {notice && (
+            <StatusMessage tone="success" title="Nota actualizada">
+              {notice}
+            </StatusMessage>
+          )}
+          <SensoryNoteForm
+            key={editing?.id ?? 'nueva'}
+            editing={editing}
+            onSave={handleSave}
+            onCancel={() => setEditing(null)}
+            synced={synced}
+            headingRef={formHeadingRef}
+          />
+        </div>
+        <NotesHistory
+          notes={notes}
+          status={status}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          onClearAll={handleClearAll}
+          onRetry={load}
+        />
       </div>
     </section>
   );

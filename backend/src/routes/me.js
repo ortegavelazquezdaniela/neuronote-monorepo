@@ -22,6 +22,7 @@ export function meRoutes({ repos }) {
   r.get('/notes', validateQuery(notesQuerySchema), n.list);
   r.post('/notes', validateBody(noteSchema), n.create);
   r.delete('/notes', n.removeAll);
+  r.put('/notes/:id', validateBody(noteSchema), n.update);
   r.delete('/notes/:id', n.remove);
   return r;
 }

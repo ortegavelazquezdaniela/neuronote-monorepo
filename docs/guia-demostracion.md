@@ -74,7 +74,8 @@ Regresa al tema **Predeterminado** antes de seguir.
 1. **Notas** (`/notas`) sin sesión: escribe una nota («Metro Insurgentes», ruido 4, comodidad 2) → **Guardar nota**. **Di:** «Sin cuenta, las notas viven solo en este navegador.»
 2. **Crear cuenta** (`/registro`): correo, apodo y una contraseña de al menos 10 caracteres con letras y números. Si te equivocas a propósito, los errores aparecen en español junto a cada campo.
 3. De vuelta en Notas: **Subirlas a mi cuenta**. **Di:** «Con cuenta, las notas se guardan en MongoDB Atlas y el perfil en PostgreSQL de Supabase, protegido con Row Level Security. La contraseña se guarda cifrada con bcrypt y la sesión usa un token JWT.»
-4. **Perfil** (`/perfil`): ajusta tu sensibilidad al ruido o a la luz → **Guardar perfil**. Muestra también que existe **Borrar mi cuenta** (no lo pulses).
+4. En el historial, pulsa **Editar** en la nota: se abre en el formulario, cambia el ruido a 3 → **Guardar cambios**. Luego **Borrar** → «Sí, borrar». **Di:** «Las notas tienen CRUD completo: crear, leer, editar y borrar, tanto en el navegador como en la cuenta (`PUT` y `DELETE` en la API).»
+5. **Perfil** (`/perfil`): ajusta tu sensibilidad al ruido o a la luz → **Guardar perfil**. Muestra también que existe **Borrar mi cuenta** (no lo pulses).
 
 ## 7. ⭐ Ayuda SOS (2 min)
 
@@ -111,10 +112,10 @@ Regresa al tema **Predeterminado** antes de seguir.
 ## 10. Calidad técnica (1 min)
 
 Muestra rápidamente, en pestañas ya abiertas:
-- **Swagger:** <https://neuronote-api-pnnf.onrender.com/api/docs> → los 20 endpoints documentados; prueba `GET /health` con **Try it out**.
+- **Swagger:** <https://neuronote-api-pnnf.onrender.com/api/docs> → los 21 endpoints documentados; prueba `GET /health` con **Try it out**.
 - **GitHub → Actions:** la CI en verde (frontend, backend y motor PHP con Docker).
 - **Storybook:** <https://ortegavelazquezdaniela.github.io/neuronote-monorepo/>, si ya activaste GitHub Pages. Muestra un componente en los 4 temas.
-- **Cifras:** 140 pruebas automatizadas (94 frontend, 39 backend, 7 del ICAS), cobertura del 83 % en el frontend y del 94 % en el backend, y Ayuda SOS con 100 en las cuatro categorías de Lighthouse.
+- **Cifras:** 143 pruebas automatizadas (96 frontend, 40 backend, 7 del ICAS), cobertura del 83 % en el frontend y del 94 % en el backend, y Ayuda SOS con 100 en las cuatro categorías de Lighthouse.
 
 ## 11. Cierre (30 s)
 

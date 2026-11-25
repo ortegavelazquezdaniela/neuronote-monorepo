@@ -2367,6 +2367,317 @@
         },
         {
           "id": "8441cd34-dd7b-572e-8bda-59cb2d30bdc6",
+          "name": "Editar una nota",
+          "request": {
+            "name": "Editar una nota",
+            "description": {
+              "content": "Reemplaza el contenido de una nota propia. Los campos opcionales que no se envían quedan vacíos.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "me",
+                "notes",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "texto",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"place\": \"Metro Insurgentes\",\n  \"when\": \"2026-11-20T08:15:00-06:00\",\n  \"noise\": 4,\n  \"comfort\": 2,\n  \"light\": \"intensa\",\n  \"crowd\": \"mucha\",\n  \"text\": \"Mejor salir por el andén norte.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "422b64c9-473a-5673-84b7-1eddf00d2c98",
+              "name": "Nota actualizada",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "me",
+                    "notes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "texto",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"place\": \"Metro Insurgentes\",\n  \"when\": \"2026-11-20T08:15:00-06:00\",\n  \"noise\": 4,\n  \"comfort\": 2,\n  \"light\": \"intensa\",\n  \"crowd\": \"mucha\",\n  \"text\": \"Mejor salir por el andén norte.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"item\": {\n    \"place\": \"Metro Insurgentes\",\n    \"when\": \"2026-11-20T08:15:00-06:00\",\n    \"noise\": 4,\n    \"comfort\": 2,\n    \"light\": \"intensa\",\n    \"crowd\": \"mucha\",\n    \"text\": \"Mejor salir por el andén norte.\",\n    \"createdAt\": \"2026-11-20T14:15:00.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b91d8dd0-3fcb-5e39-8376-448ef995097c",
+              "name": "Datos no válidos",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "me",
+                    "notes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "texto",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"place\": \"Metro Insurgentes\",\n  \"when\": \"2026-11-20T08:15:00-06:00\",\n  \"noise\": 4,\n  \"comfort\": 2,\n  \"light\": \"intensa\",\n  \"crowd\": \"mucha\",\n  \"text\": \"Mejor salir por el andén norte.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Datos no válidos\",\n  \"fields\": [\n    {\n      \"field\": \"texto\",\n      \"message\": \"texto\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3a4249e-b487-5f74-8bae-dbf4d7f2f191",
+              "name": "Falta la sesión o caducó",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "me",
+                    "notes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "texto",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"place\": \"Metro Insurgentes\",\n  \"when\": \"2026-11-20T08:15:00-06:00\",\n  \"noise\": 4,\n  \"comfort\": 2,\n  \"light\": \"intensa\",\n  \"crowd\": \"mucha\",\n  \"text\": \"Mejor salir por el andén norte.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Inicia sesión para continuar\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54f26192-2ab7-5dec-88a2-1b7b5228ae71",
+              "name": "No encontrado",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "me",
+                    "notes",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "texto",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"place\": \"Metro Insurgentes\",\n  \"when\": \"2026-11-20T08:15:00-06:00\",\n  \"noise\": 4,\n  \"comfort\": 2,\n  \"light\": \"intensa\",\n  \"crowd\": \"mucha\",\n  \"text\": \"Mejor salir por el andén norte.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"texto\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c0a6953-cc9b-52c2-851a-9147ddbde095",
           "name": "Borrar una nota",
           "request": {
             "name": "Borrar una nota",
@@ -2411,7 +2722,7 @@
           },
           "response": [
             {
-              "id": "422b64c9-473a-5673-84b7-1eddf00d2c98",
+              "id": "a7de0349-7eae-5489-8fac-c300cf0b32dc",
               "name": "Nota borrada",
               "originalRequest": {
                 "url": {
@@ -2460,7 +2771,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "b91d8dd0-3fcb-5e39-8376-448ef995097c",
+              "id": "d4d24fda-2f78-5932-8a0b-5d6eacb0e24b",
               "name": "Falta la sesión o caducó",
               "originalRequest": {
                 "url": {
@@ -2513,7 +2824,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b3a4249e-b487-5f74-8bae-dbf4d7f2f191",
+              "id": "162d2dc6-7984-5d35-8465-fc68dc903155",
               "name": "No encontrado",
               "originalRequest": {
                 "url": {
