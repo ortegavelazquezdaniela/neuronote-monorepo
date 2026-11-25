@@ -14,7 +14,7 @@ export const MODULES = [
     summary:
       'Compara caminos a pie por tiempo y cercanía a parques y bibliotecas, según lo que prefieras ese día.',
     detail:
-      'Cada dato indica su origen: calculado, estimado o reportado por la comunidad (los reportes de ruido llegan con las cuentas). Ninguna ruta se presenta como libre de estímulos para todas las personas.',
+      'Cada dato indica su origen (calculado o estimado). Ninguna ruta se presenta como libre de estímulos para todas las personas: tú eliges qué priorizar.',
     phase: 3,
   },
   {
@@ -50,7 +50,7 @@ export const MODULES = [
     summary:
       'Registra cómo se sintió un lugar o un trayecto y consulta tu historial cuando lo necesites.',
     detail:
-      'Tus notas son privadas por defecto. Puedes exportarlas o borrarlas en cualquier momento.',
+      'Tus notas son privadas: sin cuenta viven en tu navegador y con cuenta se guardan en tu perfil. Puedes borrarlas en cualquier momento.',
     phase: 2,
   },
   {
