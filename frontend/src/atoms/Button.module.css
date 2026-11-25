@@ -4,7 +4,7 @@
   justify-content: center;
   gap: var(--space-2);
   min-height: 3rem; /* objetivo táctil ≥ 44 px */
-  padding: 0 var(--space-5);
+  padding: var(--space-2) var(--space-5);
   border: 1.5px solid transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-display);
@@ -13,7 +13,10 @@
   line-height: 1.1;
   letter-spacing: -0.005em;
   text-decoration: none;
-  white-space: nowrap;
+  /* El texto puede pasar a otra línea (WCAG 1.4.12 con espaciado ampliado y 320 px) */
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
   transition:
     background-color var(--dur-fast) ease,
     border-color var(--dur-fast) ease,
@@ -58,7 +61,7 @@
 
 .sm {
   min-height: 2.75rem;
-  padding: 0 var(--space-4);
+  padding: var(--space-2) var(--space-4);
   font-size: var(--fs-sm);
 }
 

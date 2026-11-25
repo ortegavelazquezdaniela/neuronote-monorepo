@@ -80,6 +80,13 @@
   opacity: 0.92;
 }
 
+/* El texto usa el color pensado para cada tema sobre el fondo primario
+   (en Noche el primario es claro y el texto blanco no alcanzaba 4.5:1). */
+.emergency,
+.emergency:hover {
+  color: var(--color-on-primary);
+}
+
 .emergency {
   background: var(--color-primary);
 }

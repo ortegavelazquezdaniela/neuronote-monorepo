@@ -58,7 +58,7 @@
   width: 100%;
   min-height: 3rem;
   padding: 0.6rem 0.9rem 0.6rem 2.6rem;
-  border: 1.5px solid var(--color-line-strong);
+  border: 1.5px solid var(--color-control-border);
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   font-size: max(16px, var(--fs-base));

@@ -43,7 +43,7 @@
   gap: var(--space-1);
   min-height: 2.75rem;
   padding: 0 var(--space-3);
-  border: 1.5px solid var(--color-line-strong);
+  border: 1.5px solid var(--color-control-border);
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   font-weight: 700;
@@ -107,6 +107,13 @@
 .small {
   font-size: var(--fs-sm);
   opacity: 0.92;
+}
+
+/* El texto usa el color pensado para cada tema sobre el fondo primario
+   (en Noche el primario es claro y el texto blanco no alcanzaba 4.5:1). */
+.emergency,
+.emergency:hover {
+  color: var(--color-on-primary);
 }
 
 .emergency {
