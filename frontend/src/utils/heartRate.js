@@ -45,6 +45,26 @@ export function sustainedAbove(samples, threshold, seconds, now = samples.at(-1)
   return { sustained: since !== null && now - since >= seconds * 1000, since };
 }
 
+/** ¿El navegador tiene la API de vibración? (Chrome y Edge en Android sí; Safari en iPhone no). */
+export const canVibrate = () => typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
+
+/** Patrón suave: dos pulsos cortos, fáciles de notar sin ser alarmantes. */
+export const ALERT_PATTERN = [250, 150, 250];
+
+/**
+ * Vibra una vez. Devuelve false si el navegador lo bloqueó (por ejemplo, porque
+ * la página no está a la vista). Ojo: devuelve true aunque el teléfono esté en
+ * silencio o en «No molestar»; en ese caso el sistema operativo no vibra.
+ */
+export function vibrateOnce(pattern = ALERT_PATTERN) {
+  if (!canVibrate()) return false;
+  try {
+    return navigator.vibrate(pattern) !== false;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Serie de demostración: empieza en reposo, sube por encima del umbral y baja.
  * Solo sirve para mostrar cómo funciona la alerta sin un dispositivo.
