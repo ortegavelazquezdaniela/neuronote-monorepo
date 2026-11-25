@@ -101,5 +101,8 @@ export function describeError(err) {
   if (err?.kind === 'http' && err.status < 500 && err.status !== 429 && err.message && !/^HTTP \d/.test(err.message))
     return err.message;
   if (err?.status === 429) return 'El servicio recibió demasiadas consultas. Intenta en unos minutos.';
+  // Sin respuesta, o 502/503 del proxy: lo más común es que el servidor gratuito esté despertando
+  if (err?.kind === 'network' || err?.status === 502 || err?.status === 503)
+    return 'No pudimos conectar con el servidor. Si nadie lo usó en un rato, tarda hasta un minuto en despertar: inténtalo de nuevo en unos segundos.';
   return 'El servicio no está disponible en este momento.';
 }

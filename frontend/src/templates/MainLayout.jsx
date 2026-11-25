@@ -7,6 +7,7 @@ import { SiteFooter } from '../organisms/SiteFooter';
 import { SosFab } from '../organisms/SosFab';
 import { BrandIntro } from '../organisms/BrandIntro';
 import { SosProvider } from '../providers/SosProvider';
+import { wakeApi } from '../services/api';
 
 /**
  * Plantilla común: intro → skip link → header → <main> → footer, FAB SOS y modal SOS.
@@ -17,6 +18,11 @@ export function MainLayout() {
   const { pathname } = useLocation();
   const mainRef = useRef(null);
   const first = useRef(true);
+
+  // La API gratuita duerme tras 15 min: se despierta en segundo plano al abrir la app
+  useEffect(() => {
+    wakeApi();
+  }, []);
 
   useEffect(() => {
     if (first.current) {

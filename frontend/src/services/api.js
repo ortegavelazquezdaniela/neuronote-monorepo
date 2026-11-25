@@ -20,6 +20,23 @@ export const session = {
   clear: () => removeKey(SESSION_KEY, 'session'),
 };
 
+/**
+ * Render Free duerme la API tras 15 min sin tráfico y tarda hasta ~1 min en
+ * despertar: Render retiene la petición mientras tanto, así que se espera
+ * lo suficiente en lugar de abandonarla a los pocos segundos.
+ */
+const API_TIMEOUT_MS = 70_000;
+
+let waking = null;
+/** Despierta la API en segundo plano (una vez por pestaña) para que el primer clic no espere. */
+export function wakeApi() {
+  if (!API_URL || waking || import.meta.env.MODE === 'test') return waking;
+  waking = fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(API_TIMEOUT_MS) }).catch(() => {
+    waking = null; // si falló, se volverá a intentar con la siguiente petición
+  });
+  return waking;
+}
+
 let onUnauthorized = () => {};
 export const setUnauthorizedHandler = (fn) => {
   onUnauthorized = fn;
@@ -39,11 +56,12 @@ export async function api(path, { method = 'GET', body, auth = true, signal } = 
       method,
       headers,
       body: body !== undefined ? JSON.stringify(body) : undefined,
-      signal: signal ?? AbortSignal.timeout(15_000),
+      signal: signal ?? AbortSignal.timeout(API_TIMEOUT_MS),
     });
   } catch (err) {
     if (signal?.aborted) throw err;
-    throw new ApiError('No pudimos conectar con el servidor de NEURONOTE.', { kind: 'network' });
+    const kind = err?.name === 'TimeoutError' ? 'timeout' : 'network';
+    throw new ApiError('No pudimos conectar con el servidor de NEURONOTE.', { kind });
   }
 
   if (res.status === 204) return null;

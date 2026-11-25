@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 import { server } from '../setup';
 import { API } from '../msw/handlers';
 import { renderApp, fakeSession } from '../utils';
@@ -152,6 +152,23 @@ describe('Cuentas (API)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Crear cuenta' }));
     expect(await screen.findByText('Ya existe una cuenta con ese correo')).toBeInTheDocument();
   });
+
+  it('si el servidor tarda (Render despertando), avisa y sigue esperando en lugar de fallar', async () => {
+    server.use(
+      http.post(`${API}/auth/login`, async () => {
+        await delay(5_600);
+        return HttpResponse.json({ error: 'Correo o contraseña incorrectos' }, { status: 401 });
+      }),
+    );
+    renderApp(<AuthPage mode="login" />, { route: '/entrar', path: '/entrar' });
+    await userEvent.type(screen.getByRole('textbox', { name: /Correo/ }), 'prueba@neuronote.test');
+    await userEvent.type(screen.getByLabelText(/Contraseña/), 'clavesegura2026');
+    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
+    expect(await screen.findByText('Despertando el servidor', {}, { timeout: 7_000 })).toBeInTheDocument();
+    // Llega la respuesta: el aviso desaparece y se muestra el resultado real
+    expect(await screen.findByText('Correo o contraseña incorrectos', {}, { timeout: 7_000 })).toBeInTheDocument();
+    expect(screen.queryByText('Despertando el servidor')).not.toBeInTheDocument();
+  }, 20_000);
 
   it('inicio de sesión correcto lleva al perfil y guarda la sesión solo en la pestaña', async () => {
     server.use(

@@ -1,0 +1,599 @@
+<!doctype html>
+<!--
+  Fuente del Manual técnico de NEURONOTE.
+  Generar el PDF (desde frontend/):  npm run manual
+-->
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NEURONOTE · Manual técnico</title>
+    <style>
+      @font-face {
+        font-family: 'Schibsted';
+        src: url('../../frontend/node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2') format('woff2');
+        font-weight: 400 900;
+      }
+      @font-face {
+        font-family: 'Atkinson';
+        src: url('../../frontend/node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: 'Atkinson';
+        src: url('../../frontend/node_modules/@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-700-normal.woff2') format('woff2');
+        font-weight: 700;
+      }
+
+      @page {
+        size: Letter;
+        margin: 22mm 18mm 20mm;
+        @bottom-left {
+          content: 'NEURONOTE · Manual técnico';
+          font: 8.5pt 'Atkinson', sans-serif;
+          color: #407076;
+        }
+        @bottom-right {
+          content: 'Página ' counter(page) ' de ' counter(pages);
+          font: 8.5pt 'Atkinson', sans-serif;
+          color: #407076;
+        }
+      }
+      @page :first {
+        margin: 0;
+        @bottom-left { content: none; }
+        @bottom-right { content: none; }
+      }
+
+      :root {
+        --navy: #184077;
+        --petrol: #407076;
+        --aqua: #5aa2ab;
+        --paper: #fbf8f3;
+        --paper2: #f3eee6;
+        --line: #ddd5c7;
+        --ink: #1c2633;
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body {
+        margin: 0;
+        font-family: 'Atkinson', Verdana, sans-serif;
+        font-size: 10.3pt;
+        line-height: 1.5;
+        color: var(--ink);
+      }
+      h1, h2, h3 { font-family: 'Schibsted', Arial, sans-serif; color: var(--navy); line-height: 1.15; }
+      h2 {
+        font-size: 18pt;
+        margin: 0 0 10pt;
+        padding-bottom: 5pt;
+        border-bottom: 2px solid var(--aqua);
+        break-after: avoid;
+      }
+      h2 .num { color: var(--aqua); margin-right: 6pt; }
+      h3 { font-size: 12.5pt; margin: 14pt 0 5pt; break-after: avoid; }
+      p { margin: 0 0 7pt; }
+      ul, ol { margin: 0 0 8pt; padding-left: 16pt; }
+      li { margin-bottom: 2.5pt; }
+      section.chapter { break-before: page; }
+      code, pre { font-family: Consolas, 'Courier New', monospace; font-size: 8.8pt; }
+      code { background: var(--paper2); padding: 0.5pt 3pt; border-radius: 3pt; }
+      pre {
+        background: #14213d;
+        color: #e8eef5;
+        padding: 8pt 10pt;
+        border-radius: 6pt;
+        white-space: pre-wrap;
+        word-break: break-word;
+        margin: 0 0 9pt;
+        break-inside: avoid;
+      }
+      pre code { background: none; padding: 0; color: inherit; }
+      table { width: 100%; border-collapse: collapse; margin: 0 0 10pt; font-size: 9pt; break-inside: auto; }
+      th { text-align: left; background: var(--navy); color: #fff; padding: 4pt 6pt; font-family: 'Schibsted', Arial, sans-serif; font-weight: 700; }
+      td { padding: 3.5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+      tr { break-inside: avoid; }
+      tr:nth-child(even) td { background: #faf7f2; }
+      .note {
+        border-left: 4px solid var(--aqua);
+        background: #eef5f5;
+        padding: 6pt 9pt;
+        margin: 0 0 9pt;
+        border-radius: 0 6pt 6pt 0;
+        break-inside: avoid;
+      }
+      .warn { border-left-color: #f5c63c; background: #fdf6dc; }
+      .small { font-size: 8.8pt; color: #4a5568; }
+
+      /* Portada */
+      .cover {
+        height: 279.4mm;
+        background: var(--navy);
+        color: #f3eee6;
+        padding: 30mm 22mm;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+      }
+      .cover .eyebrow { font-family: 'Schibsted', sans-serif; font-weight: 700; letter-spacing: 2pt; color: #f5c63c; font-size: 11pt; }
+      .cover h1 { color: #f3eee6; font-size: 46pt; margin: 10mm 0 4mm; }
+      .cover .sub { font-size: 15pt; color: #c6d6e6; max-width: 120mm; line-height: 1.4; }
+      .cover .meta { margin-top: auto; font-size: 10.5pt; color: #c6d6e6; line-height: 1.7; }
+      .cover .meta b { color: #f3eee6; }
+      .cover svg { position: absolute; right: 14mm; top: 70mm; width: 80mm; height: 130mm; }
+
+      /* Índice */
+      .toc ol { list-style: none; padding: 0; columns: 2; column-gap: 12mm; }
+      .toc li { padding: 3pt 0; border-bottom: 1px dotted var(--line); break-inside: avoid; }
+      .toc .n { display: inline-block; width: 18pt; color: var(--aqua); font-weight: 700; }
+
+      .arch { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6pt; margin: 4pt 0 10pt; break-inside: avoid; }
+      .box { border: 1.5px solid var(--navy); border-radius: 6pt; padding: 6pt 8pt; font-size: 8.8pt; background: #fff; }
+      .box b { display: block; font-family: 'Schibsted', sans-serif; color: var(--navy); font-size: 9.6pt; margin-bottom: 2pt; }
+      .box.alt { border-color: var(--petrol); background: #f2f7f7; }
+      .span3 { grid-column: span 3; }
+      .arrow { grid-column: span 3; text-align: center; color: var(--petrol); font-size: 9pt; }
+    </style>
+  </head>
+  <body>
+    <!-- ===================== PORTADA ===================== -->
+    <div class="cover">
+      <svg viewBox="0 0 300 480" aria-hidden="true">
+        <path d="M40 420 C 110 420, 130 330, 150 250 S 210 80, 260 70" fill="none" stroke="#97B1A6" stroke-width="12" stroke-linecap="round" />
+        <circle cx="40" cy="420" r="26" fill="#FFD9D4" />
+        <circle cx="260" cy="70" r="26" fill="#5AA2AB" />
+        <circle cx="150" cy="250" r="10" fill="#EBBAB9" />
+      </svg>
+      <div class="eyebrow">MANUAL TÉCNICO</div>
+      <h1>NEURONOTE</h1>
+      <p class="sub">Plataforma web de descompresión sensorial y movilidad urbana para personas neurodivergentes.<br /><i>Find your calm. Find your way.</i></p>
+      <div class="meta">
+        <b>Versión:</b> 1.0 · noviembre de 2026<br />
+        <b>Sitio:</b> https://neuronote-monorepo.vercel.app<br />
+        <b>API:</b> https://neuronote-api-pnnf.onrender.com/api/docs<br />
+        <b>Repositorio:</b> https://github.com/ortegavelazquezdaniela/neuronote-monorepo<br />
+        <b>Autora:</b> Daniela Ortega Velázquez · <b>Licencia:</b> MIT
+      </div>
+    </div>
+
+    <!-- ===================== ÍNDICE ===================== -->
+    <section class="chapter toc">
+      <h2>Contenido</h2>
+      <ol>
+        <li><span class="n">1</span>Descripción general</li>
+        <li><span class="n">2</span>Arquitectura</li>
+        <li><span class="n">3</span>Tecnologías</li>
+        <li><span class="n">4</span>Estructura del repositorio</li>
+        <li><span class="n">5</span>Instalación y ejecución local</li>
+        <li><span class="n">6</span>Variables de entorno</li>
+        <li><span class="n">7</span>Bases de datos</li>
+        <li><span class="n">8</span>API REST</li>
+        <li><span class="n">9</span>Motor de auditoría (PHP)</li>
+        <li><span class="n">10</span>Frontend</li>
+        <li><span class="n">11</span>Seguridad y privacidad</li>
+        <li><span class="n">12</span>Pruebas y calidad</li>
+        <li><span class="n">13</span>Despliegue</li>
+        <li><span class="n">14</span>Mantenimiento y solución de problemas</li>
+      </ol>
+      <div class="note">
+        <b>Propósito de este manual:</b> describir cómo está construido NEURONOTE, cómo instalarlo, configurarlo, probarlo y publicarlo, para que otra persona desarrolladora pueda mantenerlo. La documentación de uso para presentar la plataforma está en <code>docs/guia-demostracion.md</code>.
+      </div>
+      <div class="note warn">
+        NEURONOTE no sustituye la atención médica, psicológica ni los servicios de emergencia. En una emergencia: <b>911</b>. Línea de la Vida: <b>800 911 2000</b>.
+      </div>
+    </section>
+
+    <!-- ===================== 1 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">1</span>Descripción general</h2>
+      <p><b>Objetivo.</b> Ayudar a personas neurodivergentes y con sensibilidad sensorial a moverse por la ciudad sin sobrecargarse, con información honesta y una interfaz que se adapta a la persona.</p>
+      <h3>Módulos</h3>
+      <table>
+        <tr><th style="width:24%">Módulo</th><th style="width:16%">Ruta</th><th>Qué hace</th></tr>
+        <tr><td>Rutas de calma</td><td><code>/rutas</code></td><td>Compara rutas a pie (OSRM) y prioriza la más tranquila (cerca de parques y bibliotecas) o la más rápida.</td></tr>
+        <tr><td>Oasis sensoriales</td><td><code>/oasis</code>, <code>/oasis/:id</code></td><td>Lugares públicos reales de OpenStreetMap para descansar, con ficha, favoritos y sello de certificación.</td></tr>
+        <tr><td>Explorar mapa</td><td><code>/mapa</code></td><td>Mapa Leaflet con oasis cercanos y microclima de la zona.</td></tr>
+        <tr><td>Microclima</td><td><code>/microclima</code></td><td>Temperatura, sensación térmica, índice UV y presión (Open-Meteo) con gráficas accesibles.</td></tr>
+        <tr><td>Notas sensoriales</td><td><code>/notas</code></td><td>Diario privado con CRUD completo; en el navegador o en la cuenta. Búsqueda y descarga en JSON.</td></tr>
+        <tr><td>Ayuda SOS</td><td><code>/auxilio-inmediato</code></td><td>Línea de la Vida, 911, WhatsApp de confianza, clínicas cercanas y regulación. También como modal con <b>Alt + C</b>.</td></tr>
+        <tr><td>Monitor de pulso</td><td><code>/pulso</code></td><td>Extensión experimental por Web Bluetooth; aviso tranquilo si el pulso se mantiene alto. No es un dispositivo médico.</td></tr>
+        <tr><td>Accesibilidad</td><td><code>/accesibilidad</code></td><td>Modos Calma, Alto contraste y Noche, tamaño de texto, OpenDyslexic y movimiento reducido.</td></tr>
+        <tr><td>Cuenta y perfil</td><td><code>/registro</code>, <code>/entrar</code>, <code>/perfil</code></td><td>Registro, sesión con JWT, perfil sensorial y borrado de la cuenta.</td></tr>
+        <tr><td>Panel pericial</td><td>motor PHP</td><td>Actas de auditoría, cálculo del ICAS, sellos firmados y registro de profesionales.</td></tr>
+      </table>
+      <h3>Principios de diseño</h3>
+      <ul>
+        <li><b>Honestidad de los datos:</b> cada valor indica su origen (<i>Pronóstico, Calculado, Sin verificar, Medido, Demostración</i>). No se inventan lugares, certificaciones ni profesionales.</li>
+        <li><b>Diseño sensorial:</b> sin parpadeos ni animaciones en bucle; respeta el movimiento reducido.</li>
+        <li><b>Privacidad:</b> ubicación solo bajo petición y nunca guardada; telemetría anónima; sin conversaciones guardadas.</li>
+        <li><b>Presupuesto $0.00 MXN:</b> solo herramientas y planes gratuitos.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== 2 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">2</span>Arquitectura</h2>
+      <p>Monorepo con tres aplicaciones: un frontend SPA, una API REST y un motor de auditoría, más servicios gestionados en la nube.</p>
+      <div class="arch">
+        <div class="box span3"><b>Navegador · React 19 + Vite (Vercel)</b>Leaflet ← mosaicos de OpenStreetMap · Nominatim/Overpass (lugares) · OSRM (rutas) · Supabase Realtime (presencia pública) · Web Bluetooth (pulso) · wa.me</div>
+        <div class="arrow">↓ HTTPS + JWT Bearer</div>
+        <div class="box"><b>API Node.js + Express 5</b>Render · <code>/api</code><br />helmet, CORS, rate limit, zod, Swagger</div>
+        <div class="box alt"><b>Motor PHP 8.3 (Docker)</b>Render · ICAS, actas, sellos HMAC, panel pericial</div>
+        <div class="box"><b>APIs externas vía proxy</b>Open-Meteo (caché 15 min) · REST Countries (caché 24 h, clave en el servidor)</div>
+        <div class="box"><b>Supabase (PostgreSQL)</b>Cuentas, perfil, favoritos, profesionales · RLS · Realtime</div>
+        <div class="box"><b>MongoDB Atlas</b>Notas sensoriales · telemetría anónima del SOS (TTL 1 año)</div>
+        <div class="box alt"><b>TiDB Cloud (MySQL)</b>Establecimientos, actas, profesionales, sellos · TLS</div>
+      </div>
+      <h3>Flujo de una petición autenticada</h3>
+      <ol>
+        <li>El frontend guarda el JWT en <code>sessionStorage</code> (se borra al cerrar la pestaña) y lo envía en <code>Authorization: Bearer</code>.</li>
+        <li>La API aplica <code>helmet</code>, CORS con lista blanca, límite de peticiones y valida el cuerpo con zod.</li>
+        <li><code>verifyToken</code> comprueba firma, emisor y caducidad (2 h) y carga el rol.</li>
+        <li>El controlador usa un <b>repositorio inyectado</b> (Supabase, MongoDB o memoria). Sin claves de nube, la API funciona en «modo memoria».</li>
+        <li>Los errores 5xx nunca exponen detalles internos; los 400 devuelven la lista de campos inválidos.</li>
+      </ol>
+      <h3>Decisiones clave</h3>
+      <table>
+        <tr><th style="width:30%">Decisión</th><th>Motivo</th></tr>
+        <tr><td>Tres bases de datos</td><td>PostgreSQL para datos relacionales con seguridad por filas; MongoDB para documentos flexibles y datos que caducan; MySQL porque el motor pericial usa PHP + PDO.</td></tr>
+        <tr><td>Proxy de APIs en el servidor</td><td>Las claves (REST Countries) no llegan al navegador; la caché reduce llamadas a servicios gratuitos.</td></tr>
+        <tr><td>Nominatim antes que Overpass</td><td>Los servidores públicos de Overpass se saturan; si ambos fallan se usa la última respuesta guardada (≤ 7 días).</td></tr>
+        <tr><td>Motor PHP en Docker</td><td>Los hostings PHP gratuitos bloquean peticiones entre servidores; Docker en Render lo permite.</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== 3 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">3</span>Tecnologías</h2>
+      <table>
+        <tr><th style="width:22%">Capa</th><th style="width:38%">Tecnología</th><th>Uso</th></tr>
+        <tr><td>Frontend</td><td>React 19, Vite 7, React Router 7</td><td>SPA con carga diferida de páginas</td></tr>
+        <tr><td>Estilos</td><td>CSS Modules + tokens (CSS custom properties)</td><td>Design system con 4 temas; Flexbox y Grid</td></tr>
+        <tr><td>Mapas</td><td>Leaflet 1.9, OpenStreetMap</td><td>Mapas, marcadores y rutas</td></tr>
+        <tr><td>Iconos y fuentes</td><td>lucide-react, Atkinson Hyperlegible Next, Schibsted Grotesk, OpenDyslexic</td><td>Fuentes autoalojadas (sin peticiones a terceros)</td></tr>
+        <tr><td>Backend</td><td>Node.js 22, Express 5</td><td>API REST</td></tr>
+        <tr><td>Seguridad</td><td>jsonwebtoken, bcryptjs, helmet, cors, express-rate-limit, zod</td><td>Autenticación, cifrado, cabeceras, validación</td></tr>
+        <tr><td>Datos</td><td>@supabase/supabase-js, Mongoose 9, PDO MySQL</td><td>Acceso a PostgreSQL, MongoDB y MySQL</td></tr>
+        <tr><td>Motor de auditoría</td><td>PHP 8.3 + Apache (Docker)</td><td>Formularios, ICAS, sellos</td></tr>
+        <tr><td>Pruebas</td><td>Vitest 5, React Testing Library, MSW 3, Supertest</td><td>Pruebas unitarias, de componentes y de API</td></tr>
+        <tr><td>Documentación</td><td>OpenAPI 3.1, Swagger UI, Postman, Storybook 10</td><td>API y catálogo de componentes</td></tr>
+        <tr><td>CI/CD y hosting</td><td>GitHub Actions, Vercel, Render, GitHub Pages</td><td>Integración continua y despliegue gratuito</td></tr>
+        <tr><td>Monitoreo (opcional)</td><td>Sentry</td><td>Errores 500 sin datos personales</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== 4 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">4</span>Estructura del repositorio</h2>
+<pre><code>neuronote-monorepo/
+├── frontend/                 React 19 + Vite
+│   ├── src/
+│   │   ├── atoms/            Botón, campo de texto, interruptor, etiquetas de datos
+│   │   ├── molecules/        Grupos de opciones, listas, gráficas
+│   │   ├── organisms/        Mapa, formulario de notas, SOS, clínicas, encabezado
+│   │   ├── templates/        Plantilla principal y del tablero
+│   │   ├── pages/            Una página por ruta
+│   │   ├── hooks/            useAuth, useGeolocation, usePageMeta, useHeartRateMonitor…
+│   │   ├── providers/        Preferencias, sesión, SOS (Context API)
+│   │   ├── services/         http, api, OSM, Open-Meteo, notas, clínicas, telemetría
+│   │   ├── utils/            Validación, geografía, sitemap, textos de módulos
+│   │   ├── styles/           tokens.css (design system) y base.css
+│   │   └── routes.jsx        Definición de rutas
+│   ├── tests/                Vitest + RTL + MSW
+│   ├── .storybook/           Configuración del catálogo
+│   └── scripts/              Imagen Open Graph y sitemap
+├── backend/                  Node.js + Express 5
+│   ├── src/
+│   │   ├── routes/           auth, me, public, docs
+│   │   ├── controllers/      Lógica de cada recurso
+│   │   ├── middleware/       verifyToken, rateLimiter, validate, errorHandler
+│   │   ├── models/           Mongoose: SensoryNote, CrisisEvent
+│   │   ├── services/         Repositorios Supabase / MongoDB / memoria, caché
+│   │   ├── validation/       Esquemas zod
+│   │   ├── docs/             Especificación OpenAPI
+│   │   └── monitoring.js     Sentry opcional
+│   ├── db/supabase/          Migraciones SQL
+│   ├── docs/                 Colección de Postman
+│   └── tests/                Supertest
+├── audit-engine/             PHP 8 + MySQL
+│   ├── index.php             Panel pericial
+│   ├── src/                  ICAS, actas, sellos, verificación
+│   ├── db/schema.sql         Esquema MySQL
+│   └── Dockerfile            Imagen para Render
+├── docs/                     Accesibilidad, costos, guía, resumen, guion, rúbrica
+├── .github/workflows/        ci.yml y storybook.yml
+└── render.yaml               Infraestructura como código (Render Blueprint)</code></pre>
+    </section>
+
+    <!-- ===================== 5 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">5</span>Instalación y ejecución local</h2>
+      <h3>Requisitos</h3>
+      <ul>
+        <li>Node.js 20.19 o superior (probado con 22 y 24) y npm.</li>
+        <li>Git.</li>
+        <li>XAMPP (PHP 8.2+ y MariaDB/MySQL) para el motor de auditoría.</li>
+        <li>Opcional: cuentas gratuitas de Supabase y MongoDB Atlas. Sin ellas, la API funciona en memoria.</li>
+      </ul>
+      <h3>1. Clonar e instalar</h3>
+<pre><code>git clone https://github.com/ortegavelazquezdaniela/neuronote-monorepo.git
+cd neuronote-monorepo
+npm install --prefix frontend
+npm install --prefix backend</code></pre>
+      <h3>2. Configurar variables</h3>
+<pre><code>cp frontend/.env.example frontend/.env.local
+cp backend/.env.example backend/.env
+cp audit-engine/.env.example audit-engine/.env</code></pre>
+      <p>Completa los valores según el capítulo 6. Los archivos <code>.env</code> están en <code>.gitignore</code> y nunca se suben al repositorio.</p>
+      <h3>3. Base de datos del motor PHP</h3>
+<pre><code>C:\xampp\mysql\bin\mysql.exe -u root &lt; audit-engine/db/schema.sql</code></pre>
+      <h3>4. Ejecutar (tres terminales)</h3>
+      <table>
+        <tr><th style="width:26%">Servicio</th><th style="width:40%">Comando (desde la raíz)</th><th>Dirección</th></tr>
+        <tr><td>Frontend</td><td><code>npm run dev</code></td><td>http://localhost:5173</td></tr>
+        <tr><td>API</td><td><code>npm run api</code></td><td>http://localhost:4000/api/health</td></tr>
+        <tr><td>Motor PHP</td><td><code>npm run audit:serve</code></td><td>http://localhost:8080</td></tr>
+        <tr><td>Storybook</td><td><code>npm run storybook</code></td><td>http://localhost:6006</td></tr>
+      </table>
+      <div class="note">Si <code>/api/health</code> responde <code>"users": "memory"</code> o <code>"notes": "memory"</code>, falta configurar Supabase o MongoDB: la API funciona, pero los datos se pierden al reiniciar.</div>
+    </section>
+
+    <!-- ===================== 6 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">6</span>Variables de entorno</h2>
+      <p>Las marcadas como <b>secreto</b> solo se configuran en el servidor (archivo <code>.env</code> local o panel de Render). Nunca se escriben en el código ni en el chat.</p>
+      <h3>API (<code>backend/.env</code>)</h3>
+      <table>
+        <tr><th style="width:30%">Variable</th><th style="width:12%">Tipo</th><th>Descripción</th></tr>
+        <tr><td><code>PORT</code></td><td>—</td><td>Puerto (4000 por defecto; Render lo define solo).</td></tr>
+        <tr><td><code>NODE_ENV</code></td><td>—</td><td><code>production</code> en Render; exige un JWT_SECRET de 32+ caracteres.</td></tr>
+        <tr><td><code>CORS_ORIGIN</code></td><td>—</td><td>Orígenes permitidos separados por comas (p. ej. el dominio de Vercel).</td></tr>
+        <tr><td><code>JWT_SECRET</code></td><td>secreto</td><td>Clave para firmar los tokens. En Render se genera automáticamente.</td></tr>
+        <tr><td><code>JWT_EXPIRES_IN</code></td><td>—</td><td>Vigencia de la sesión (<code>2h</code>).</td></tr>
+        <tr><td><code>SUPABASE_URL</code></td><td>—</td><td>URL del proyecto de Supabase.</td></tr>
+        <tr><td><code>SUPABASE_SECRET_KEY</code></td><td>secreto</td><td>Clave de servicio de Supabase (solo servidor).</td></tr>
+        <tr><td><code>MONGODB_URI</code></td><td>secreto</td><td>Cadena de conexión de MongoDB Atlas.</td></tr>
+        <tr><td><code>RESTCOUNTRIES_KEY</code></td><td>secreto</td><td>Clave gratuita de REST Countries v5.</td></tr>
+        <tr><td><code>AUDIT_ENGINE_URL</code></td><td>—</td><td>URL del motor PHP (consulta de sellos).</td></tr>
+        <tr><td><code>SENTRY_DSN</code></td><td>secreto</td><td>Opcional: monitoreo de errores.</td></tr>
+      </table>
+      <h3>Frontend (<code>frontend/.env.local</code> o variables de Vercel)</h3>
+      <table>
+        <tr><th style="width:36%">Variable</th><th>Descripción</th></tr>
+        <tr><td><code>VITE_API_URL</code></td><td>URL de la API, terminada en <code>/api</code>.</td></tr>
+        <tr><td><code>VITE_SUPABASE_URL</code></td><td>URL de Supabase (solo para Realtime de presencia).</td></tr>
+        <tr><td><code>VITE_SUPABASE_PUBLISHABLE_KEY</code></td><td>Clave <i>publicable</i> de Supabase: está hecha para el navegador y RLS limita lo que puede leer.</td></tr>
+        <tr><td><code>VITE_SITE_URL</code></td><td>Dominio público (canonical, Open Graph, sitemap).</td></tr>
+        <tr><td><code>VITE_AUDIT_URL</code></td><td>Enlace «Acceso para auditores» del pie de página.</td></tr>
+        <tr><td><code>VITE_RESTCOUNTRIES_KEY</code></td><td>En desuso: la clave ahora vive en la API. Déjala vacía.</td></tr>
+      </table>
+      <p class="small">Todo lo que empieza con <code>VITE_</code> termina en el código que descarga el navegador: nunca pongas ahí un secreto.</p>
+      <h3>Motor PHP (<code>audit-engine/.env</code> o variables de Render)</h3>
+      <table>
+        <tr><th style="width:30%">Variable</th><th style="width:12%">Tipo</th><th>Descripción</th></tr>
+        <tr><td><code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code></td><td>—</td><td>Conexión MySQL/TiDB (TiDB usa el puerto 4000).</td></tr>
+        <tr><td><code>DB_USER</code>, <code>DB_PASS</code></td><td>secreto</td><td>Usuario dedicado con permisos solo sobre sus tablas.</td></tr>
+        <tr><td><code>DB_SSL_CA</code></td><td>—</td><td>Certificados para TLS (la imagen Docker ya lo define).</td></tr>
+        <tr><td><code>TRUST_PROXY</code></td><td>—</td><td><code>1</code> detrás del proxy de Render (HTTPS, cookies <i>Secure</i>, HSTS).</td></tr>
+        <tr><td><code>ADMIN_USER</code></td><td>—</td><td>Usuario del panel pericial (<code>admin</code>).</td></tr>
+        <tr><td><code>ADMIN_PASS_HASH</code></td><td>secreto</td><td>Hash bcrypt de la contraseña del panel (<code>password_hash</code> de PHP).</td></tr>
+        <tr><td><code>BADGE_SECRET</code></td><td>secreto</td><td>Clave HMAC para firmar los sellos.</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== 7 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">7</span>Bases de datos</h2>
+      <h3>Supabase · PostgreSQL con Row Level Security</h3>
+      <p>Migraciones en <code>backend/db/supabase/</code>. RLS está activo en todas las tablas: las privadas niegan todo acceso al navegador y solo la API (con la clave de servicio) puede leerlas o escribirlas.</p>
+      <table>
+        <tr><th style="width:30%">Tabla</th><th>Contenido</th></tr>
+        <tr><td><code>app_users</code></td><td>Cuenta: correo, apodo, hash bcrypt de la contraseña, rol (<code>user</code>, <code>psychologist</code>, <code>admin</code>).</td></tr>
+        <tr><td><code>sensory_profiles</code></td><td>Sensibilidad al ruido, luz, gente y calor (1–5) y prioridad de ruta.</td></tr>
+        <tr><td><code>favorite_havens</code></td><td>Oasis favoritos (id de OpenStreetMap, nombre, coordenadas).</td></tr>
+        <tr><td><code>psychologists</code></td><td>Profesionales; solo se listan los aprobados con cédula verificada.</td></tr>
+        <tr><td><code>psychologist_presence</code></td><td>Disponibilidad en línea; única tabla legible desde el navegador y publicada en Realtime.</td></tr>
+        <tr><td><code>access_audit</code></td><td>Bitácora de registros e inicios de sesión.</td></tr>
+      </table>
+      <h3>MongoDB Atlas</h3>
+      <table>
+        <tr><th style="width:30%">Colección</th><th>Contenido</th></tr>
+        <tr><td><code>sensorynotes</code></td><td>Notas: lugar, fecha, ruido, confort, luz, gente y texto (≤ 500 caracteres); índice por <code>userId</code> y fecha.</td></tr>
+        <tr><td><code>crisisevents</code></td><td>Telemetría anónima del SOS (hora, día, clima, origen); colección <i>time series</i> que caduca al año. Sin cuenta, ubicación ni texto.</td></tr>
+      </table>
+      <h3>TiDB Cloud · MySQL (motor de auditoría)</h3>
+      <table>
+        <tr><th style="width:30%">Tabla</th><th>Contenido</th></tr>
+        <tr><td><code>establishments</code></td><td>Lugares auditados (nombre, id de OSM, dirección).</td></tr>
+        <tr><td><code>audits</code></td><td>Actas: mediciones, ICAS, nivel y estado (pendiente, aprobada, rechazada); restricciones <code>CHECK</code> de rangos.</td></tr>
+        <tr><td><code>professionals</code></td><td>Profesionales con cédula (7–8 dígitos) y estado de aprobación.</td></tr>
+        <tr><td><code>badges</code></td><td>Sellos: folio <code>NN-AAAA-NNNNNN</code>, hash HMAC del acta y vigencia de un año.</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== 8 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">8</span>API REST</h2>
+      <p>Base: <code>https://neuronote-api-pnnf.onrender.com/api</code>. Documentación interactiva en <code>/api/docs</code> (Swagger UI) y especificación OpenAPI 3.1 en <code>/api/openapi.json</code>; colección de Postman en <code>backend/docs/</code>. Una prueba automática falla si una ruta de Express no está documentada.</p>
+      <table>
+        <tr><th style="width:12%">Método</th><th style="width:38%">Ruta</th><th style="width:9%">Auth</th><th>Descripción</th></tr>
+        <tr><td>GET</td><td><code>/health</code></td><td>—</td><td>Estado y tipo de almacenamiento</td></tr>
+        <tr><td>POST</td><td><code>/auth/register</code></td><td>—</td><td>Crear cuenta</td></tr>
+        <tr><td>POST</td><td><code>/auth/login</code></td><td>—</td><td>Iniciar sesión</td></tr>
+        <tr><td>GET · DELETE</td><td><code>/auth/me</code></td><td>JWT</td><td>Ver o borrar la cuenta y sus datos</td></tr>
+        <tr><td>GET · PUT</td><td><code>/me/profile</code></td><td>JWT</td><td>Ver o guardar el perfil sensorial</td></tr>
+        <tr><td>GET · POST</td><td><code>/me/favorites</code></td><td>JWT</td><td>Listar o guardar oasis favoritos</td></tr>
+        <tr><td>DELETE</td><td><code>/me/favorites/{osmId}</code></td><td>JWT</td><td>Quitar un favorito</td></tr>
+        <tr><td>GET · POST · DELETE</td><td><code>/me/notes</code></td><td>JWT</td><td>Listar (paginado, búsqueda, fechas), crear o borrar todas las notas</td></tr>
+        <tr><td>PUT · DELETE</td><td><code>/me/notes/{id}</code></td><td>JWT</td><td>Editar o borrar una nota</td></tr>
+        <tr><td>POST</td><td><code>/telemetry/crisis</code></td><td>—</td><td>Registrar una activación del SOS (anónima)</td></tr>
+        <tr><td>GET</td><td><code>/telemetry/crisis/summary</code></td><td>JWT admin</td><td>Activaciones por hora</td></tr>
+        <tr><td>GET</td><td><code>/psychologists</code></td><td>—</td><td>Profesionales verificados</td></tr>
+        <tr><td>GET</td><td><code>/proxy/weather?lat&amp;lon</code></td><td>—</td><td>Open-Meteo (coordenadas redondeadas, caché 15 min)</td></tr>
+        <tr><td>GET</td><td><code>/proxy/countries</code></td><td>—</td><td>REST Countries (caché 24 h)</td></tr>
+        <tr><td>GET</td><td><code>/havens/{osmId}/certification</code></td><td>—</td><td>Sello del lugar (motor PHP)</td></tr>
+      </table>
+      <h3>Convenciones</h3>
+      <ul>
+        <li><b>Errores:</b> siempre <code>{ "error": "mensaje" }</code> en español; los 400 de validación añaden <code>fields</code>.</li>
+        <li><b>Límites:</b> 300 peticiones / 15 min por IP; 10 intentos fallidos de inicio de sesión / 15 min; 20 eventos de telemetría / hora.</li>
+        <li><b>Contraseñas:</b> mínimo 10 caracteres con letras y un número; bcrypt de 12 rondas.</li>
+      </ul>
+<pre><code>curl -X POST https://neuronote-api-pnnf.onrender.com/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"tu@correo.com","password":"********"}'
+# → { "token": "eyJ…", "user": { "id": "…", "role": "user" } }</code></pre>
+    </section>
+
+    <!-- ===================== 9 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">9</span>Motor de auditoría (PHP)</h2>
+      <p>Aplicación PHP 8 independiente (<code>audit-engine/</code>) con PDO y sentencias preparadas reales, tokens CSRF, cabeceras de seguridad y archivos internos inaccesibles desde el navegador.</p>
+      <h3>Índice de Confort Acústico y Sensorial (ICAS)</h3>
+      <table>
+        <tr><th style="width:32%">Variable</th><th style="width:12%">Peso</th><th>Escala (100 = mejor, 0 = peor)</th></tr>
+        <tr><td>Ruido promedio (dB(A))</td><td>35 %</td><td>35 dB → 100 · 75 dB → 0</td></tr>
+        <tr><td>Picos sonoros (dB(A))</td><td>15 %</td><td>60 dB → 100 · 90 dB → 0</td></tr>
+        <tr><td>Reverberación (RT60, s)</td><td>15 %</td><td>0.4 s → 100 · 2.0 s → 0</td></tr>
+        <tr><td>Iluminación (lux)</td><td>20 %</td><td>150–500 lux → 100; 0 si &lt; 50 o &gt; 1000; −30 con parpadeo</td></tr>
+        <tr><td>Aforo (personas / 10 m²)</td><td>15 %</td><td>0 → 100 · 3 → 0</td></tr>
+      </table>
+      <p><b>Niveles:</b> ≥ 75 alto (certificable) · 55–74.9 moderado · &lt; 55 bajo. Fórmula propia y documentada en <code>src/icas.php</code>; no es una norma oficial.</p>
+      <h3>Flujo de certificación</h3>
+      <ol>
+        <li>El perito registra el acta en <code>src/submit_audit.php</code> (validación de rangos, CSRF, transacción).</li>
+        <li>En el panel (<code>index.php</code>, HTTP Basic + <code>password_verify</code>) se aprueba o rechaza.</li>
+        <li>Con ICAS ≥ 75 se emite el sello: folio y hash <b>HMAC-SHA256</b> de los datos del acta con <code>BADGE_SECRET</code>, vigente un año.</li>
+        <li><code>src/verify.php</code> recalcula el hash: si alguien altera el acta en la base, responde <code>"integrity": "alterado"</code>.</li>
+      </ol>
+      <h3>Archivos principales</h3>
+      <table>
+        <tr><th style="width:36%">Archivo</th><th>Responsabilidad</th></tr>
+        <tr><td><code>src/bootstrap.php</code></td><td>Configuración, conexión PDO (TLS), CSRF, cabeceras, autenticación del panel</td></tr>
+        <tr><td><code>src/calculate_index.php</code></td><td>Cálculo del ICAS en JSON sin guardar</td></tr>
+        <tr><td><code>src/register_professional.php</code></td><td>Registro de profesionales con cédula</td></tr>
+        <tr><td><code>src/generate_badge.php</code>, <code>src/badge.php</code></td><td>Emisión y firma del sello</td></tr>
+        <tr><td><code>src/health.php</code></td><td>Comprobación de vida para Render</td></tr>
+      </table>
+    </section>
+
+    <!-- ===================== 10 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">10</span>Frontend</h2>
+      <h3>Organización (Atomic Design)</h3>
+      <p><b>Átomos</b> (botón, campo, interruptor, etiqueta de dato) → <b>moléculas</b> (grupos de opciones, gráficas) → <b>organismos</b> (mapa, formulario de notas, SOS, clínicas) → <b>plantillas</b> → <b>páginas</b>. Los estilos usan CSS Modules y los tokens de <code>styles/tokens.css</code>.</p>
+      <h3>Estado y datos</h3>
+      <ul>
+        <li><b>Context API:</b> <code>PreferencesProvider</code> (tema, fuente, tamaño, movimiento), <code>AuthProvider</code> (sesión JWT) y <code>SosProvider</code> (modal y atajo Alt + C).</li>
+        <li><b>Hooks propios:</b> <code>useAsync</code>, <code>useGeolocation</code>, <code>useHavens</code>, <code>useSensoryRoute</code>, <code>useWeather</code>, <code>usePsychologist</code>, <code>usePageMeta</code>, <code>useHeartRateMonitor</code>, <code>useDebounce</code>.</li>
+        <li><b>Servicios:</b> <code>services/http.js</code> centraliza <code>fetch</code> con tiempo límite, reintentos, caché y mensajes de error en español.</li>
+        <li><b>Notas:</b> la misma interfaz (<code>list</code>, <code>add</code>, <code>update</code>, <code>remove</code>, <code>clear</code>) para el navegador (<code>notesStore</code>) y la cuenta (<code>notesApiStore</code>).</li>
+      </ul>
+      <h3>Rutas</h3>
+      <p>Definidas en <code>src/routes.jsx</code> con React Router 7: carga diferida de páginas pesadas, ruta dinámica <code>/oasis/:id</code>, ruta protegida <code>/perfil</code> (<code>RequireAuth</code>) y página 404.</p>
+      <h3>Accesibilidad y SEO</h3>
+      <ul>
+        <li>WCAG 2.2 AA (autoevaluación): 45 de 47 criterios aplicables; ficha en <code>docs/accesibilidad-wcag-2.2.md</code>.</li>
+        <li>Enlace para saltar al contenido, foco gestionado al navegar, controles de 44 px o más, sin scroll horizontal a 320 px.</li>
+        <li><code>usePageMeta</code>: título, descripción, canonical, Open Graph y <code>noindex</code> por página; <code>sitemap.xml</code> y <code>robots.txt</code> generados en el build.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== 11 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">11</span>Seguridad y privacidad</h2>
+      <table>
+        <tr><th style="width:30%">Amenaza</th><th>Medida</th></tr>
+        <tr><td>Robo de contraseñas</td><td>bcrypt (12 rondas); comparación con hash ficticio para no revelar qué correos existen.</td></tr>
+        <tr><td>Sesiones</td><td>JWT HS256 con emisor y caducidad de 2 h; guardado en <code>sessionStorage</code>.</td></tr>
+        <tr><td>Datos inválidos o maliciosos</td><td>zod en el servidor (y validación en el cliente); limpieza de caracteres de control; cuerpo máximo de 10 KB.</td></tr>
+        <tr><td>Fuerza bruta y abuso</td><td><code>express-rate-limit</code> por IP y por intentos fallidos.</td></tr>
+        <tr><td>Acceso a datos ajenos</td><td>Toda consulta filtra por el usuario del token; RLS en PostgreSQL niega el acceso directo desde el navegador.</td></tr>
+        <tr><td>Inyección SQL</td><td>Supabase con consultas parametrizadas; PDO con <code>ATTR_EMULATE_PREPARES = false</code>.</td></tr>
+        <tr><td>XSS y clickjacking</td><td>React escapa la salida; <code>htmlspecialchars</code> en PHP; <code>helmet</code>, CSP y <code>X-Frame-Options</code>.</td></tr>
+        <tr><td>CSRF (panel PHP)</td><td>Token por sesión y cookies <code>HttpOnly</code> + <code>SameSite=Strict</code>.</td></tr>
+        <tr><td>Exposición de claves</td><td>Secretos solo en variables del servidor; <code>.env</code> fuera de Git; el navegador solo recibe la clave publicable de Supabase.</td></tr>
+        <tr><td>Errores con información interna</td><td>Los 5xx responden un mensaje genérico; Sentry (opcional) recibe solo el tipo de error y la ruta patrón.</td></tr>
+      </table>
+      <h3>Privacidad</h3>
+      <ul>
+        <li>La ubicación se pide solo al pulsar un botón y no se guarda; al clima se envían coordenadas redondeadas (~1 km).</li>
+        <li>La telemetría del SOS es anónima y respeta <i>Do Not Track</i> y <i>Global Privacy Control</i>.</li>
+        <li>Las lecturas del monitor de pulso no salen del dispositivo. No se guardan conversaciones.</li>
+        <li>La cuenta se puede borrar por completo desde el perfil (cuenta, perfil, favoritos y notas).</li>
+      </ul>
+    </section>
+
+    <!-- ===================== 12 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">12</span>Pruebas y calidad</h2>
+      <table>
+        <tr><th style="width:42%">Comando</th><th>Qué hace</th></tr>
+        <tr><td><code>npm run lint</code> (frontend o backend)</td><td>ESLint sin errores</td></tr>
+        <tr><td><code>npm test</code> / <code>npm run coverage</code> (frontend)</td><td>Vitest + React Testing Library + MSW; umbral de cobertura del 70 %</td></tr>
+        <tr><td><code>npm test</code> / <code>npm run coverage</code> (backend)</td><td>Vitest + Supertest con repositorios en memoria</td></tr>
+        <tr><td><code>php audit-engine/tests/icas_test.php</code></td><td>Pruebas del ICAS</td></tr>
+        <tr><td><code>npm run build-storybook</code></td><td>Compila el catálogo de componentes</td></tr>
+        <tr><td><code>npm run postman</code> (backend)</td><td>Regenera la colección de Postman desde OpenAPI</td></tr>
+      </table>
+      <h3>Resultados (24 de noviembre de 2026)</h3>
+      <ul>
+        <li><b>143 pruebas:</b> 96 de frontend (83.6 % de sentencias), 40 de backend (94.2 %) y 7 del ICAS.</li>
+        <li><b>Lighthouse (móvil):</b> Ayuda SOS 100 en las cuatro categorías; accesibilidad 100 en todas las páginas salvo el mapa (97).</li>
+        <li><b>axe-core:</b> 0 infracciones WCAG 2.0–2.2 A/AA en 16 páginas × 4 temas.</li>
+        <li><b>Consola:</b> 0 errores en las páginas públicas en producción.</li>
+      </ul>
+      <h3>Integración continua (GitHub Actions)</h3>
+      <p><code>ci.yml</code> se ejecuta en cada pull request: lint, pruebas con cobertura y build del frontend (incluido Storybook); lint, pruebas y colección de Postman al día en el backend; sintaxis PHP, pruebas del ICAS, esquema en MySQL 8.4 y la imagen Docker probada contra la base. <code>storybook.yml</code> publica el catálogo en GitHub Pages.</p>
+    </section>
+
+    <!-- ===================== 13 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">13</span>Despliegue</h2>
+      <table>
+        <tr><th style="width:18%">Parte</th><th style="width:24%">Servicio (gratis)</th><th>Pasos</th></tr>
+        <tr><td>Frontend</td><td>Vercel Hobby</td><td>Importar el repositorio → <i>Root Directory</i> <code>frontend</code> → variables <code>VITE_*</code> → Deploy. <code>vercel.json</code> define la reescritura de la SPA y las cabeceras.</td></tr>
+        <tr><td>API</td><td>Render Free</td><td>New → <b>Blueprint</b> con <code>render.yaml</code> → completar los secretos. Health check: <code>/api/health</code>.</td></tr>
+        <tr><td>Motor PHP</td><td>Render Free (Docker)</td><td>Servicio <code>neuronote-audit</code> del mismo Blueprint; variables <code>DB_*</code>, <code>ADMIN_PASS_HASH</code>, <code>BADGE_SECRET</code>.</td></tr>
+        <tr><td>MySQL</td><td>TiDB Cloud Starter</td><td>Clúster con límite de gasto 0 → ejecutar <code>schema.sql</code> en el SQL Editor (cada sentencia en una línea).</td></tr>
+        <tr><td>PostgreSQL</td><td>Supabase Free</td><td>Aplicar las migraciones de <code>backend/db/supabase/</code>.</td></tr>
+        <tr><td>MongoDB</td><td>Atlas Free (M0)</td><td>Crear clúster, usuario y acceso de red <code>0.0.0.0/0</code> (Render no tiene IP fija).</td></tr>
+        <tr><td>Storybook</td><td>GitHub Pages</td><td>Settings → Pages → Source: <b>GitHub Actions</b>.</td></tr>
+      </table>
+      <p>Al fusionar a <code>main</code>, Vercel y Render vuelven a desplegar automáticamente. Costos y límites detallados en <code>docs/arquitectura-cloud-costos.md</code>.</p>
+      <div class="note warn"><b>Planes gratuitos:</b> Render se duerme tras 15 min sin tráfico (primer acceso de hasta 1 min) y Supabase se pausa tras una semana sin actividad.</div>
+    </section>
+
+    <!-- ===================== 14 ===================== -->
+    <section class="chapter">
+      <h2><span class="num">14</span>Mantenimiento y solución de problemas</h2>
+      <table>
+        <tr><th style="width:38%">Síntoma</th><th>Causa y solución</th></tr>
+        <tr><td>La app dice que el servicio no responde</td><td>Render está despertando: esperar ~1 min y reintentar. Ver <i>Logs</i> en Render si persiste.</td></tr>
+        <tr><td>No se puede iniciar sesión ni registrarse</td><td>Supabase pausado: reanudarlo en su panel. Revisar <code>SUPABASE_SECRET_KEY</code>.</td></tr>
+        <tr><td><code>/api/health</code> dice <code>memory</code></td><td>Faltan <code>SUPABASE_SECRET_KEY</code> o <code>MONGODB_URI</code> en las variables de la API.</td></tr>
+        <tr><td>Error de CORS en el navegador</td><td>Agregar el dominio del frontend a <code>CORS_ORIGIN</code> (separado por comas) y guardar.</td></tr>
+        <tr><td>El mapa no muestra lugares</td><td>Servidores públicos de OpenStreetMap saturados; la app usa la última respuesta guardada. Reintentar más tarde.</td></tr>
+        <tr><td>La consulta de sellos responde 502/503</td><td>El motor PHP está dormido o falta <code>AUDIT_ENGINE_URL</code>. La ficha del oasis oculta el sello sin romperse.</td></tr>
+        <tr><td><code>verify.php</code> responde 500</td><td>Faltan las tablas en TiDB (revisar con <code>SHOW TABLES FROM neuronote_audit;</code>) o datos de conexión incorrectos.</td></tr>
+        <tr><td>El panel no acepta la contraseña</td><td><code>ADMIN_PASS_HASH</code> debe empezar con <code>$2y$</code>, sin espacios ni comillas.</td></tr>
+        <tr><td>La CI falla en «colección de Postman»</td><td>Ejecutar <code>npm run postman</code> en <code>backend/</code> y subir el archivo.</td></tr>
+      </table>
+      <h3>Cómo agregar un endpoint</h3>
+      <ol>
+        <li>Esquema zod en <code>backend/src/validation/schemas.js</code>.</li>
+        <li>Método del repositorio en memoria y en Supabase/MongoDB.</li>
+        <li>Controlador y ruta (con <code>verifyToken</code> si es privado).</li>
+        <li>Documentarlo en <code>src/docs/openapi.js</code> (la prueba de rutas lo exige) y ejecutar <code>npm run postman</code>.</li>
+        <li>Pruebas con Supertest; en el frontend, el servicio y su prueba con MSW.</li>
+      </ol>
+      <h3>Documentos relacionados</h3>
+      <ul>
+        <li><code>README.md</code> · <code>backend/README.md</code> · <code>audit-engine/README.md</code></li>
+        <li><code>docs/accesibilidad-wcag-2.2.md</code> · <code>docs/arquitectura-cloud-costos.md</code> · <code>docs/autoevaluacion-rubrica.md</code></li>
+      </ul>
+      <p class="small">Proyecto desarrollado con apoyo de IA (Claude, de Anthropic, mediante Claude Code). Licencia MIT.</p>
+    </section>
+  </body>
+</html>

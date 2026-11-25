@@ -44,6 +44,7 @@ export function AuthPage({ mode = 'login' }) {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [slow, setSlow] = useState(false);
   const alertRef = useRef(null);
 
   if (status === 'authenticated') return <Navigate to={back} replace />;
@@ -60,6 +61,8 @@ export function AuthPage({ mode = 'login' }) {
       return;
     }
     setBusy(true);
+    // Si tarda, casi siempre es el servidor gratuito despertando: se avisa en vez de dejar la duda
+    const slowTimer = setTimeout(() => setSlow(true), 5_000);
     try {
       if (isRegister) await register({ ...form, email: form.email.trim(), displayName: form.displayName.trim() });
       else await login(form.email.trim(), form.password);
@@ -70,6 +73,8 @@ export function AuthPage({ mode = 'login' }) {
       setServerError(describeError(err));
       requestAnimationFrame(() => alertRef.current?.focus());
     } finally {
+      clearTimeout(slowTimer);
+      setSlow(false);
       setBusy(false);
     }
   };
@@ -133,6 +138,12 @@ export function AuthPage({ mode = 'login' }) {
           onChange={set('password')}
           error={errors.password}
         />
+        {slow && (
+          <StatusMessage tone="info" title="Despertando el servidor">
+            El servidor gratuito se duerme cuando nadie lo usa y tarda hasta un minuto en arrancar. No cierres esta
+            página: seguimos esperando.
+          </StatusMessage>
+        )}
         <Button type="submit" icon={isRegister ? UserPlus : LogIn} iconPosition="start" disabled={busy || !enabled}>
           {busy ? 'Un momento…' : isRegister ? 'Crear cuenta' : 'Entrar'}
         </Button>
