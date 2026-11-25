@@ -4,6 +4,9 @@ import { MODULES } from '../utils/modules';
 import { HELPLINES } from '../utils/helplines';
 import styles from './SiteFooter.module.css';
 
+/** Panel pericial del motor de auditoría (PHP). Se cambia con VITE_AUDIT_URL. */
+const AUDIT_PANEL_URL = import.meta.env.VITE_AUDIT_URL || 'https://neuronote-audit.onrender.com/';
+
 export function SiteFooter() {
   const { lineaDeLaVida, emergencias } = HELPLINES;
   return (
@@ -30,6 +33,9 @@ export function SiteFooter() {
                 <Link to={m.path}>{m.label}</Link>
               </li>
             ))}
+            <li>
+              <Link to="/pulso">Monitor de pulso (experimental)</Link>
+            </li>
           </ul>
         </nav>
 
@@ -47,6 +53,14 @@ export function SiteFooter() {
             </li>
             <li>
               <Link to="/contacto">Contacto</Link>
+            </li>
+            <li>
+              {/* Panel pericial (motor PHP): protegido con usuario y contraseña de auditor */}
+              <a href={AUDIT_PANEL_URL} rel="nofollow">
+                Acceso para auditores
+                {' '}
+                <span className={styles.hint}>(requiere contraseña)</span>
+              </a>
             </li>
           </ul>
         </nav>

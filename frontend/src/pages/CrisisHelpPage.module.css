@@ -111,6 +111,13 @@
   background: var(--color-surface-calm);
 }
 
+/* Sobre el fondo de calma, el color de enlace no llegaba a 4.5:1 en el tema Calma:
+   se usa el color del texto (el subrayado sigue indicando que es un enlace). */
+.ground a {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
 .steps {
   display: grid;
   gap: var(--space-2);

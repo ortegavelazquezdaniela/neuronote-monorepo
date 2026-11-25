@@ -10,6 +10,7 @@ const KINDS = {
   unverified: { label: 'Sin verificar', title: 'Lugar público real que NEURONOTE todavía no ha evaluado' },
   estimated: { label: 'Estimado', title: 'Valor calculado a partir de otras variables' },
   reported: { label: 'Reportado', title: 'Información aportada por la comunidad' },
+  measured: { label: 'Medido', title: 'Lectura de tu propio dispositivo (no la guardamos ni la enviamos)' },
   demo: { label: 'Demostración', title: 'Dato ficticio usado solo para ilustrar la interfaz' },
 };
 

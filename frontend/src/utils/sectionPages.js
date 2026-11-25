@@ -23,6 +23,8 @@ export const SECTION_PAGES = [
       'Con cuenta: guardamos tu correo, un nombre o apodo, tu contraseña cifrada con bcrypt, tu perfil sensorial, tus favoritos y tus notas. Puedes borrarlo todo desde tu perfil.',
       'Ubicación: solo cuando pulsas «Usar mi ubicación»; no se guarda. Al clima se envían coordenadas redondeadas (≈ 1 km).',
       'SOS: no guardamos conversaciones. Registramos de forma anónima la hora y el día en que se abrió la ayuda (sin cuenta, ubicación ni texto); no se registra si tu navegador pide «No rastrear».',
+      'Monitor de pulso: las lecturas de tu dispositivo se quedan en esta pestaña; no se guardan ni se envían a ningún servidor.',
+      'Clínicas cercanas: la búsqueda se hace en OpenStreetMap con tu ubicación aproximada. El enlace a Google Maps solo se abre si lo pulsas, y Google recibe tu zona (~1 km).',
       'Servicios externos: OpenStreetMap, Open-Meteo y FOSSGIS reciben las consultas del mapa como cualquier visita a sus servidores.',
     ],
   },

@@ -62,3 +62,10 @@
 .demo .dot {
   color: #c26b68;
 }
+
+.measured {
+  background: var(--nn-rose-wash, #fdeceb);
+}
+.measured .dot {
+  color: #9c4a4f;
+}

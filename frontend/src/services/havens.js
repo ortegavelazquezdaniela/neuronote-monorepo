@@ -15,7 +15,7 @@ import { distanceMeters } from '../utils/geo';
 
 const BACKUP_TTL = 7 * 24 * 60 * 60_000; // datos públicos de lugares, no personales
 
-async function withFallback(key, sources, signal) {
+export async function withFallback(key, sources, signal) {
   let lastError;
   for (const [source, load] of sources) {
     try {

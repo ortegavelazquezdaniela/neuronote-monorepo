@@ -20,6 +20,7 @@ const HavenDetailPage = named(() => import('./pages/HavenDetailPage'), 'HavenDet
 const MicroclimatePage = named(() => import('./pages/MicroclimatePage'), 'MicroclimatePage');
 const AuthPage = named(() => import('./pages/AuthPage'), 'AuthPage');
 const ProfilePage = named(() => import('./pages/ProfilePage'), 'ProfilePage');
+const HeartRatePage = named(() => import('./pages/HeartRatePage'), 'HeartRatePage');
 
 /** Rutas de la app (también las usa la prueba que valida el sitemap). */
 export const routes = [
@@ -39,6 +40,7 @@ export const routes = [
           { path: 'oasis', element: <HavensPage /> },
           { path: 'oasis/:id', element: <HavenDetailPage /> },
           { path: 'microclima', element: <MicroclimatePage /> },
+          { path: 'pulso', element: <HeartRatePage /> },
           { path: 'entrar', element: <AuthPage mode="login" /> },
           { path: 'registro', element: <AuthPage mode="register" /> },
           {

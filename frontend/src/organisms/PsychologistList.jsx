@@ -8,10 +8,12 @@ const PRO_MESSAGE =
   'Hola, estoy usando NEURONOTE y experimento una crisis de sobrecarga/ansiedad. Requiero contención psicológica.';
 
 /** Profesionales con cédula verificada; "en línea" se actualiza en tiempo real. */
-export function PsychologistList() {
+/** hideWhenEmpty: no muestra nada (ni el encabezado `heading`) si aún no hay profesionales verificados. */
+export function PsychologistList({ hideWhenEmpty = false, heading = null }) {
   const { items, status, enabled, live } = usePsychologist();
 
   if (!enabled || status === 'error' || (status === 'success' && items.length === 0)) {
+    if (hideWhenEmpty) return null;
     return (
       <EmptyState icon={UserCheck} title="Aún no hay profesionales verificados">
         Solo publicaremos psicólogas y psicólogos con cédula profesional validada, y su disponibilidad
@@ -19,10 +21,11 @@ export function PsychologistList() {
       </EmptyState>
     );
   }
-  if (status !== 'success') return <p role="status">Buscando profesionales disponibles…</p>;
+  if (status !== 'success') return hideWhenEmpty ? null : <p role="status">Buscando profesionales disponibles…</p>;
 
   return (
     <>
+      {heading}
       <ul className={styles.list}>
         {items.map((p) => (
           <li key={p.id} className={styles.card}>

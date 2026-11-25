@@ -75,6 +75,9 @@
 | Open-Meteo | < 10 000 llamadas/día, 5 000/hora, 600/min; no comercial; atribución CC BY 4.0 | Proxy en la API con caché de 15 min por zona de ~1 km. |
 | REST Countries v5 | Clave gratuita | La clave vive solo en Render; caché de 24 h. |
 | WhatsApp | Enlace `wa.me`, no es una API de envío | NEURONOTE no envía mensajes ni guarda conversaciones. |
+| Clínicas cercanas (Overpass → Nominatim) | Las mismas políticas de OSM | Una sola búsqueda al pulsar el botón; en Nominatim, 5 búsquedas en la cola de 1 petición por segundo; caché de 6 h y respaldo local. |
+| Google Maps (enlace) | Enlace público de búsqueda, no es una API | Solo se abre si la persona lo pulsa; la página avisa que Google recibe la zona (~1 km). |
+| Web Bluetooth (monitor de pulso) | API del navegador, sin servidor ni costo | El navegador pide permiso y la persona elige el dispositivo; las lecturas no salen del dispositivo. |
 
 ## 4. Seguridad y privacidad en la nube
 

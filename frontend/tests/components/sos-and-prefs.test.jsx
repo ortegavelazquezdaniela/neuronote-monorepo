@@ -34,7 +34,9 @@ describe('SOS', () => {
     await userEvent.type(screen.getByLabelText(/Número de WhatsApp/), '5512345678');
     const link = screen.getByRole('link', { name: /Abrir WhatsApp/ });
     expect(link.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/525512345678\?text=/);
-    expect(await screen.findByText('Aún no hay profesionales verificados')).toBeInTheDocument();
+    // Sin profesionales verificados no se muestra esa sección vacía; sí la de clínicas cercanas
+    expect(screen.getByRole('heading', { name: 'Clínicas psicológicas cerca de ti' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /Profesionales verificados/ })).not.toBeInTheDocument();
   });
 
   it('no abre WhatsApp si falta el número', async () => {

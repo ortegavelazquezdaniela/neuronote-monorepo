@@ -17,6 +17,7 @@ export const PUBLIC_ROUTES = [
   '/notas',
   '/auxilio-inmediato',
   '/accesibilidad',
+  '/pulso',
   ...SECTION_PAGES.map((p) => p.path),
 ];
 
